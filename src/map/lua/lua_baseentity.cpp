@@ -8763,7 +8763,7 @@ inline int32 CLuaBaseEntity::delLearnedAbility(lua_State *L)
 /************************************************************************
 *  Function: addSpell()
 *  Purpose : Adds a specified spell to the player
-*  Example : player:adtpzell(128)
+*  Example : player:addSpell(128)
 *  Notes   :
 ************************************************************************/
 

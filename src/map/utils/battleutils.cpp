@@ -4319,7 +4319,7 @@ namespace battleutils
         resist = 1.0f + PDefender->getMod(Mod::DMGRANGE) / 100.f + PDefender->getMod(Mod::DMG) / 100.f;
         resist = std::max(resist, 0.5f);
 
-		resist = 1.0f + PDefender->getMod(Mod::DMG_II) / 100.f;
+		resist += PDefender->getMod(Mod::DMG_II) / 100.f;
 		resist = std::max(resist, 0.1f); // DT II caps at 90%
 
         damage = (int32)(damage * resist);
