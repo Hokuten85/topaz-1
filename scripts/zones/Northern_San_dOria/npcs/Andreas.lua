@@ -12,27 +12,27 @@ local keyitems = {
     [0] = {
         id = tpz.ki.WOOD_PURIFICATION,
         rank = 3,
-        cost = 40000
+        cost = 1
     },
     [1] = {
         id = tpz.ki.WOOD_ENSORCELLMENT,
         rank = 3,
-        cost = 40000
+        cost = 1
     },
     [2] = {
         id = tpz.ki.LUMBERJACK,
         rank = 3,
-        cost = 10000
+        cost = 1
     },
     [3] = {
         id = tpz.ki.BOLTMAKER,
         rank = 3,
-        cost = 10000
+        cost = 1
     },
     [4] = {
         id = tpz.ki.WAY_OF_THE_CARPENTER,
         rank = 9,
-        cost = 20000
+        cost = 1
     }
 }
 
@@ -40,42 +40,42 @@ local items = {
     [0] = {
         id = 15444, -- Carpenter's Belt
         rank = 1,
-        cost = 10000
+        cost = 1
     },
     [1] = {
         id = 14830, -- Carpenter's Gloves
         rank = 5,
-        cost = 70000
+        cost = 1
     },
     [2] = {
         id = 14392, -- Carpenter's Apron
         rank = 7,
-        cost = 100000
+        cost = 1
     },
     [3] = {
         id = 28, -- Drawing Desk
         rank = 9,
-        cost = 150000
+        cost = 1
     },
     [4] = {
         id = 341, -- Carpenter's Signboard
         rank = 9,
-        cost = 200000
+        cost = 1
     },
     [5] = {
         id = 15819, -- Carpenter's Ring
-        rank = 6,
-        cost = 80000
+        rank = 1,
+        cost = 1
     },
     [6] = {
         id = 3672, -- Carpenter's Kit
         rank = 8,
-        cost = 50000
+        cost = 1
     },
     [7] = {
         id = 3331, -- Carpenter's Emblem
         rank = 9,
-        cost = 15000
+        cost = 1
     }
 }
 

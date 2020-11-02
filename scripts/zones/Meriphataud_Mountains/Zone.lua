@@ -17,10 +17,10 @@ end
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.WARAXE_BEAK)
-    GetMobByID(ID.mob.WARAXE_BEAK):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.WARAXE_BEAK):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.COO_KEJA_THE_UNSEEN)
-    GetMobByID(ID.mob.COO_KEJA_THE_UNSEEN):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.COO_KEJA_THE_UNSEEN):setRespawnTime(900)
 
     tpz.conq.setRegionalConquestOverseers(zone:getRegionID())
 end

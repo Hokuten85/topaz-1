@@ -28,8 +28,8 @@ function onUseWeaponSkill(player, target, wsID, tp, primary, action, taChar)
     params.atk100 = 1; params.atk200 = 1; params.atk300 = 1
     -- Defense ignored is 50%, 75%, 100% (50% at 100 TP is accurate, other values are guesses)
     params.ignoresDef = true
-    params.ignored100 = 0.5
-    params.ignored200 = 0.75
+    params.ignored100 = 0.7
+    params.ignored200 = 0.8
     params.ignored300 = 1
 
     if (USE_ADOULIN_WEAPON_SKILL_CHANGES == true) then

@@ -105,6 +105,7 @@ struct map_config_t
     float  mob_tp_multiplier;         // Multiplies the amount of TP mobs gain on any effect that would grant TP
     float  player_tp_multiplier;      // Multiplies the amount of TP players gain on any effect that would grant TP
     bool   mob_no_despawn;            // Toggle whether mobs roam home or despawn
+    uint8  mob_stat_scale_start_level;// Multiplier for max HP of NM.
     float  nm_hp_multiplier;          // Multiplier for max HP of NM.
     float  mob_hp_multiplier;         // Multiplier for max HP pool of mob
     float  player_hp_multiplier;      // Multiplier for max HP pool of player
@@ -143,6 +144,8 @@ struct map_config_t
     bool   skillup_bloodpact;         // Enable/disable skillups for bloodpacts
     bool   anticheat_enabled;         // Is the anti-cheating system enabled
     bool   anticheat_jail_disable;    // Globally disable auto-jailing by the anti-cheat system
+    uint8  global_equipment_drop_rate;
+    uint8  global_equipment_drop_range;
 };
 
 /************************************************************************

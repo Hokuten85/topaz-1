@@ -14,7 +14,7 @@ end
 
 function onPetAbility(target, pet, skill, summoner)
     local bonusTime = utils.clamp(summoner:getSkillLevel(tpz.skill.SUMMONING_MAGIC) - 300, 0, 200)
-    local duration = 180 + bonusTime
+    local duration = 300 + bonusTime
     local hour = VanadielHour()
     local buffvalue = 0
     buffvalue = math.abs(12 - hour) + 1

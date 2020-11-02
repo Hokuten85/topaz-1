@@ -16,13 +16,13 @@ end
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.NANDI)
-    GetMobByID(ID.mob.NANDI):setRespawnTime(math.random(3600, 4200))
+    GetMobByID(ID.mob.NANDI):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.CACTROT_RAPIDO)
-    GetMobByID(ID.mob.CACTROT_RAPIDO):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.CACTROT_RAPIDO):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.CENTURIO_XII_I)
-    GetMobByID(ID.mob.CENTURIO_XII_I):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.CENTURIO_XII_I):setRespawnTime(900)
 
     tpz.conq.setRegionalConquestOverseers(zone:getRegionID())
     tpz.chocobo.initZone(zone)

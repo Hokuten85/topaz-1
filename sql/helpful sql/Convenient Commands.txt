@@ -1,0 +1,1 @@
+"C:\Program Files\MySQL\MySQL Server 5.7\bin\mysqldump" --skip-compact --skip-extended-insert --hex-blob -u ******** -p******** --default-character-set=utf8 --result-file=item_armor.sql tpzdb item_armor

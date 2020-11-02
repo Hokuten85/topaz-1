@@ -466,12 +466,19 @@ bool CAutomatonController::TryHeal(const CurrentManeuvers& maneuvers)
 
     if (maneuvers.light && !PCastTarget && PAutomaton->getHead() == HEAD_SOULSOOTHER && PAutomaton->PMaster->PParty) // Light + Soulsoother head -> Heal party
     {
+        std::vector<CBattleEntity*> pets;
         if (PMob)
         {
             uint16 highestEnmity = 0;
             for (uint8 i = 0; i < PAutomaton->PMaster->PParty->members.size(); ++i)
             {
                 CBattleEntity* member = PAutomaton->PMaster->PParty->members.at(i);
+
+                if (member->PPet != nullptr && member->PPet->status != STATUS_DISAPPEAR)
+                {
+                    pets.push_back(member->PPet);
+                }
+
                 if (member->id != PAutomaton->PMaster->id)
                 {
                     auto enmity_obj = enmityList->find(member->id);
@@ -483,12 +490,35 @@ bool CAutomatonController::TryHeal(const CurrentManeuvers& maneuvers)
                     }
                 }
             }
+
+            for (uint8 i = 0; i < pets.size(); ++i)
+            {
+                CBattleEntity* pet = pets.at(i);
+
+                if (pet->id != PAutomaton->PMaster->id)
+                {
+                    auto enmity_obj = enmityList->find(pet->id);
+                    if (enmity_obj != enmityList->end() && highestEnmity < enmity_obj->second.CE + enmity_obj->second.VE &&
+                        pet->GetHPP() <= threshold && distance(PAutomaton->loc.p, PAutomaton->PMaster->loc.p) < 20)
+                    {
+                        highestEnmity = enmity_obj->second.CE + enmity_obj->second.VE;
+                        PCastTarget = pet;
+                    }
+                }
+            }
         }
         else
         {
+            
             for (uint8 i = 0; i < PAutomaton->PMaster->PParty->members.size(); ++i)
             {
                 CBattleEntity* member = PAutomaton->PMaster->PParty->members.at(i);
+
+                if (member->PPet != nullptr && member->PPet->status != STATUS_DISAPPEAR)
+                {
+                    pets.push_back(member->PPet);
+                }
+
                 if (member->id != PAutomaton->PMaster->id && distance(PAutomaton->loc.p, PAutomaton->PMaster->loc.p) < 20)
                 {
                     if (member->GetHPP() <= threshold)
@@ -497,8 +527,27 @@ bool CAutomatonController::TryHeal(const CurrentManeuvers& maneuvers)
                         break;
                     }
                 }
+
+                
+            }
+
+            for (uint8 i = 0; i < pets.size(); ++i)
+            {
+                CBattleEntity* pet = pets.at(i);
+
+                if (pet->id != PAutomaton->PMaster->id && distance(PAutomaton->loc.p, PAutomaton->PMaster->loc.p) < 20)
+                {
+                    if (pet->GetHPP() <= threshold)
+                    {
+                        PCastTarget = pet;
+                        break;
+                    }
+                }
             }
         }
+
+        pets.clear();
+        pets.shrink_to_fit();
     }
 
     // This might be wrong

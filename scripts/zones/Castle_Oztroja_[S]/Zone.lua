@@ -8,31 +8,31 @@ local ID = require("scripts/zones/Castle_Oztroja_[S]/IDs")
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.DUU_MASA_THE_ONECUT)
-    GetMobByID(ID.mob.DUU_MASA_THE_ONECUT):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.DUU_MASA_THE_ONECUT):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.DEE_ZELKO_THE_ESOTERIC)
-    GetMobByID(ID.mob.DEE_ZELKO_THE_ESOTERIC):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.DEE_ZELKO_THE_ESOTERIC):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.MARQUIS_FORNEUS)
-    GetMobByID(ID.mob.MARQUIS_FORNEUS):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.MARQUIS_FORNEUS):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.LOO_KUTTO_THE_PENSIVE)
-    GetMobByID(ID.mob.LOO_KUTTO_THE_PENSIVE):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.LOO_KUTTO_THE_PENSIVE):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.FLESHGNASHER)
-    GetMobByID(ID.mob.FLESHGNASHER):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.FLESHGNASHER):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.VEE_LADU_THE_TITTERER)
-    GetMobByID(ID.mob.VEE_LADU_THE_TITTERER):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.VEE_LADU_THE_TITTERER):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.MAA_ILLMU_THE_BESTOWER)
-    GetMobByID(ID.mob.MAA_ILLMU_THE_BESTOWER):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.MAA_ILLMU_THE_BESTOWER):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.ASTERION)
-    GetMobByID(ID.mob.ASTERION):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.ASTERION):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.SUU_XICU_THE_CANTABILE)
-    GetMobByID(ID.mob.SUU_XICU_THE_CANTABILE):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.SUU_XICU_THE_CANTABILE):setRespawnTime(900)
 end
 
 function onZoneIn(player, prevZone)

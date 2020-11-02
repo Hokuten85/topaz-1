@@ -9,7 +9,7 @@ require("scripts/globals/msg")
 -----------------------------------
 
 function onAdditionalEffect(player, target, damage)
-    local chance = 10
+    local chance = 25
 
     if (math.random(0, 99) >= chance or target:isUndead()) then
         return 0, 0, 0

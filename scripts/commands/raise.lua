@@ -5,9 +5,9 @@
 
 cmdprops =
 {
-    permission = 1,
-    parameters = "ss"
-}
+    permission = 2,
+    parameters = "is"
+};
 
 function error(player, msg)
     player:PrintToPlayer(msg)

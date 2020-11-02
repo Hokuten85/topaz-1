@@ -547,6 +547,7 @@ void SmallPacket0x015(map_session_data_t* session, CCharEntity* PChar, CBasicPac
     {
         bool moved = ((PChar->loc.p.x != data.ref<float>(0x04)) ||
             (PChar->loc.p.z != data.ref<float>(0x0C)) ||
+            (PChar->loc.p.rotation != data.ref<uint8>(0x14)) ||
             (PChar->m_TargID != data.ref<uint16>(0x16)));
 
         bool isUpdate = moved || PChar->updatemask & UPDATE_POS;
@@ -2397,11 +2398,11 @@ void SmallPacket0x04E(map_session_data_t* session, CCharEntity* PChar, CBasicPac
         return;
     }
 
-    if (PChar->m_GMlevel == 0 && !PChar->loc.zone->CanUseMisc(MISC_AH))
+    /*if (PChar->m_GMlevel == 0 && !PChar->loc.zone->CanUseMisc(MISC_AH))
     {
         ShowDebug(CL_CYAN"%s is trying to use the auction house in a disallowed zone [%s]\n" CL_RESET, PChar->GetName(), PChar->loc.zone->GetName());
         return;
-    }
+    }*/
 
     // 0x04 - Selling Items
     // 0x05 - Open List Of Sales / Wait
@@ -6043,11 +6044,13 @@ void SmallPacket0x102(map_session_data_t* session, CCharEntity* PChar, CBasicPac
         {
             if (data.ref<uint8>(0x0C) != 0)
             {
+                PChar->removePetModifiers((CPetEntity*)PChar->PAutomaton);
                 puppetutils::setHead(PChar, data.ref<uint8>(0x0C));
                 puppetutils::LoadAutomatonStats(PChar);
             }
             else if (data.ref<uint8>(0x0D) != 0)
             {
+                PChar->removePetModifiers((CPetEntity*)PChar->PAutomaton);
                 puppetutils::setFrame(PChar, data.ref<uint8>(0x0D));
                 puppetutils::LoadAutomatonStats(PChar);
             }

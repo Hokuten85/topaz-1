@@ -8,7 +8,7 @@ require("scripts/globals/msg")
 -----------------------------------
 
 function onAdditionalEffect(player, target, damage)
-    local chance = 10
+    local chance = 25
 
     if (chance > math.random(0, 99)) then
         local dmg = math.random(38, 70)

@@ -653,6 +653,7 @@ public:
     int32 instantiateMob(lua_State* L);
 
     int32 hasTrait(lua_State*);
+    int32 getTraitValue(lua_State*);
     int32 hasImmunity(lua_State*);          // Check if the mob has immunity for a type of spell (list at mobentity.h)
 
     int32 setAggressive(lua_State* L);
@@ -704,6 +705,13 @@ public:
     int32 getDespoilDebuff(lua_State*);     // gets the status effect id to apply to the mob on successful despoil
     int32 itemStolen(lua_State*);           // sets mob's ItemStolen var = true
     int32 getTHlevel(lua_State*);           // Returns the Monster's current Treasure Hunter Tier
+
+    int32 addCharMod(lua_State*);           // Adds permanent mod to character
+    int32 getCharMod(lua_State*);           // Adds permanent mod to character
+
+    int32 getBountyMob(lua_State*);         // Gets Bounty Mob
+    int32 setFace(lua_State*);              // Sets Character face
+    int32 setRace(lua_State*);              // Sets Character race
 };
 
 #endif

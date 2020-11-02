@@ -14,24 +14,18 @@ end
 
 function onPetAbility(target, pet, skill, summoner)
     local bonusTime = utils.clamp(summoner:getSkillLevel(tpz.skill.SUMMONING_MAGIC) - 300, 0, 200)
-    local duration = 180 + bonusTime
+    local duration = 300 + bonusTime
 
     local moon = VanadielMoonPhase()
     local buffvalue = 0
     if moon > 90 then
-        buffvalue = 7
+        buffvalue = 10
     elseif moon > 75 then
-        buffvalue = 6
+        buffvalue = 9
     elseif moon > 60 then
-        buffvalue = 5
-    elseif moon > 40 then
-        buffvalue = 4
-    elseif moon > 25 then
-        buffvalue = 3
-    elseif moon > 10 then
-        buffvalue = 2
+        buffvalue = 8;
     else
-        buffvalue = 1
+        buffvalue = 7;
     end
     target:delStatusEffect(tpz.effect.STR_BOOST)
     target:delStatusEffect(tpz.effect.DEX_BOOST)

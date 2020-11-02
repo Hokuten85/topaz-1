@@ -32,6 +32,7 @@ end
 function onEventFinish(player, csid, option)
     if csid == 32001 then
         if player:getCurrentMission(COP) == tpz.mission.id.cop.THREE_PATHS and player:getCharVar("COP_Ulmia_s_Path") == 5 then
+			addColoredDrop(player);
             player:setCharVar("COP_Ulmia_s_Path", 6)
         end
         player:addExp(1000)

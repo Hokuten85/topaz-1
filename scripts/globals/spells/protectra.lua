@@ -12,7 +12,7 @@ end
 
 function onSpellCast(caster, target, spell)
     local power = 15
-    local duration = calculateDuration(1800, spell:getSkillType(), spell:getSpellGroup(), caster, target, false)
+    local duration = calculateDuration(28800, spell:getSkillType(), spell:getSpellGroup(), caster, target, false)
     duration = calculateDurationForLvl(duration, 7, target:getMainLvl())
 
     local typeEffect = tpz.effect.PROTECT

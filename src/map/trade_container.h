@@ -59,7 +59,7 @@ public:
     uint16  getItemID(uint8 slotID);
     uint8   getInvSlotID(uint8 slotID);
     uint32  getQuantity(uint8 slotID);                      // количество предметов в ячейке
-    uint8   getConfirmedStatus(uint8 slotID);
+    uint32   getConfirmedStatus(uint8 slotID);
     uint32  getItemQuantity(uint16 itemID);                 // количество предметов одного типа
     uint8   getSize();
     uint8   getExSize();

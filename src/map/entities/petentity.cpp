@@ -227,7 +227,7 @@ bool CPetEntity::ValidTarget(CBattleEntity* PInitiator, uint16 targetFlags)
 {
     if (targetFlags & TARGET_PLAYER && PInitiator->allegiance == allegiance)
     {
-        return false;
+        return true; // allow casting on same allegiance pets
     }
     return CMobEntity::ValidTarget(PInitiator, targetFlags);
 }

@@ -43,7 +43,7 @@ function onMobDespawn(mob)
             GetMobByID(hqId):setRespawnTime(math.random(75600, 86400))
         else
             UpdateNMSpawnPoint(nqId)
-            mob:setRespawnTime(math.random(75600, 86400))
+            mob:setRespawnTime(900)
             SetServerVariable("[PH]Overlord_Bakgodek", kills + 1)
         end
     end

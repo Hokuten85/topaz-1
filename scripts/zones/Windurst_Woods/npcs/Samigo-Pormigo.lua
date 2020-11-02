@@ -15,25 +15,25 @@ local keyitems =
     {
         id = tpz.ki.BONE_PURIFICATION,
         rank = 3,
-        cost = 40000
+        cost = 1
     },
     [1] =
     {
         id = tpz.ki.BONE_ENSORCELLMENT,
         rank = 3,
-        cost = 40000
+        cost = 1
     },
     [2] =
     {
         id = tpz.ki.FILING,
         rank = 3,
-        cost = 10000
+        cost = 1
     },
     [3] =
     {
         id = tpz.ki.WAY_OF_THE_BONEWORKER,
         rank = 9,
-        cost = 20000
+        cost = 1
     }
 }
 
@@ -43,49 +43,49 @@ local items =
     {
         id = 15449,
         rank = 3,
-        cost = 10000
+        cost = 1
     },
     [1] =
     {
         id = 13947,
         rank = 6,
-        cost = 70000
+        cost = 1
     },
     [2] =
     {
         id = 14397,
         rank = 7,
-        cost = 100000
+        cost = 1
     },
     [3] =
     {
         id = 142, -- Drogaroga's Fang
         rank = 9,
-        cost = 150000
+        cost = 1
     },
     [4] =
     {
         id = 336, -- Boneworker's Signboard
         rank = 9,
-        cost = 200000
+        cost = 1
     },
     [5] =
     {
         id = 15824, -- Bonecrafter's Ring
-        rank = 6,
-        cost = 80000
+        rank = 1,
+        cost = 1
     },
     [6] =
     {
         id = 3663, -- Bonecraft Tools
         rank = 7,
-        cost = 50000
+        cost = 1
     },
     [7] =
     {
         id = 3326, -- Boneworker's Emblem
         rank = 9,
-        cost = 15000
+        cost = 1
     }
 }
 

@@ -57,6 +57,7 @@ CRangeState::CRangeState(CCharEntity* PEntity, uint16 targid) :
             m_rapidShot = true;
         }
     }
+
     m_aimTime = std::chrono::milliseconds(delay);
     m_startPos = m_PEntity->loc.p;
 

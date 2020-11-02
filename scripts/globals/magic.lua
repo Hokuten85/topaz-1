@@ -96,24 +96,24 @@ function doBoostGain(caster, target, spell, effect)
     --printf("BOOST-GAIN: POTENCY = %d", potency)
 
     --Only one Boost Effect can be active at once, so if the player has any we have to cancel & overwrite
-    local effectOverwrite =
-    {
-        tpz.effect.STR_BOOST,
-        tpz.effect.DEX_BOOST,
-        tpz.effect.VIT_BOOST,
-        tpz.effect.AGI_BOOST,
-        tpz.effect.INT_BOOST,
-        tpz.effect.MND_BOOST,
-        tpz.effect.CHR_BOOST
-    }
+    -- local effectOverwrite =
+    -- {
+        -- tpz.effect.STR_BOOST,
+        -- tpz.effect.DEX_BOOST,
+        -- tpz.effect.VIT_BOOST,
+        -- tpz.effect.AGI_BOOST,
+        -- tpz.effect.INT_BOOST,
+        -- tpz.effect.MND_BOOST,
+        -- tpz.effect.CHR_BOOST
+    -- }
 
-    for i, effect in ipairs(effectOverwrite) do
-            --printf("BOOST-GAIN: CHECKING FOR EFFECT %d...", effect)
-            if caster:hasStatusEffect(effect) then
-                --printf("BOOST-GAIN: HAS EFFECT %d, DELETING...", effect)
-                caster:delStatusEffect(effect)
-            end
-    end
+    -- for i, effect in ipairs(effectOverwrite) do
+            -- --printf("BOOST-GAIN: CHECKING FOR EFFECT %d...",effect);
+            -- if caster:hasStatusEffect(effect) then
+                -- --printf("BOOST-GAIN: HAS EFFECT %d, DELETING...",effect);
+                -- caster:delStatusEffect(effect)
+            -- end
+    -- end
 
     if target:addStatusEffect(effect, potency, 0, duration) then
         spell:setMsg(tpz.msg.basic.MAGIC_GAIN_EFFECT)
@@ -123,10 +123,10 @@ function doBoostGain(caster, target, spell, effect)
 end
 
 function doEnspell(caster, target, spell, effect)
-    local duration = calculateDuration(180, spell:getSkillType(), spell:getSpellGroup(), caster, target)
+    local duration = calculateDuration(300, spell:getSkillType(), spell:getSpellGroup(), caster, target)
 
     --calculate potency
-    local magicskill = target:getSkillLevel(tpz.skill.ENHANCING_MAGIC)
+    local magicskill = caster:getSkillLevel(tpz.skill.ENHANCING_MAGIC)
 
     local potency = 3 + math.floor(6 * magicskill / 100)
     if magicskill > 200 then
@@ -699,15 +699,15 @@ function calculateMagicBurst(caster, spell, target, params)
 
     if (skillchainTier > 0) then
         if (skillchainCount == 1) then -- two weaponskills
-            skillchainburst = 1.35
+            skillchainburst = 2;
         elseif (skillchainCount == 2) then -- three weaponskills
-            skillchainburst = 1.45
+            skillchainburst = 2.2;
         elseif (skillchainCount == 3) then -- four weaponskills
-             skillchainburst = 1.55
+             skillchainburst = 2.4;
         elseif (skillchainCount == 4) then -- five weaponskills
-            skillchainburst = 1.65
+            skillchainburst = 2.6;
         elseif (skillchainCount == 5) then -- six weaponskills
-            skillchainburst = 1.75
+            skillchainburst = 2.8;
         else
             -- Something strange is going on if this occurs.
             skillchainburst = 1.0
@@ -949,18 +949,18 @@ end
 function getElementalDebuffDOT(INT)
     local DOT = 0
     if (INT<= 39) then
-        DOT = 1
+        DOT = 2;
     elseif (INT <= 69) then
-        DOT = 2
+        DOT = 3;
     elseif (INT <= 99) then
-        DOT = 3
+        DOT = 4;
     elseif (INT <= 149) then
-        DOT = 4
+        DOT = 5;
     else
-        DOT = 5
+        DOT = 6;
     end
-    return DOT
-end
+    return DOT;
+end;
 
 function getElementalDebuffStatDownFromDOT(dot)
     local stat_down = 0
@@ -1063,20 +1063,27 @@ function canOverwrite(target, effect, power, mod)
 end
 
 function doElementalNuke(caster, spell, target, spellParams)
-    local DMG = 0
-    local dINT = caster:getStat(tpz.mod.INT) - target:getStat(tpz.mod.INT)
-    local V = 0
-    local M = 0
+    local DMG = 0;
+    local dINT = caster:getStat(tpz.mod.INT) - target:getStat(tpz.mod.INT);
+    local V = 0;
+    local M = 0;
+    
+    local hasMultipleTargetReduction = spellParams.hasMultipleTargetReduction; --still unused!!!
+    local resistBonus = spellParams.resistBonus;
+    local AMIIaccBonus = spellParams.AMIIaccBonus;
+    local mDMG = caster:getMod(tpz.mod.MAGIC_DAMAGE);
 
     if USE_OLD_MAGIC_DAMAGE and spellParams.V ~= nil and spellParams.M ~= nil then
-        V = spellParams.V -- Base value
-        M = spellParams.M -- Tier multiplier
-        local I = spellParams.I -- Inflection point
-        local cap = I * 2 + V -- Base damage soft cap
+        V = spellParams.V; -- Base value
+        M = spellParams.M; -- Tier multiplier
+        local I = spellParams.I; -- Inflection point
+        -- local cap = I * 2 + V; -- Base damage soft cap
+
+        DMG = DMG + mDMG;
 
         if dINT < 0 then
             -- If dINT is a negative value the tier multiplier is always 1
-            DMG = V + dINT
+            DMG = DMG + V + dINT;
 
             -- Check/ set lower limit of 0 damage for negative dINT
             if DMG < 1 then
@@ -1085,23 +1092,19 @@ function doElementalNuke(caster, spell, target, spellParams)
 
         elseif dINT < I then
              -- If dINT > 0 but below inflection point I
-            DMG = V + dINT * M
+            DMG = DMG + V + dINT * M;
 
         else
              -- Above inflection point I additional dINT is only half as effective
-            DMG = V + I + ((dINT - I) * (M / 2))
+            DMG = DMG + V + I + ((dINT - I) * (M / 2));
         end
 
         -- Check/ set damage soft cap
-        if DMG > cap then
-            DMG = cap
-        end
+        -- if DMG > cap then
+            -- DMG = cap;
+        -- end
 
     else
-        local hasMultipleTargetReduction = spellParams.hasMultipleTargetReduction --still unused!!!
-        local resistBonus = spellParams.resistBonus
-        local mDMG = caster:getMod(tpz.mod.MAGIC_DAMAGE)
-
         --[[
                 Calculate base damage:
                 D = mDMG + V + (dINT × M)
@@ -1337,4 +1340,210 @@ function outputMagicHitRateInfo()
     end
 end
 
-tpz.ma = tpz.magic
+function calculateElementalNukeSpellParams(caster, nukeTier, AOE)
+    local spellParams = {};
+    local skillLevel = caster:getSkillLevel(tpz.skill.ELEMENTAL_MAGIC) + caster:getMod(79 + tpz.skill.ELEMENTAL_MAGIC);
+    
+    --Attempt to scale V with elemental magic skill, starting with Stone potency and scaling up to Thunder potency
+    if (AOE == 1) then
+        if (nukeTier == 1) then
+            spellParams.hasMultipleTargetReduction = true;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(1.84 * skillLevel - 32, 56), 172);
+                spellParams.M = 1;
+                spellParams.I = 201;
+            else
+                spellParams.V0 = math.min(math.max(2.22 * skillLevel - 46, 60), 200);
+                spellParams.V50 = math.min(math.max(1.43 * skillLevel + 141.5, 210), 300);
+                spellParams.V100 = math.min(math.max(1.032 * skillLevel + 260.5, 310), 375);
+                spellParams.V200 = math.min(math.max(1.032 * skillLevel + 360.5, 410), 475);
+                spellParams.M0 = 2;
+                spellParams.M50 = 1.5;
+                spellParams.M100 = 1;
+                spellParams.M200 = 0;
+            end
+        elseif (nukeTier == 2) then
+            spellParams.hasMultipleTargetReduction = true;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(2.27 * skillLevel - 77, 201), 392);
+                spellParams.M = 1.5;
+                spellParams.I = 434;
+            else
+                spellParams.V0 = math.min(math.max(1.79 * skillLevel + 30, 250), 400);
+                spellParams.V50 = math.min(math.max(0.9 * skillLevel + 340, 450), 525);
+                spellParams.V100 = math.min(math.max(0.6 * skillLevel + 527, 600), 650);
+                spellParams.V200 = math.min(math.max(0.3 * skillLevel + 763, 800), 825);
+                spellParams.M0 = 2.5;
+                spellParams.M50 = 2.5;
+                spellParams.M100 = 1.75;
+                spellParams.M200 = 1;
+            end
+        elseif (nukeTier == 3) then
+            spellParams.hasMultipleTargetReduction = true;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(5.37 * skillLevel - 730, 434), 697);
+                spellParams.M = 1.5;
+                spellParams.I = 719;
+            else
+                spellParams.V0 = math.min(math.max(4.1 * skillLevel - 385, 500), 700);
+                spellParams.V50 = math.min(math.max(2.66 * skillLevel + 174, 750), 880);
+                spellParams.V100 = math.min(math.max(2.14 * skillLevel + 486, 950), 1055);
+                spellParams.V200 = math.min(math.max(1.53 * skillLevel + 919, 1250), 1330);
+                spellParams.M0 = 3.6;
+                spellParams.M50 = 3.5;
+                spellParams.M100 = 2.75;
+                spellParams.M200 = 2;
+            end
+        elseif (nukeTier == 4) then
+            -- MOB ONLY TIER SO I DON'T HAVE SETTINGS
+        elseif (nukeTier == 5) then
+            spellParams.hasMultipleTargetReduction = true;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(2.61 * skillLevel - 50, 800), 1000);
+                spellParams.M = 4;
+                spellParams.I = 1000;
+            else
+                spellParams.V0 = math.min(math.max(2.61 * skillLevel - 50, 800), 1000);
+                spellParams.V50 = math.min(math.max(1.56 * skillLevel + 572, 1100), 1200);
+                spellParams.V100 = math.min(math.max(0.92 * skillLevel + 1021, 1350), 1387);
+                spellParams.V200 = math.min(math.max(0.66 * skillLevel + 1501, 1750), 1762);
+                spellParams.M0 = 4;
+                spellParams.M50 = 3.75;
+                spellParams.M100 = 3.75;
+                spellParams.M200 = 3;
+            end
+        end
+    else
+        if (nukeTier == 1) then
+            spellParams.hasMultipleTargetReduction = false;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(0.76 * skillLevel + 10, 10), 60);
+                spellParams.M = 1;
+                spellParams.I = 78;
+            else
+                spellParams.V0 = math.min(math.max(1.25 * skillLevel + 2.5, 10), 85);
+                spellParams.V50 = math.min(math.max(0.42 * skillLevel + 107.5, 110), 135);
+                spellParams.V100 = math.min(math.max(0.42 * skillLevel + 157.5, 160), 185);
+                spellParams.V200 = spellParams.V100;
+                spellParams.M0 = 1;
+                spellParams.M50 = 1;
+                spellParams.M100 = 0;
+                spellParams.M200 = 0;
+            end
+        elseif (nukeTier == 2) then
+            spellParams.hasMultipleTargetReduction = false;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(1.67 * skillLevel - 57, 78), 178);
+                spellParams.M = 1;
+                spellParams.I = 210;
+            else
+                spellParams.V0 = math.min(math.max(1.67 * skillLevel - 35, 100), 200);
+                spellParams.V50 = math.min(math.max(0.84 * skillLevel + 182.5, 250), 300);
+                spellParams.V100 = math.min(math.max(0.42 * skillLevel + 316.25, 350), 375);
+                spellParams.V200 = math.min(math.max(0.42 * skillLevel + 416.25, 450), 475);
+                spellParams.M0 = 2;
+                spellParams.M50 = 1.5;
+                spellParams.M100 = 1;
+                spellParams.M200 = 0;
+            end
+        elseif (nukeTier == 3) then
+            spellParams.hasMultipleTargetReduction = false;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(1.82 * skillLevel - 77, 210), 345);
+                spellParams.M = 1.5;
+                spellParams.I = 381;
+            else
+                spellParams.V0 = math.min(math.max(2.03 * skillLevel - 120, 200), 350);
+                spellParams.V50 = math.min(math.max(1.02 * skillLevel + 240, 400), 475);
+                spellParams.V100 = math.min(math.max(0.68 * skillLevel + 443, 550), 600);
+                spellParams.V200 = math.min(math.max(0.34 * skillLevel + 696.6, 750), 775);
+                spellParams.M0 = 2.5;
+                spellParams.M50 = 2.5;
+                spellParams.M100 = 1.75;
+                spellParams.M200 = 1;
+            end
+        elseif (nukeTier == 4) then
+            spellParams.hasMultipleTargetReduction = false;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(4.57 * skillLevel - 720, 381), 541);
+                spellParams.M = 2;
+                spellParams.I = 626;
+            else
+                spellParams.V0 = math.min(math.max(5.72 * skillLevel - 977, 400), 600);
+                spellParams.V50 = math.min(math.max(3.72 * skillLevel - 245, 650), 780);
+                spellParams.V100 = math.min(math.max(3 * skillLevel + 127, 850), 955);
+                spellParams.V200 = math.min(math.max(2.23 * skillLevel + 617, 1150), 1230);
+                spellParams.M0 = 3.6;
+                spellParams.M50 = 3.5;
+                spellParams.M100 = 2.75;
+                spellParams.M200 = 2;
+            end
+            
+        elseif (nukeTier == 5) then
+            spellParams.hasMultipleTargetReduction = false;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(2.81 * skillLevel - 153, 650), 900);
+                spellParams.M = 4;
+                spellParams.I = 1000;
+            else
+                spellParams.V0 = math.min(math.max(2.81 * skillLevel - 153, 650), 900);
+                spellParams.V50 = math.min(math.max(1.69 * skillLevel + 468, 950), 1100);
+                spellParams.V100 = math.min(math.max(0.99 * skillLevel + 920, 1200), 1287);
+                spellParams.V200 = math.min(math.max(0.71 * skillLevel + 1400, 1600), 1662);
+                spellParams.M0 = 4;
+                spellParams.M50 = 3.74;
+                spellParams.M100 = 3.75;
+                spellParams.M200 = 3;
+            end
+        elseif (nukeTier == 6) then
+            spellParams.hasMultipleTargetReduction = false;
+            spellParams.resistBonus = 1.0;
+            
+            if USE_OLD_MAGIC_DAMAGE then
+                spellParams.V = math.min(math.max(2.62 * skillLevel + 126, 526), 657);
+                spellParams.M = 2
+                spellParams.I = 684;
+            else
+                spellParams.V0 = 700
+                spellParams.V50 = 800
+                spellParams.V100 = 900
+                spellParams.V200 = 1100
+                spellParams.M0 = 2
+                spellParams.M50 = 2
+                spellParams.M100 = 2
+                spellParams.M200 = 2
+            end
+        end
+    end
+    
+    return spellParams;
+end;
+
+AOE = 1;
+NOT_AOE = 0;
+ELEMENTAL_TIER_1 = 1;
+ELEMENTAL_TIER_2 = 2;
+ELEMENTAL_TIER_3 = 3;
+ELEMENTAL_TIER_4 = 4;
+ELEMENTAL_TIER_5 = 5;
+ANCIENT_MAGIC = 6;
+
+tpz.ma = tpz.magic;

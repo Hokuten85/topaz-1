@@ -5,7 +5,7 @@ require("scripts/globals/status")
 require("scripts/globals/pets")
 
 function onMobSpawn(mob)
-    mob:setLocalVar("MANEUVER_DURATION", 60)
+    mob:setLocalVar("MANEUVER_DURATION", 120)
     mob:addListener("EFFECTS_TICK", "MANEUVER_DURATION", function(automaton)
         if (automaton:getTarget()) then
             local dur = automaton:getLocalVar("MANEUVER_DURATION")

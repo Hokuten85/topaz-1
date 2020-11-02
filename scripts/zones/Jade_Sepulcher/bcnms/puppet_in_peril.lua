@@ -31,6 +31,7 @@ end
 
 function onEventFinish(player, csid, option)
     if csid == 32001 and player:getCurrentMission(TOAU) == tpz.mission.id.toau.PUPPET_IN_PERIL then
+		addColoredDrop(player);
         player:completeMission(TOAU, tpz.mission.id.toau.PUPPET_IN_PERIL)
         player:addMission(TOAU, tpz.mission.id.toau.PREVALENCE_OF_PIRATES)
         player:setCharVar("AhtUrganStatus", 0)

@@ -36,5 +36,5 @@ function onMobDespawn(mob)
     DisallowRespawn(mob:getID(), true)
     DisallowRespawn(nqId, false)
     UpdateNMSpawnPoint(nqId)
-    GetMobByID(nqId):setRespawnTime(math.random(75600, 86400))
+    GetMobByID(nqId):setRespawnTime(900)
 end

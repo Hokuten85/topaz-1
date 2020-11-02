@@ -562,7 +562,7 @@ void CZoneEntities::SpawnMoogle(CCharEntity* PChar)
         {
             PCurrentNpc->status = STATUS_NORMAL;
             PChar->pushPacket(new CEntityUpdatePacket(PCurrentNpc, ENTITY_SPAWN, UPDATE_ALL_MOB));
-            PCurrentNpc->status = STATUS_DISAPPEAR;
+            //PCurrentNpc->status = STATUS_DISAPPEAR;
             return;
         }
     }

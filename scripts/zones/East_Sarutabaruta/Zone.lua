@@ -18,7 +18,7 @@ end
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.DUKE_DECAPOD)
-    GetMobByID(ID.mob.DUKE_DECAPOD):setRespawnTime(math.random(3600, 4200))
+    GetMobByID(ID.mob.DUKE_DECAPOD):setRespawnTime(900)
 end
 
 function onZoneIn(player, prevZone)

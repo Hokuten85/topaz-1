@@ -12,19 +12,24 @@ end
 
 function onSpellCast(caster, target, spell)
     local spellParams = {}
-    spellParams.hasMultipleTargetReduction = true
-    spellParams.resistBonus = 1.0
-    spellParams.V = 642
-    spellParams.V0 = 660
-    spellParams.V50 = 855
-    spellParams.V100 = 1035
-    spellParams.V200 = 1315
-    spellParams.M = 1.5
-    spellParams.M0 = 3.9
-    spellParams.M50 = 3.6
-    spellParams.M100 = 2.8
-    spellParams.M200 = 2
-    spellParams.I = 697
+    
+    if (caster:isPC()) then
+        spellParams = calculateElementalNukeSpellParams(caster, ELEMENTAL_TIER_3, AOE);
+    else
+        spellParams.hasMultipleTargetReduction = true
+        spellParams.resistBonus = 1.0
+        spellParams.V = 642
+        spellParams.V0 = 660
+        spellParams.V50 = 855
+        spellParams.V100 = 1035
+        spellParams.V200 = 1315
+        spellParams.M = 1.5
+        spellParams.M0 = 3.9
+        spellParams.M50 = 3.6
+        spellParams.M100 = 2.8
+        spellParams.M200 = 2
+        spellParams.I = 697    
+    end
 
     return doElementalNuke(caster, spell, target, spellParams)
 end

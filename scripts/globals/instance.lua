@@ -62,3 +62,9 @@ function updateInstanceTime(instance, elapsed, texttable)
         instance:setLastTimeUpdate(message)
     end
 end
+
+function addColoredDrop(player)
+	local dropId = 4258+math.random(0,7);
+	player:addItem(dropId);
+	player:messageSpecial(zones[player:getZoneID()].text.ITEM_OBTAINED,dropId);
+end;

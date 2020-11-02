@@ -9,7 +9,7 @@ require("scripts/globals/conquest")
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.DIAMOND_QUADAV)
-    GetMobByID(ID.mob.DIAMOND_QUADAV):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.DIAMOND_QUADAV):setRespawnTime(900)
 end
 
 function onZoneIn(player, prevZone)

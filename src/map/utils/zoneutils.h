@@ -25,6 +25,7 @@
 #include "../../common/cbasetypes.h"
 
 #include "../zone.h"
+#include "../items/item.h"
 
 /************************************************************************
 *                                                                       *
@@ -35,6 +36,15 @@
 class CBaseEntity;
 class CCharEntity;
 class CNpcEntity;
+
+struct BountyMob_t
+{
+    BountyMob_t(CMobEntity* Mob, std::vector<CItem*>* Items);
+    CMobEntity* Mob;
+    std::vector<CItem*>* Items;
+};
+
+typedef std::vector<BountyMob_t*> BountyMobList_t;
 
 namespace zoneutils
 {
@@ -59,6 +69,8 @@ namespace zoneutils
     void         ForEachZone(std::function<void(CZone*)> func);
     uint64       GetZoneIPP(uint16 zoneid);                                         // returns IPP for zone ID
     bool         IsResidentialArea(CCharEntity*);                                  // returns whether or not the area is a residential zone
+
+    BountyMob_t* GetBountyMob(uint8 charLevel, uint8 bountyType);
 };
 
 #endif

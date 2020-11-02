@@ -10,8 +10,8 @@ require("scripts/globals/helm")
 -----------------------------------
 
 function onInitialize(zone)
-    UpdateNMSpawnPoint(ID.mob.ASH_DRAGON)
-    GetMobByID(ID.mob.ASH_DRAGON):setRespawnTime(math.random(900, 10800))
+    UpdateNMSpawnPoint(ID.mob.ASH_DRAGON);
+    GetMobByID(ID.mob.ASH_DRAGON):setRespawnTime(900);
 
     tpz.treasure.initZone(zone)
     tpz.helm.initZone(zone, tpz.helm.type.MINING)

@@ -47,7 +47,7 @@ end
 function onMobDeath(mob, player, isKiller)
     local motherGlobe = mob:getID()
 
-    mob:setRespawnTime(math.random(10800, 21600)) -- respawn 3-6 hrs
+    mob:setRespawnTime(900) -- respawn 3-6 hrs
 
     for i = motherGlobe + 1, motherGlobe + 6 do
         local pet = GetMobByID(i)
@@ -58,5 +58,5 @@ function onMobDeath(mob, player, isKiller)
 end
 
 function onMobDespawn(mob)
-    mob:setRespawnTime(math.random(10800, 21600)) -- 3 to 6 hours
+    mob:setRespawnTime(900) -- 3 to 6 hours
 end

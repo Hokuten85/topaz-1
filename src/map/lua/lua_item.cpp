@@ -255,6 +255,20 @@ inline int32 CLuaItem::getSkillType(lua_State* L)
     return 1;
 }
 
+inline int32 CLuaItem::getSubSkillType(lua_State* L)
+{
+    TPZ_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
+
+    auto PItem = dynamic_cast<CItemWeapon*>(m_PLuaItem);
+
+    if (PItem)
+        lua_pushinteger(L, PItem->getSubSkillType());
+    else
+        lua_pushinteger(L, -1);
+
+    return 1;
+}
+
 inline int32 CLuaItem::getWeaponskillPoints(lua_State* L)
 {
     TPZ_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
@@ -338,6 +352,18 @@ inline int32 CLuaItem::getSignature(lua_State* L)
 
     return 1;
 }
+
+inline int32 CLuaItem::getSlotType(lua_State* L)
+{
+    TPZ_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
+
+    if (CItemEquipment* PEquip = dynamic_cast<CItemEquipment*>(m_PLuaItem))
+        lua_pushinteger(L, PEquip->getSlotType());
+    else
+        lua_pushinteger(L, -1);
+
+    return 1;
+}
 //==========================================================//
 
 const char CLuaItem::className[] = "CItem";
@@ -364,10 +390,12 @@ Lunar<CLuaItem>::Register_t CLuaItem::methods[] =
     LUNAR_DECLARE_METHOD(CLuaItem,delMod),
     LUNAR_DECLARE_METHOD(CLuaItem,getAugment),
     LUNAR_DECLARE_METHOD(CLuaItem,getSkillType),
+    LUNAR_DECLARE_METHOD(CLuaItem,getSubSkillType),
     LUNAR_DECLARE_METHOD(CLuaItem,getWeaponskillPoints),
     LUNAR_DECLARE_METHOD(CLuaItem,isTwoHanded),
     LUNAR_DECLARE_METHOD(CLuaItem,isHandToHand),
     LUNAR_DECLARE_METHOD(CLuaItem,isShield),
     LUNAR_DECLARE_METHOD(CLuaItem,getSignature),
+    LUNAR_DECLARE_METHOD(CLuaItem,getSlotType),
     {nullptr,nullptr}
 };

@@ -11,7 +11,7 @@ function onMagicCastingCheck(caster, target, spell)
 end
 
 function onSpellCast(caster, target, spell)
-    local duration = 180
+    local duration = 300
 
     if caster:hasStatusEffect(tpz.effect.COMPOSURE) and caster:getID() == target:getID() then
        duration = duration * 3

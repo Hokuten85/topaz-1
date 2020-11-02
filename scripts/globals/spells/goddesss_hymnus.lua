@@ -11,7 +11,7 @@ end
 
 function onSpellCast(caster, target, spell)
 
-        local duration = 120
+        local duration = 300
 
         duration = duration * (caster:getMod(tpz.mod.SONG_DURATION_BONUS)/100)
 

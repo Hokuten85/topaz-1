@@ -39,7 +39,7 @@ function onUseAbility(player, target, ability)
         target:removeAllManeuvers()
         target:addStatusEffect(tpz.effect.OVERLOAD, 0, 0, overload)
     else
-        if (target:getActiveManeuvers() == 3) then
+        if (target:getActiveManeuvers() == 4) then
             target:removeOldestManeuver()
         end
 

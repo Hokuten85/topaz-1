@@ -12,7 +12,7 @@ function onAbilityCheck(player, target, ability)
 end
 
 function onPetAbility(target, pet, skill)
-    local base = 16 + pet:getMainLvl()*2.5
+    local base = 16 + pet:getMainLvl()*3
 
     if (target:getHP()+base > target:getMaxHP()) then
         base = target:getMaxHP() - target:getHP() --cap it

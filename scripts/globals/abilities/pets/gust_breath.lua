@@ -26,7 +26,7 @@ function onUseAbility(pet, target, skill, action)
 
     local gear = master:getMod(tpz.mod.WYVERN_BREATH) / 256 -- Master gear that enhances breath
 
-    local dmgmod = MobBreathMove(pet, target, 0.185, pet:getMainLvl() * 15, tpz.magic.ele.WIND) -- Works out to (hp/6) + 15, as desired
+    local dmgmod = MobBreathMove(pet, target, 0.4, pet:getMainLvl() * 15, tpz.magic.ele.WIND, pet:getHP()) -- Works out to (hp/6) + 15, as desired
     dmgmod = (dmgmod * (1 + gear)) * deep
     pet:setTP(0)
 

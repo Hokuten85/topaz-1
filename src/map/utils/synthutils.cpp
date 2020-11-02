@@ -249,7 +249,7 @@ uint8 calcSynthResult(CCharEntity* PChar)
                 if (PChar->CraftContainer->getCraftType() ==  1) //if it's a desynth lower success rate
                     success = 0.45;
                 else
-                    success = 0.95;
+                    success = 0.99;
 
                 if(synthDiff > -11)       //0-10 levels over recipe
                     hqtier = 1;

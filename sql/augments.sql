@@ -205,7 +205,7 @@ INSERT INTO `augments` VALUES (149, 0, 0, 0, 0, 0); -- 149 currently unused. Lea
 INSERT INTO `augments` VALUES (150, 0, 0, 0, 0, 0); -- 150 currently unused. Leave at zero. Edit+move or remove this note as new augments get discovered.
 INSERT INTO `augments` VALUES (151, 0, 173, 1, 0, 0); -- Martial Arts+1
 INSERT INTO `augments` VALUES (152, 0, 0, 0, 0, 0); -- 152 currently unused. Leave at zero. Edit+move or remove this note as new augments get discovered.
-INSERT INTO `augments` VALUES (153, 0, 485, 1, 0, 0); -- Shield Mastery+1 (tested in retail, this is correct)
+INSERT INTO `augments` VALUES (153, 10, 485, 1, 0, 0); -- Shield Mastery+1 (tested in retail, this is correct)
 
 -- 154 to 175 currently unused. Leave at zero. Edit+move or remove this note as new augments get discovered.
 INSERT INTO `augments` VALUES (154, 0, 0, 0, 0, 0);
@@ -902,12 +902,12 @@ insert into `augments` values (742, 0, 0, 0, 0, 0); -- Dmg:+65   Ranged weapons 
 insert into `augments` values (743, 0, 0, 0, 0, 0); -- Dmg:+97    (melee, not ranged)
 insert into `augments` values (744, 0, 0, 0, 0, 0); -- Dmg:-1    (melee, not ranged)
 insert into `augments` values (745, 0, 0, 0, 0, 0); -- Dmg:-33    (melee, not ranged)
-insert into `augments` values (746, 0, 0, 0, 0, 0); -- Dmg:+1    (ranged, not melee)
-insert into `augments` values (747, 0, 0, 0, 0, 0); -- Dmg:+33    (ranged, not melee)
-insert into `augments` values (748, 0, 0, 0, 0, 0); -- Dmg:+65    (ranged, not melee)
-insert into `augments` values (749, 0, 0, 0, 0, 0); -- Dmg:+97    (ranged, not melee)
-insert into `augments` values (750, 0, 0, 0, 0, 0); -- Dmg:-1    (ranged, not melee)
-insert into `augments` values (751, 0, 0, 0, 0, 0); -- Dmg:-33    (ranged, not melee)
+insert into `augments` values (746, 0, 376, 1, 0, 0); -- Dmg:+1    (ranged, not melee)
+insert into `augments` values (747, 0, 376, 33, 0, 0); -- Dmg:+33    (ranged, not melee)
+insert into `augments` values (748, 0, 376, 65, 0, 0); -- Dmg:+65    (ranged, not melee)
+insert into `augments` values (749, 0, 376, 97, 0, 0); -- Dmg:+97    (ranged, not melee)
+insert into `augments` values (750, 0, 376, -1, 0, 0); -- Dmg:-1    (ranged, not melee)
+insert into `augments` values (751, 0, 376, -33, 0, 0); -- Dmg:-33    (ranged, not melee)
 insert into `augments` values (752, 0, 0, 0, 0, 0); -- Delay:+1    (melee, not ranged)
 insert into `augments` values (753, 0, 0, 0, 0, 0); -- Delay:+33    (melee, not ranged)
 insert into `augments` values (754, 0, 0, 0, 0, 0); -- Delay:+65    (melee, not ranged)

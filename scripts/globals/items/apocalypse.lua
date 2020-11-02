@@ -9,7 +9,7 @@ require("scripts/globals/status")
 -----------------------------------
 
 function onAdditionalEffect(player, target, damage)
-    local chance = 10
+    local chance = 25
 
     -- if (target:hasImmunity(64)) then
         -- spell:setMsg(tpz.msg.basic.MAGIC_NO_EFFECT)

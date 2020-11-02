@@ -47,30 +47,30 @@ function onTrigger(player, npc)
             4937,  2331,    -- Doton: Ichi
             4940,  2331,    -- Raiton: Ichi
             4943,  2331,    -- Suiton: Ichi
-            4949,  2849,    -- Jubaku: Ichi
-            4952,  2849,    -- Hojo: Ichi
-            4955,  2849,    -- Kurayami: Ichi
-            4958,  2849,    -- Dokumori: Ichi
-            4961,  2849,    -- Tonko: Ichi
-            4964,  9590,    -- Monomi: Ichi
-            4687, 60750,    -- Recall-Jugner
-            4688, 60750,    -- Recall-Pashh
-            4689, 60750,    -- Recall-Meriph
-            4747, 34656,    -- Teleport-Vahzl
-            4728, 34656,    -- Teleport-Yhoat
-            4729, 34656,    -- Teleport-Altep
-            4730, 34656,    -- Teleport-Holla
-            4731, 34656,    -- Teleport-Dem
-            4732, 34656,    -- Teleport-Mea
-            4853, 10428,    -- Drain
-            4855, 12850,    -- Aspir
-            4857, 10428,    -- Blaze Spikes
-            4869, 11953,    -- Warp
-            4870, 37200,    -- Warp II
-            4873, 32320,    -- Retrace
-            4882, 67818,    -- Sleepga II
-            4946, 13133,    -- Utsusemi: Ichi
-            4994, 11830,    -- Mage's Ballad
+            --4949,  2849,    -- Jubaku: Ichi
+            --4952,  2849,    -- Hojo: Ichi
+            --4955,  2849,    -- Kurayami: Ichi
+            --4958,  2849,    -- Dokumori: Ichi
+            --4961,  2849,    -- Tonko: Ichi
+            --4964,  9590,    -- Monomi: Ichi
+            --4687, 60750,    -- Recall-Jugner
+            --4688, 60750,    -- Recall-Pashh
+            --4689, 60750,    -- Recall-Meriph
+            --4747, 34656,    -- Teleport-Vahzl
+            --4728, 34656,    -- Teleport-Yhoat
+            --4729, 34656,    -- Teleport-Altep
+            --4730, 34656,    -- Teleport-Holla
+            --4731, 34656,    -- Teleport-Dem
+            --4732, 34656,    -- Teleport-Mea
+            --4853, 10428,    -- Drain
+            --4855, 12850,    -- Aspir
+            --4857, 10428,    -- Blaze Spikes
+            --4869, 11953,    -- Warp
+            --4870, 37200,    -- Warp II
+            --4873, 32320,    -- Retrace
+            --4882, 67818,    -- Sleepga II
+            --4946, 13133,    -- Utsusemi: Ichi
+            --4994, 11830,    -- Mage's Ballad
         }
 
         player:showText(npc, ID.text.AMALASANDA_SHOP_DIALOG)

@@ -22,6 +22,17 @@ function onAbilityCheck(player, target, ability)
 end
 
 function onUseAbility(player, target, ability)
+    if (player:getID() ~= target:getID()) then
+        local power = 20
+        if player:getSubJob() == tpz.job.MNK then
+            power = math.floor(power / 2);
+        end
+        
+        target:addStatusEffect(tpz.effect.SUBTLE_BLOW_PLUS,power,0,120);
+        ability:setMsg(0);
+        return;
+    end
+
     local chakraRemoval = player:getMod(tpz.mod.CHAKRA_REMOVAL)
     for k, v in pairs(ChakraStatusEffects) do
         if bit.band(chakraRemoval, v) == v then

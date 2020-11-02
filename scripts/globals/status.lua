@@ -1573,6 +1573,10 @@ tpz.mod =
     -- SPARE = 979, -- stuff
 }
 
+    ENMITY_CAP                  = 2000,
+    DMG_II                      = 2001
+};
+
 tpz.latent =
 {
     HP_UNDER_PERCENT         = 0,  -- hp less than or equal to % - PARAM: HP PERCENT
@@ -2887,3 +2891,9 @@ tpz.relicTiers =
         15070, 16195, 16196, 16197, 16198, 11927, 16200
     },
 }
+
+------------------------------------
+-- JOB TRAITS
+------------------------------------
+TRAIT_ACCURACY_BONUS                = 1;
+TRAIT_STORE_TP                        = 14;

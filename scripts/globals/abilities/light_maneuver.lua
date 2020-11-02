@@ -22,9 +22,9 @@ end
 
 function onUseAbility(player, target, ability)
 
-    local burden = 15
+    local burden = 10
     if (target:getStat(tpz.mod.CHR) < target:getPet():getStat(tpz.mod.CHR)) then
-        burden = 20
+        burden = 15
     end
 
     local overload = target:addBurden(tpz.magic.ele.LIGHT-1, burden)
@@ -48,7 +48,7 @@ function onUseAbility(player, target, ability)
 
         local bonus = 1 + (level/15) + target:getMod(tpz.mod.MANEUVER_BONUS)
 
-        if (target:getActiveManeuvers() == 3) then
+        if (target:getActiveManeuvers() == 4) then
             target:removeOldestManeuver()
         end
 
