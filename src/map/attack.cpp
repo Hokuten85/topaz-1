@@ -369,7 +369,7 @@ bool CAttack::CheckAnticipated()
     else
     { // do have seigan, decay anticipations correctly (guesstimated)
         // 5-6 anticipates is a 'lucky' streak, going to assume 15% decay per proc, with a 100% base w/ Seigan
-        if (tpzrand::GetRandomNumber(100) < (100 - (pastAnticipations * 15) + m_victim->getMod(Mod::THIRD_EYE_ANTICIPATE_RATE)))
+        if (tpzrand::GetRandomNumber(100) < (100 - ((int16)pastAnticipations * 15) + m_victim->getMod(Mod::THIRD_EYE_ANTICIPATE_RATE)))
         {
             // increment power and don't remove
             effect->SetPower(effect->GetPower() + 1);

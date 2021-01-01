@@ -529,7 +529,7 @@ namespace zoneutils
 
                 GetZone(ZoneID)->InsertMOB(PMob);
 
-                if (GetZone(ZoneID)->GetType() & (ZONETYPE_OUTDOORS | ZONETYPE_DUNGEON) && (PMob->m_Type & MOBTYPE_NOTORIOUS) && !(PMob->m_Type & (MOBTYPE_BATTLEFIELD | MOBTYPE_EVENT)) && PMob->m_DropID > 0)
+                if (GetZone(ZoneID)->GetType() & (ZONE_TYPE::OUTDOORS | ZONE_TYPE::DUNGEON) && (PMob->m_Type & MOBTYPE_NOTORIOUS) && !(PMob->m_Type & (MOBTYPE_BATTLEFIELD | MOBTYPE_EVENT)) && PMob->m_DropID > 0)
                 {
                     DropList_t* dropList = itemutils::GetDropList(PMob->m_DropID);
                     if (dropList != nullptr)

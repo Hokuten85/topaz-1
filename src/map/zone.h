@@ -412,6 +412,16 @@ enum class ZONE_TYPE : uint8
     DUNGEON_INSTANCED = 6
 };
 
+inline int operator|(ZONE_TYPE a, ZONE_TYPE b)
+{
+    return static_cast<int>(a) | static_cast<int>(b);
+}
+
+inline int operator&(ZONE_TYPE a, int b)
+{
+    return static_cast<int>(a) & b;
+}
+
 enum GLOBAL_MESSAGE_TYPE
 {
     CHAR_INRANGE,

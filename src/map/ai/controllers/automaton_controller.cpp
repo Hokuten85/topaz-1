@@ -487,7 +487,7 @@ bool CAutomatonController::TryHeal(const CurrentManeuvers& maneuvers)
             static_cast<CCharEntity*>(PAutomaton->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
                 if (PMember->id != PAutomaton->PMaster->id)
                 {
-                    if (PMember->PPet != nullptr && PMember->PPet->status != STATUS_DISAPPEAR)
+                    if (PMember->PPet != nullptr && PMember->PPet->status != STATUS_TYPE::DISAPPEAR)
                     {
                         pets.push_back(PMember->PPet);
                     }
@@ -521,7 +521,7 @@ bool CAutomatonController::TryHeal(const CurrentManeuvers& maneuvers)
         else
         {
             static_cast<CCharEntity*>(PAutomaton->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                if (PMember->PPet != nullptr && PMember->PPet->status != STATUS_DISAPPEAR)
+                if (PMember->PPet != nullptr && PMember->PPet->status != STATUS_TYPE::DISAPPEAR)
                 {
                     pets.push_back(PMember->PPet);
                 }
