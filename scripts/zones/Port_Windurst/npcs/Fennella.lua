@@ -12,22 +12,22 @@ local keyitems = {
     [0] = {
         id = tpz.ki.FROG_FISHING,
         rank = 3,
-        cost = 30000
+        cost = 1
     },
     [1] = {
         id = tpz.ki.SERPENT_RUMORS,
         rank = 8,
-        cost = 95000
+        cost = 1
     },
     [2] = {
         id = tpz.ki.MOOCHING,
         rank = 9,
-        cost = 115000
+        cost = 1
     },
     [3] = {
         id = tpz.ki.ANGLERS_ALMANAC,
         rank = 9,
-        cost = 20000
+        cost = 1
     }
 }
 
@@ -35,42 +35,42 @@ local items = {
     [0] = {
         id = 17002, -- Robber's Rig
         rank = 3,
-        cost = 1500
+        cost = 1
     },
     [1] = {
         id = 15452, -- Fisherman's Belt
         rank = 4,
-        cost = 10000
+        cost = 1
     },
     [2] = {
         id = 14195, -- Pair of Waders
         rank = 5,
-        cost = 70000
+        cost = 1
     },
     [3] = {
         id = 14400, -- Fisherman's Apron
         rank = 7,
-        cost = 100000
+        cost = 1
     },
     [4] = {
         id = 191, -- Fishing hole map
         rank = 9,
-        cost = 150000
+        cost = 1
     },
     [5] = {
         id = 340, -- Fisherman's Signboard
         rank = 9,
-        cost = 200000
+        cost = 1
     },
     [6] = {
         id = 3670, -- Fish and Lure
         rank = 7,
-        cost = 50000
+        cost = 1
     },
     [7] = {
         id = 3330, -- Fishermen's Emblem
         rank = 9,
-        cost = 15000
+        cost = 1
     }
 }
 

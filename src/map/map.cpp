@@ -1028,6 +1028,7 @@ int32 map_config_default()
     map_config.craft_specialization_points = 400;
     map_config.mob_tp_multiplier           = 1.0f;
     map_config.player_tp_multiplier        = 1.0f;
+    map_config.mob_stat_scale_start_level  = 20;
     map_config.nm_hp_multiplier            = 1.0f;
     map_config.mob_hp_multiplier           = 1.0f;
     map_config.player_hp_multiplier        = 1.0f;
@@ -1075,6 +1076,8 @@ int32 map_config_default()
     map_config.anticheat_jail_disable      = false;
     map_config.daily_tally_amount          = 10;
     map_config.daily_tally_limit           = 50000;
+    map_config.global_equipment_drop_rate  = 30;
+    map_config.global_equipment_drop_range = 3;
     return 0;
 }
 
@@ -1216,6 +1219,10 @@ int32 map_config_read(const int8* cfgName)
         else if (strcmp(w1, "player_tp_multiplier") == 0)
         {
             map_config.player_tp_multiplier = (float)atof(w2);
+        }
+        else if (strcmp(w1, "mob_stat_scale_start_level") == 0)
+        {
+            map_config.mob_stat_scale_start_level = (uint8)atof(w2);
         }
         else if (strcmp(w1, "nm_hp_multiplier") == 0)
         {
@@ -1488,6 +1495,14 @@ int32 map_config_read(const int8* cfgName)
         else if (strcmp(w1, "daily_tally_limit") == 0)
         {
             map_config.daily_tally_limit = atoi(w2);
+        }
+        else if (strcmp(w1, "global_equipment_drop_rate") == 0)
+        {
+            map_config.global_equipment_drop_rate = atoi(w2);
+        }
+        else if (strcmp(w1, "global_equipment_drop_range") == 0)
+        {
+            map_config.global_equipment_drop_range = atoi(w2);
         }
         else
         {

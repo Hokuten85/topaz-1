@@ -25,10 +25,12 @@
 #include "../entities/battleentity.h"
 #include "../map.h"
 #include "itemutils.h"
+#include "../lua/luautils.h"
 
 std::array<CItem*, MAX_ITEMID>      g_pItemList; // global array of pointers to game items
 std::array<DropList_t*, MAX_DROPID> g_pDropList; // global array of monster droplist items
 std::array<LootList_t*, MAX_LOOTID> g_pLootList; // global array of BCNM lootlist items
+std::array<DropEquipList_t*, MAX_EQUIPDROPID> g_pEquipmentList;
 
 CItemWeapon* PUnarmedItem;
 CItemWeapon* PUnarmedH2HItem;
@@ -44,6 +46,11 @@ DropGroup_t::DropGroup_t(uint16 GroupRate)
 : GroupRate(GroupRate)
 {
 }
+
+DropEquip_t::DropEquip_t(uint16 ItemID, uint32 Jobs)
+    : ItemID(ItemID)
+    , Jobs(Jobs)
+{ }
 
 /************************************************************************
  *                                                                       *
@@ -275,6 +282,49 @@ namespace itemutils
         return nullptr;
     }
 
+	/************************************************************************
+	*                                                                       *
+	*  Get equipment around mob level for random drops                      *
+	*                                                                       *
+	************************************************************************/
+
+    DropEquipList_t* GetEquipDropList(CCharEntity* PChar, CMobEntity* CMob)
+	{
+        uint8 range = map_config.global_equipment_drop_range;
+
+		uint8 maxPCLevel = luautils::GetSettingsVariable("MAX_LEVEL");
+		uint8 targetLevel = std::clamp<uint8>(CMob->GetMLevel(), 0, maxPCLevel);
+
+		uint8 minLevel = std::max(targetLevel - range, 1) - 1; // -1 to offset levels for zero based indexed g_pEquipmentList array
+		uint8 maxLevel = std::min<int16>(targetLevel + range, maxPCLevel) - 1;
+
+		uint32 allianceJobs = 0;
+		PChar->ForAlliance([&allianceJobs](CBattleEntity* PPartyMember) {
+			auto PMember = static_cast<CCharEntity*>(PPartyMember);
+
+			allianceJobs = allianceJobs | (1 << (PMember->GetMJob() - 1));
+		});
+
+        DropEquipList_t* items(new DropEquipList_t());
+
+		for (uint8 i = minLevel; i < maxLevel; ++i)
+		{
+			if (g_pEquipmentList[i] != NULL)
+			{
+				for (uint16 j = 0; j < g_pEquipmentList[i]->size(); ++j)
+				{
+                    DropEquip_t* item = g_pEquipmentList[i]->at(j);
+
+					if ((item->Jobs & allianceJobs)) {
+                        items->emplace_back(item);
+					}
+				}
+			}
+		}
+
+        return items;
+	}
+
     /************************************************************************
      *                                                                       *
      *  Load the items                                                       *
@@ -387,6 +437,23 @@ namespace itemutils
                         if (((CItemEquipment*)PItem)->getValidTarget() != 0)
                         {
                             ((CItemEquipment*)PItem)->setSubType(ITEM_CHARGED);
+                        }
+
+                        if ((PItem->getFlag() & (ITEM_FLAG_01 | ITEM_FLAG_EX | ITEM_FLAG_RARE)) == 0 && PItem->getAHCat() != 47)
+                        {
+                            uint8 reqLvl = ((CItemEquipment*)PItem)->getReqLvl();
+                            uint8 iLvl = ((CItemEquipment*)PItem)->getILvl();
+                            if (iLvl != 0) { reqLvl = iLvl; }
+                            reqLvl--;
+
+                            if (g_pEquipmentList[reqLvl] == 0)
+                            {
+                                g_pEquipmentList[reqLvl] = new DropEquipList_t;
+                            }
+
+                            DropEquip_t* dropEquip = new DropEquip_t(PItem->getID(), ((CItemEquipment*)PItem)->getJobs());
+
+                            g_pEquipmentList[reqLvl]->emplace_back(dropEquip);
                         }
                     }
                     if (PItem->isType(ITEM_WEAPON))

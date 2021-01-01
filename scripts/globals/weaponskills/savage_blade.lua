@@ -10,7 +10,7 @@
 -- Element: None
 -- Modifiers: STR:50%  MND:50%
 -- 100%TP    200%TP    300%TP
--- 4.00      10.25      13.75
+-- 4.50      10.25      13.75
 -----------------------------------
 require("scripts/globals/status")
 require("scripts/globals/settings")

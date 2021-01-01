@@ -24,5 +24,5 @@ function onMobDeath(mob, player, isKiller)
 end
 
 function onMobDespawn(mob)
-    mob:setRespawnTime(math.random(3600, 4200)) -- 60 to 70 minutes
+    mob:setRespawnTime(900) -- 60 to 70 minutes
 end

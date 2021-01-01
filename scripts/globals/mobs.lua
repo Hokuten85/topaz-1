@@ -71,6 +71,9 @@ tpz.mob.phOnDespawn = function(ph, phList, chance, cooldown, immediate)
         cooldown = NM_LOTTERY_COOLDOWN >= 0 and (cooldown * NM_LOTTERY_COOLDOWN) or cooldown
     end
 
+    chance = 100; -- minimum 100% chance to spawn
+    cooldown = math.min(cooldown,900); -- maximum 15 min respawn
+
     local phId = ph:getID()
     local nmId = phList[phId]
 

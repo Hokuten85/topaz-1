@@ -47,7 +47,7 @@ function onUseAbility(player, target, ability)
         TPGain = 9.5 * 5 + STM * 5 ^ 2 + Merits
     end
 
-    TPGain = TPGain * 10
+    TPGain = TPGain * 15
 
     player:addTP(TPGain)
     player:delStatusEffect(tpz.effect.FINISHING_MOVE_1)

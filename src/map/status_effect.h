@@ -746,8 +746,8 @@ public:
     EFFECT GetStatusID();
     uint32 GetSubID() const;
     uint16 GetIcon() const;
-    uint16 GetPower() const;
-    uint16 GetSubPower() const;
+    uint32 GetPower() const;
+    uint32 GetSubPower() const;
     uint16 GetTier() const;
     uint32 GetFlag() const;
     uint16 GetType() const;
@@ -764,8 +764,8 @@ public:
     void SetType(uint16 Type);
     void SetSlot(uint8 Slot);
     void SetIcon(uint16 Icon);
-    void SetPower(uint16 Power);
-    void SetSubPower(uint16 subPower);
+    void SetPower(uint32 Power);
+    void SetSubPower(uint32 subPower);
     void SetTier(uint16 tier);
     void SetDuration(uint32 Duration);
     void SetOwner(CBattleEntity* Owner);
@@ -784,7 +784,7 @@ public:
     std::vector<CModifier> modList; // список модификаторов
     bool                   deleted{ false };
 
-    CStatusEffect(EFFECT id, uint16 icon, uint16 power, uint32 tick, uint32 duration, uint32 subid = 0, uint16 subPower = 0, uint16 tier = 0, uint32 flags = 0);
+    CStatusEffect(EFFECT id, uint16 icon, uint32 power, uint32 tick, uint32 duration, uint32 subid = 0, uint32 subPower = 0, uint16 tier = 0, uint32 flags = 0);
 
     ~CStatusEffect();
 
@@ -794,8 +794,8 @@ private:
     EFFECT m_StatusID{ EFFECT_NONE }; // основной тип эффекта
     uint32 m_SubID{ 0 };              // дополнительный тип эффекта
     uint16 m_Icon{ 0 };               // иконка эффекта
-    uint16 m_Power{ 0 };              // сила эффекта
-    uint16 m_SubPower{ 0 };           // Secondary power of the effect
+    uint32 m_Power{ 0 };              // сила эффекта
+    uint32 m_SubPower{ 0 };           // Secondary power of the effect
     uint16 m_Tier{ 0 };               // Tier of the effect
     uint32 m_Flag{ 0 };               // флаг эффекта (условия его исчезновения)
     uint16 m_Type{ 0 };               // used to enforce only one

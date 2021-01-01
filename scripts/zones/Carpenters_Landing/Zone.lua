@@ -16,7 +16,7 @@ end
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.TEMPEST_TIGON)
-    GetMobByID(ID.mob.TEMPEST_TIGON):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.TEMPEST_TIGON):setRespawnTime(900)
 
     tpz.helm.initZone(zone, tpz.helm.type.LOGGING)
     func.herculesTreeOnGameHour()

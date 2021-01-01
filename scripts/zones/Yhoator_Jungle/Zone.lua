@@ -19,16 +19,16 @@ end
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.WOODLAND_SAGE)
-    GetMobByID(ID.mob.WOODLAND_SAGE):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.WOODLAND_SAGE):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.POWDERER_PENNY)
-    GetMobByID(ID.mob.POWDERER_PENNY):setRespawnTime(math.random(5400, 7200))
+    GetMobByID(ID.mob.POWDERER_PENNY):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.BISQUE_HEELED_SUNBERRY)
-    GetMobByID(ID.mob.BISQUE_HEELED_SUNBERRY):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.BISQUE_HEELED_SUNBERRY):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.BRIGHT_HANDED_KUNBERRY)
-    GetMobByID(ID.mob.BRIGHT_HANDED_KUNBERRY):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.BRIGHT_HANDED_KUNBERRY):setRespawnTime(900)
 
     tpz.conq.setRegionalConquestOverseers(zone:getRegionID())
 

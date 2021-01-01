@@ -16,7 +16,7 @@ end
 function onPetAbility(target, pet, skill)
     local numhits = 1
     local accmod = 1
-    local dmgmod = 2
+    local dmgmod = 2.5
     local dmgmodsubsequent = 1 -- ??
 
     local totaldamage = 0
@@ -33,7 +33,7 @@ function onPetAbility(target, pet, skill)
     end
     damage.dmg = damage.dmg * tp / 1000
     totaldamage = AvatarFinalAdjustments(damage.dmg, pet, skill, target, tpz.attackType.MAGICAL, tpz.damageType.LIGHTNING, numhits)
-    target:addStatusEffect(tpz.effect.PARALYSIS, 15, 0, 60)
+    target:addStatusEffect(tpz.effect.PARALYSIS, 25, 0, 120)
     target:takeDamage(totaldamage, pet, tpz.attackType.MAGICAL, tpz.damageType.LIGHTNING)
     target:updateEnmityFromDamage(pet, totaldamage)
 

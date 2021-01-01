@@ -9,13 +9,13 @@ require("scripts/globals/conquest")
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.DREXERION_THE_CONDEMNED)
-    GetMobByID(ID.mob.DREXERION_THE_CONDEMNED):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.DREXERION_THE_CONDEMNED):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.PHANDURON_THE_CONDEMNED)
-    GetMobByID(ID.mob.PHANDURON_THE_CONDEMNED):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.PHANDURON_THE_CONDEMNED):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.BLOODSUCKER)
-    GetMobByID(ID.mob.BLOODSUCKER):setRespawnTime(3600)
+    GetMobByID(ID.mob.BLOODSUCKER):setRespawnTime(900)
 end
 
 function onZoneIn(player, prevZone)

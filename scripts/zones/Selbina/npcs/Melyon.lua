@@ -23,11 +23,11 @@ function onTrade(player, npc, trade)
 
     elseif player:getQuestStatus(OTHER_AREAS_LOG, tpz.quest.id.otherAreas.ONLY_THE_BEST) ~= QUEST_AVAILABLE then
         if npcUtil.tradeHas(trade, {{4366, 5}}) then -- La Theine Cabbage x5
-            player:startEvent(62)
+            player:startEvent(62, 0, 4366)
         elseif npcUtil.tradeHas(trade, {{629, 3}}) then -- Millioncorn x3
-            player:startEvent(63)
+            player:startEvent(63, 0, 629)
         elseif npcUtil.tradeHas(trade, 919) then -- Boyahda Moss x1
-            player:startEvent(64)
+            player:startEvent(64, 0, 919)
         end
     end
 end

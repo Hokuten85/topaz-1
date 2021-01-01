@@ -259,10 +259,13 @@ protected:
     void DropItems(CCharEntity* PChar);
 
 private:
-    time_point                     m_DespawnTimer{ time_point::min() }; // Despawn Timer to despawn mob after set duration
-    std::unordered_map<int, int16> m_mobModStat;
-    std::unordered_map<int, int16> m_mobModStatSave;
-    static constexpr float         roam_home_distance{ 60.f };
+
+    time_point    m_DespawnTimer {time_point::min()};  // Despawn Timer to despawn mob after set duration
+    std::unordered_map<int, int16>     m_mobModStat;
+    std::unordered_map<int, int16>     m_mobModStatSave;
+    static constexpr float roam_home_distance {60.f};
+
+    std::array<uint16, 7> coloredDrops = { 4258,4259,4260,4261,4262,4263,4264 };
 };
 
 #endif

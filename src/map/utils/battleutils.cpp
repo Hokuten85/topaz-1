@@ -499,6 +499,7 @@ namespace battleutils
                                          WEATHER_SAND_STORM, WEATHER_THUNDERSTORMS, WEATHER_DARKNESS,  WEATHER_STELLAR_GLARE };
         uint32  obi[8]                 = { 15435, 15436, 15437, 15438, 15439, 15440, 15441, 15442 };
         Mod     resistarray[8] = { Mod::FIRERES, Mod::ICERES, Mod::WINDRES, Mod::EARTHRES, Mod::THUNDERRES, Mod::WATERRES, Mod::LIGHTRES, Mod::DARKRES };
+        Mod     mdefarray[8] = { Mod::FIREDEF, Mod::EARTHDEF, Mod::WATERDEF, Mod::WINDDEF, Mod::ICEDEF, Mod::THUNDERDEF, Mod::LIGHTDEF, Mod::DARKDEF };
         bool    obiBonus       = false;
 
         double half      = (double)(PDefender->getMod(resistarray[element])) / 100;
@@ -562,6 +563,9 @@ namespace battleutils
         {
             dBonus -= 0.25f;
         }
+
+        double mdef = (double)(PDefender->getMod(mdefarray[element])) / 256; // negative value is increase in damage, positive is decrease in damage
+        dBonus -= mdef;
 
         damage = (int32)(damage * resist);
         damage = (int32)(damage * dBonus);
@@ -2106,9 +2110,9 @@ namespace battleutils
             if (giveTPtoVictim)
             {
                 // account for attacker's subtle blow which reduces the baseTP gain for the defender
-                float sBlow1    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW), -50.0f, 50.0f);
+                float sBlow1    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW), -50.0f, 75.0f);
                 float sBlow2    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW_II), -50.0f, 50.0f);
-                float sBlowMult = ((100.0f - std::clamp((float)(sBlow1 + sBlow2), -75.0f, 75.0f)) / 100.0f);
+                float sBlowMult = ((100.0f - std::clamp((float)(sBlow1 + sBlow2), -75.0f, 90.0f)) / 100.0f);
 
                 // mobs hit get basetp+30 whereas pcs hit get basetp/3
                 if (PDefender->objtype == TYPE_PC || (PDefender->objtype == TYPE_PET && PDefender->PMaster && PDefender->PMaster->objtype == TYPE_PC))
@@ -2251,9 +2255,9 @@ namespace battleutils
             }
 
             // account for attacker's subtle blow which reduces the baseTP gain for the defender
-            float sBlow1    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW), -50.0f, 50.0f);
+            float sBlow1    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW), -50.0f, 75.0f);
             float sBlow2    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW_II), -50.0f, 50.0f);
-            float sBlowMult = ((100.0f - std::clamp((float)(sBlow1 + sBlow2), -75.0f, 75.0f)) / 100.0f);
+            float sBlowMult = ((100.0f - std::clamp((float)(sBlow1 + sBlow2), -75.0f, 90.0f)) / 100.0f);
 
             // mobs hit get basetp+30 whereas pcs hit get basetp/3
             if (PDefender->objtype == TYPE_PC)
@@ -3537,7 +3541,7 @@ namespace battleutils
                 PSCEffect->SetDuration(PSCEffect->GetDuration() - 1000);
                 PSCEffect->SetTier(GetSkillchainTier((SKILLCHAIN_ELEMENT)skillchain));
                 PSCEffect->SetPower(skillchain);
-                PSCEffect->SetSubPower(std::min(PSCEffect->GetSubPower() + 1, 5)); // Linked, limited to 5
+                PSCEffect->SetSubPower(std::min<uint32>(PSCEffect->GetSubPower() + 1, 5)); // Linked, limited to 5
 
                 return (SUBEFFECT)GetSkillchainSubeffect((SKILLCHAIN_ELEMENT)skillchain);
             }
@@ -4150,13 +4154,13 @@ namespace battleutils
             drainPercent          = drainPercent + std::min(0.02f, 0.01f * gearBonusPercent);
 
             damage += (uint32)(m_PChar->health.hp * drainPercent);
-            m_PChar->addHP(-HandleStoneskin(m_PChar, (int32)(m_PChar->health.hp * (drainPercent - m_PChar->getMod(Mod::STALWART_SOUL) * 0.001f))));
+            m_PChar->addHP(-HandleStoneskin(m_PChar, (int32)(m_PChar->health.hp * (drainPercent - m_PChar->getMod(Mod::STALWART_SOUL) * 0.001f) * 0.5)));
         }
         else if (m_PChar->GetSJob() == JOB_DRK && m_PChar->health.hp >= 10 && m_PChar->StatusEffectContainer->HasStatusEffect(EFFECT_SOULEATER))
         {
             // lose 10% Current HP, only HALF (5%) converted to damage
             damage += (uint32)(m_PChar->health.hp * 0.05f);
-            m_PChar->addHP(-HandleStoneskin(m_PChar, (int32)(m_PChar->health.hp * 0.1f)));
+            m_PChar->addHP(-HandleStoneskin(m_PChar, (int32)(m_PChar->health.hp * 0.05f)));
         }
         return damage;
     }
@@ -4277,23 +4281,23 @@ namespace battleutils
         }
         else if (lvl < 50)
         {
-            shotCount += 3;
+            shotCount += 4;
         }
         else if (lvl < 75)
         {
-            shotCount += 4;
+            shotCount += 5;
         }
         else if (lvl < 90)
         {
-            shotCount += 5;
+            shotCount += 6;
         }
         else if (lvl < 99)
         {
-            shotCount += 6;
+            shotCount += 7;
         }
         else if (lvl >= 99)
         {
-            shotCount += 7;
+            shotCount += 8;
         }
 
         // make sure we have enough ammo for all these shots
@@ -4909,6 +4913,8 @@ namespace battleutils
         resist =
             1.0f + (floor(256.0f * (PDefender->getMod(Mod::DMGBREATH) / 100.0f)) / 256.0f) + (floor(256.0f * (PDefender->getMod(Mod::DMG) / 100.0f)) / 256.0f);
         resist = std::clamp(resist, 0.5f, 1.5f); // assuming if its floored at .5f its capped at 1.5f but who's stacking +dmgtaken equip anyway???
+        resist = resist + (floor(256.0f * (PDefender->getMod(Mod::DMG_II) / 100.0f)) / 256.0f);
+        resist = std::clamp(resist, 0.1f, 1.5f); //allows for DT II to take reduction to 90%
         damage = (int32)(damage * resist);
 
         if (tpzrand::GetRandomNumber(100) < PDefender->getMod(Mod::ABSORB_DMG_CHANCE))
@@ -4942,6 +4948,10 @@ namespace battleutils
         resist = std::max(resist, 0.5f);
         resist += PDefender->getMod(Mod::DMGMAGIC_II) / 100.f;
         resist = std::max(resist, 0.125f); // Total cap with MDT-% II included is 87.5%
+
+		resist += PDefender->getMod(Mod::DMG_II) / 100.f;
+		resist = std::max(resist, 0.1f); // Total cap with DT II included is 90%
+
         damage = (int32)(damage * resist);
 
         if (damage > 0 && PDefender->objtype == TYPE_PET && PDefender->getMod(Mod::AUTO_STEAM_JACKET) > 1)
@@ -4983,6 +4993,10 @@ namespace battleutils
         resist = 1.f + PDefender->getMod(Mod::DMGPHYS) / 100.f + PDefender->getMod(Mod::DMG) / 100.f;
         resist = std::max(resist, 0.5f);                      // PDT caps at -50%
         resist += PDefender->getMod(Mod::DMGPHYS_II) / 100.f; // Add Burtgang reduction after 50% cap. Extends cap to -68%
+
+		resist += PDefender->getMod(Mod::DMG_II) / 100.f;
+		resist = std::max(resist, 0.1f); // DT II caps at -90%
+
         damage = (int32)(damage * resist);
 
         if (damage > 0 && PDefender->objtype == TYPE_PET && PDefender->getMod(Mod::AUTO_STEAM_JACKET) > 0)
@@ -5023,6 +5037,10 @@ namespace battleutils
 
         resist = 1.0f + PDefender->getMod(Mod::DMGRANGE) / 100.f + PDefender->getMod(Mod::DMG) / 100.f;
         resist = std::max(resist, 0.5f);
+
+		resist += PDefender->getMod(Mod::DMG_II) / 100.f;
+		resist = std::max(resist, 0.1f); // DT II caps at 90%
+
         damage = (int32)(damage * resist);
 
         if (damage > 0 && PDefender->objtype == TYPE_PET && PDefender->getMod(Mod::AUTO_STEAM_JACKET) > 0)

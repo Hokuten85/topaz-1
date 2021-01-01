@@ -320,7 +320,7 @@ void CItemEquipment::SetAugmentMod(uint16 type, uint8 value)
         // apply modifier to item. increase modifier power by 'value' (default magnitude 1 for most augments) if multiplier isn't specified
         // otherwise increase modifier power using the multiplier
         // check if we should be adding to or taking away from the mod power (handle scripted augments properly)
-        modValue = (modValue > 0 ? modValue + value : modValue - value) * (multiplier > 1 ? multiplier : 1);
+        modValue = (modValue > 0 ? modValue + value : modValue - value) * (multiplier == 0 ? 1 : multiplier);
 
         if (!isPet)
         {

@@ -139,6 +139,7 @@ namespace charutils
     int32 delPetAbility(CCharEntity* PChar, uint16 AbilityID);
 
     int32 hasTrait(CCharEntity* PChar, uint8 TraitID); // check if pchar has trait by traitid and jobid
+    int32 getTraitValue(CCharEntity* PChar, uint8 TraitID);	        // get the value of a characters trait
     int32 addTrait(CCharEntity* PChar, uint8 TraitID); // add trait by traitid and jobid
     int32 delTrait(CCharEntity* PChar, uint8 TraitID); // delete trait by traitid and jobid
 
@@ -211,6 +212,8 @@ namespace charutils
     void SendTimerPacket(CCharEntity* PChar, uint32 seconds);
     void SendTimerPacket(CCharEntity* PChar, duration dur);
     void SendClearTimerPacket(CCharEntity* PChar);
+
+    void AddCharMod(CCharEntity* PChar, Mod type, int value);
 }; // namespace charutils
 
 #endif // _CHARUTILS_H

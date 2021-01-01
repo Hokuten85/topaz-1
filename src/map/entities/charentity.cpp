@@ -598,10 +598,8 @@ void CCharEntity::PostTick()
             });
         }
         // Do not send an update packet when only the position has change
-        if (updatemask ^ UPDATE_POS)
-        {
-            pushPacket(new CCharUpdatePacket(this));
-        }
+        // if (updatemask ^ UPDATE_POS) // WHY THE FUCK NOT? IF THE POSITION CHANGES, SEND THE FUCKING PACKET
+        pushPacket(new CCharUpdatePacket(this));
         updatemask = 0;
     }
 }
@@ -616,6 +614,21 @@ void CCharEntity::delTrait(CTrait* PTrait)
 {
     CBattleEntity::delTrait(PTrait);
     charutils::delTrait(this, PTrait->getID());
+}
+
+void CCharEntity::setCharMod(Mod type, int16 value)
+{
+    m_charModStat[type] = value;
+}
+
+int16 CCharEntity::getCharMod(Mod type)
+{
+    return m_charModStat[type];
+}
+
+void CCharEntity::addCharMod(Mod type, int16 value)
+{
+    m_charModStat[type] += value;
 }
 
 bool CCharEntity::ValidTarget(CBattleEntity* PInitiator, uint16 targetFlags)
@@ -1550,7 +1563,7 @@ void CCharEntity::OnRaise()
         // add weakness effect (75% reduction in HP/MP)
         if (GetLocalVar("MijinGakure") == 0)
         {
-            CStatusEffect* PWeaknessEffect = new CStatusEffect(EFFECT_WEAKNESS, EFFECT_WEAKNESS, weaknessLvl, 0, 300);
+            CStatusEffect* PWeaknessEffect = new CStatusEffect(EFFECT_WEAKNESS, EFFECT_WEAKNESS, weaknessLvl, 0, 150);
             StatusEffectContainer->AddStatusEffect(PWeaknessEffect);
         }
 

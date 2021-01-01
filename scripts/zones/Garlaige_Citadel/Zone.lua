@@ -27,10 +27,10 @@ function onInitialize(zone)
     zone:registerRegion(22, -130, -1, 322, -128, 1, 324)
 
     UpdateNMSpawnPoint(ID.mob.OLD_TWO_WINGS)
-    GetMobByID(ID.mob.OLD_TWO_WINGS):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.OLD_TWO_WINGS):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.SKEWER_SAM)
-    GetMobByID(ID.mob.SKEWER_SAM):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.SKEWER_SAM):setRespawnTime(900)
 
     UpdateNMSpawnPoint(ID.mob.SERKET)
     GetMobByID(ID.mob.SERKET):setRespawnTime(math.random(900, 10800))

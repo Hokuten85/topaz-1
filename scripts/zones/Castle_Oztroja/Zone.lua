@@ -12,7 +12,7 @@ require("scripts/globals/zone")
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.YAGUDO_AVATAR)
-    GetMobByID(ID.mob.YAGUDO_AVATAR):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.YAGUDO_AVATAR):setRespawnTime(900)
 
     CASTLE_OZTROJA.pickNewCombo() -- update combination for brass door on floor 2
     CASTLE_OZTROJA.pickNewPassword() -- update password for trap door on floor 4

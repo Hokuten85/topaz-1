@@ -31,20 +31,20 @@ function onUseAbility(player, target, ability)
     --Add extra enmity if 2 finishing moves are used
     elseif (player:hasStatusEffect(tpz.effect.FINISHING_MOVE_2)) then
         player:delStatusEffect(tpz.effect.FINISHING_MOVE_2)
-        target:addEnmity(player, 0, 500)
+        target:addEnmity(player, 0, 1000)
     elseif (player:hasStatusEffect(tpz.effect.FINISHING_MOVE_3)) then
         player:delStatusEffectSilent(tpz.effect.FINISHING_MOVE_3)
-        player:addStatusEffect(tpz.effect.FINISHING_MOVE_1, 1, 0, 7200)
-        target:addEnmity(player, 0, 500)
+        player:addStatusEffect(tpz.effect.FINISHING_MOVE_1,1,0,7200)
+        target:addEnmity(player, 0, 1000)
 
     elseif (player:hasStatusEffect(tpz.effect.FINISHING_MOVE_4)) then
         player:delStatusEffectSilent(tpz.effect.FINISHING_MOVE_4)
-        player:addStatusEffect(tpz.effect.FINISHING_MOVE_2, 1, 0, 7200)
-        target:addEnmity(player, 0, 500)
+        player:addStatusEffect(tpz.effect.FINISHING_MOVE_2,1,0,7200)
+        target:addEnmity(player, 0, 1000)
 
     elseif (player:hasStatusEffect(tpz.effect.FINISHING_MOVE_5)) then
         player:delStatusEffectSilent(tpz.effect.FINISHING_MOVE_5)
-        player:addStatusEffect(tpz.effect.FINISHING_MOVE_3, 1, 0, 7200)
-        target:addEnmity(player, 0, 500)
+        player:addStatusEffect(tpz.effect.FINISHING_MOVE_3,1,0,7200)
+        target:addEnmity(player, 0, 1000)
     end
 end

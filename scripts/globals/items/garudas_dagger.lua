@@ -8,7 +8,7 @@ require("scripts/globals/magic")
 -----------------------------------
 
 function onAdditionalEffect(player, target, damage)
-    local chance = 10
+    local chance = 25
 
     if (VanadielDayOfTheWeek() == tpz.day.WINDSDAY) then
         chance = chance+6

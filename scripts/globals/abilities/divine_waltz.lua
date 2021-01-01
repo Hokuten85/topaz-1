@@ -17,7 +17,7 @@ function onAbilityCheck(player, target, ability)
         return tpz.msg.basic.UNABLE_TO_USE_JA2, 0
     elseif (player:hasStatusEffect(tpz.effect.TRANCE)) then
         return 0, 0
-    elseif (player:getTP() < 400) then
+    elseif (player:getTP() < 300) then
         return tpz.msg.basic.NOT_ENOUGH_TP, 0
     else
         --[[ Apply "Waltz Ability Delay" reduction
@@ -42,7 +42,7 @@ end
 function onUseAbility(player, target, ability)
     -- Only remove TP if the player doesn't have Trance, and only deduct once instead of for each target.
     if (player:getID() == target:getID() and player:hasStatusEffect(tpz.effect.TRANCE) == false) then
-        player:delTP(400)
+        player:delTP(300)
     end
 
     -- Grabbing variables.
@@ -54,11 +54,11 @@ function onUseAbility(player, target, ability)
 
     -- Performing sj mj check.
     if mjob == tpz.job.DNC then
-        cure = (vit+chr)*0.25+60
+        cure = (vit+chr)*0.3+60
     end
 
     if sjob == tpz.job.DNC then
-        cure = (vit+chr)*0.125+60
+        cure = (vit+chr)*0.15+60
     end
 
     -- Apply waltz modifiers
@@ -75,6 +75,9 @@ function onUseAbility(player, target, ability)
     target:restoreHP(cure)
     target:wakeUp()
     player:updateEnmityFromCure(target, cure)
+    
+    target:addStatusEffect(tpz.effect.EVASION_BOOST, 50, 0, 10)
+    target:addStatusEffect(tpz.effect.DEFENSE_BOOST, 15, 0, 10)
 
     return cure
 end

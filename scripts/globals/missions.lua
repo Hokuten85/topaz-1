@@ -1292,23 +1292,29 @@ function finishMissionTimeline(player, guard, csid, option)
                 messList = timeline[cs + 5][nb]
 
                 switch (messList[1]) : caseof {
-                    [1] = function (x) if (messList[2] ~= nil) then player:addMission(nation, messList[2]) else player:addMission(nation, timeline[cs]) end end,
-                    [2] = function (x) player:messageSpecial(zones[player:getZoneID()].text.YOU_ACCEPT_THE_MISSION) end,
-                    [3] = function (x) player:setCharVar(messList[2], messList[3]) end,
-                    [4] = function (x) player:tradeComplete() end,
-                    [5] = function (x) if ((player:getRankPoints() + messList[2]) > 4000) then player:setRankPoints(4000) else player:addRankPoints(messList[2]) end end,
-                    [6] = function (x) player:setRankPoints(0) end,
-                    [7] = function (x) player:addCP(messList[2]) player:messageSpecial(zones[player:getZoneID()].text.YOUVE_EARNED_CONQUEST_POINTS) end,
-                    [8] = function (x) player:addGil(GIL_RATE*messList[2]) player:messageSpecial(zones[player:getZoneID()].text.GIL_OBTAINED, GIL_RATE*messList[2]) end,
-                    [9] = function (x) player:delKeyItem(messList[2]) end,
-                    [10] = function (x) player:addKeyItem(messList[2]) player:messageSpecial(zones[player:getZoneID()].text.KEYITEM_OBTAINED, messList[2]) end,
-                    [11] = function (x) player:setRank(messList[2]) end,
-                    [12] = function (x) player:completeMission(nation, timeline[cs]) end,
-                    [13] = function (x) player:addTitle(messList[2]) end,
-                    [14] = function (x) player:setCharVar("MissionStatus", messList[2]) end,
+                    [1] = function (x) if (messList[2] ~= nil) then player:addMission(nation,messList[2]); else player:addMission(nation,timeline[cs]); end end,
+                    [2] = function (x) player:messageSpecial(zones[player:getZoneID()].text.YOU_ACCEPT_THE_MISSION); end,
+                    [3] = function (x) player:setCharVar(messList[2],messList[3]); end,
+                    [4] = function (x) player:tradeComplete(); end,
+                    [5] = function (x) if ((player:getRankPoints() + messList[2]) > 4000) then player:setRankPoints(4000); else player:addRankPoints(messList[2]); end end,
+                    [6] = function (x) player:setRankPoints(0); end,
+                    [7] = function (x) player:addCP(messList[2]); player:messageSpecial(zones[player:getZoneID()].text.YOUVE_EARNED_CONQUEST_POINTS); end,
+                    [8] = function (x) local g=GIL_RATE*messList[2]; player:addGil(g); player:messageSpecial(zones[player:getZoneID()].text.GIL_OBTAINED,g); addColoredDrop(player); end,
+                    [9] = function (x) player:delKeyItem(messList[2]); end,
+                    [10] = function (x) player:addKeyItem(messList[2]); player:messageSpecial(zones[player:getZoneID()].text.KEYITEM_OBTAINED,messList[2]); end,
+                    [11] = function (x) player:setRank(messList[2]); end,
+                    [12] = function (x) player:completeMission(nation,timeline[cs]); end,
+                    [13] = function (x) player:addTitle(messList[2]); end,
+                    [14] = function (x) player:setCharVar("MissionStatus",messList[2]); end,
                 }
             end
         end
     end
 
-end
+end;
+
+function addColoredDrop(player)
+	local dropId = 4258+math.random(0,7);
+	player:addItem(dropId);
+	player:messageSpecial(zones[player:getZoneID()].text.ITEM_OBTAINED,dropId);
+end;

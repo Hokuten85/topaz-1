@@ -295,14 +295,14 @@ namespace mobutils
             PMob->health.maxhp = PMob->HPmodifier;
         }
 
-        if (isNM)
-        {
-            PMob->health.maxhp = (int32)(PMob->health.maxhp * map_config.nm_hp_multiplier);
-        }
-        else
-        {
-            PMob->health.maxhp = (int32)(PMob->health.maxhp * map_config.mob_hp_multiplier);
-        }
+    if(isNM)
+    {
+        PMob->health.maxhp = (int32)(PMob->health.maxhp * map_config.nm_hp_multiplier);
+    }
+    else
+    {
+        PMob->health.maxhp = (int32)(PMob->health.maxhp * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_hp_multiplier : 1));
+    }
 
         bool hasMp = false;
 
@@ -361,15 +361,15 @@ namespace mobutils
                 PMob->health.maxmp = PMob->MPmodifier;
             }
 
-            if (isNM)
-            {
-                PMob->health.maxmp = (int32)(PMob->health.maxmp * map_config.nm_mp_multiplier);
-            }
-            else
-            {
-                PMob->health.maxmp = (int32)(PMob->health.maxmp * map_config.mob_mp_multiplier);
-            }
+        if(isNM)
+        {
+            PMob->health.maxmp = (int32)(PMob->health.maxmp * map_config.nm_mp_multiplier);
         }
+        else
+        {
+            PMob->health.maxmp = (int32)(PMob->health.maxmp * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_mp_multiplier : 1));
+        }
+    }
 
         PMob->UpdateHealth();
 
@@ -444,26 +444,26 @@ namespace mobutils
         PMob->stats.MND = fMND + mMND + sMND;
         PMob->stats.CHR = fCHR + mCHR + sCHR;
 
-        if (isNM)
-        {
-            PMob->stats.STR = (uint16)(PMob->stats.STR * map_config.nm_stat_multiplier);
-            PMob->stats.DEX = (uint16)(PMob->stats.DEX * map_config.nm_stat_multiplier);
-            PMob->stats.VIT = (uint16)(PMob->stats.VIT * map_config.nm_stat_multiplier);
-            PMob->stats.AGI = (uint16)(PMob->stats.AGI * map_config.nm_stat_multiplier);
-            PMob->stats.INT = (uint16)(PMob->stats.INT * map_config.nm_stat_multiplier);
-            PMob->stats.MND = (uint16)(PMob->stats.MND * map_config.nm_stat_multiplier);
-            PMob->stats.CHR = (uint16)(PMob->stats.CHR * map_config.nm_stat_multiplier);
-        }
-        else
-        {
-            PMob->stats.STR = (uint16)(PMob->stats.STR * map_config.mob_stat_multiplier);
-            PMob->stats.DEX = (uint16)(PMob->stats.DEX * map_config.mob_stat_multiplier);
-            PMob->stats.VIT = (uint16)(PMob->stats.VIT * map_config.mob_stat_multiplier);
-            PMob->stats.AGI = (uint16)(PMob->stats.AGI * map_config.mob_stat_multiplier);
-            PMob->stats.INT = (uint16)(PMob->stats.INT * map_config.mob_stat_multiplier);
-            PMob->stats.MND = (uint16)(PMob->stats.MND * map_config.mob_stat_multiplier);
-            PMob->stats.CHR = (uint16)(PMob->stats.CHR * map_config.mob_stat_multiplier);
-        }
+    if(isNM)
+    {
+        PMob->stats.STR = (uint16)(PMob->stats.STR * map_config.nm_stat_multiplier);
+        PMob->stats.DEX = (uint16)(PMob->stats.DEX * map_config.nm_stat_multiplier);
+        PMob->stats.VIT = (uint16)(PMob->stats.VIT * map_config.nm_stat_multiplier);
+        PMob->stats.AGI = (uint16)(PMob->stats.AGI * map_config.nm_stat_multiplier);
+        PMob->stats.INT = (uint16)(PMob->stats.INT * map_config.nm_stat_multiplier);
+        PMob->stats.MND = (uint16)(PMob->stats.MND * map_config.nm_stat_multiplier);
+        PMob->stats.CHR = (uint16)(PMob->stats.CHR * map_config.nm_stat_multiplier);
+    }
+    else
+    {
+        PMob->stats.STR = (uint16)(PMob->stats.STR * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_stat_multiplier : 1));
+        PMob->stats.DEX = (uint16)(PMob->stats.DEX * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_stat_multiplier : 1));
+        PMob->stats.VIT = (uint16)(PMob->stats.VIT * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_stat_multiplier : 1));
+        PMob->stats.AGI = (uint16)(PMob->stats.AGI * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_stat_multiplier : 1));
+        PMob->stats.INT = (uint16)(PMob->stats.INT * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_stat_multiplier : 1));
+        PMob->stats.MND = (uint16)(PMob->stats.MND * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_stat_multiplier : 1));
+        PMob->stats.CHR = (uint16)(PMob->stats.CHR * (map_config.mob_stat_scale_start_level >= PMob->GetMLevel() ? map_config.mob_stat_multiplier : 1));
+    }
 
         // special case, give spell list to my pet
         if (PMob->getMobMod(MOBMOD_PET_SPELL_LIST) && PMob->PPet != nullptr)

@@ -12,8 +12,8 @@ function onAbilityCheck(player, target, ability)
     return 0, 0
 end
 
-function onUseAbility(player, target, ability)
-    local power = 12.5 + (0.10 * player:getMod(tpz.mod.BOOST_EFFECT))
+function onUseAbility(player,target,ability)
+    local power = 20 + (0.10 * player:getMod(tpz.mod.BOOST_EFFECT))
 
     if (player:hasStatusEffect(tpz.effect.BOOST) == true) then
         local effect = player:getStatusEffect(tpz.effect.BOOST)

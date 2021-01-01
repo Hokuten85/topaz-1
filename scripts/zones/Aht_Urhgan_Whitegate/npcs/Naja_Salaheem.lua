@@ -21,7 +21,7 @@ end
 function onTrigger(player, npc)
 
     local TOAUM3_DAY = player:getCharVar("TOAUM3_STARTDAY")
-    local realday = tonumber(os.date("%j")) -- %M for next minute, %j for next day
+    local realday = tonumber(os.date("%M")) -- %M for next minute, %j for next day
     local needToZone = player:needToZone()
 
     if (player:getCharVar("AssaultPromotion") >= 25 and player:hasKeyItem(tpz.ki.PFC_WILDCAT_BADGE) == false and player:getCharVar("PromotionPFC") == 0) then

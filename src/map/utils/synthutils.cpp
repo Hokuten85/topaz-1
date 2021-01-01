@@ -272,7 +272,7 @@ namespace synthutils
                     }
                     else
                     {
-                        success = 0.95;
+                        success = 0.99;
                     }
 
                     if (synthDiff > -11)

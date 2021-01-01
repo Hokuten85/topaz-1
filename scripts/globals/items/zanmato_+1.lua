@@ -8,7 +8,7 @@ require("scripts/globals/status")
 -----------------------------------
 
 function onAdditionalEffect(player, target, damage)
-    local chance = 5
+    local chance = 25
     if math.random(100) <= chance then
         local effect = target:dispelStatusEffect()
         if effect ~= tpz.effect.NONE then

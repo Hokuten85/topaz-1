@@ -544,14 +544,14 @@ function onTrigger(player, npc)
 
     local theRealGift    = player:getQuestStatus(OTHER_AREAS_LOG, tpz.quest.id.otherAreas.THE_REAL_GIFT)
     local insideTheBelly = player:getQuestStatus(OTHER_AREAS_LOG, tpz.quest.id.otherAreas.INSIDE_THE_BELLY)
-    local mLvl           = player:getMainLvl()
+	local fishingSkill = player:getSkillLevel(tpz.skill.FISHING)
 
     -- UNDER THE SEA
     if player:getCharVar("underTheSeaVar") == 3 then
         player:startEvent(34, 4501) -- During quest "Under the sea" - 3rd dialog
 
     -- INSIDE THE BELLY
-    elseif mLvl >= 30 and theRealGift == QUEST_COMPLETED and insideTheBelly == QUEST_AVAILABLE then
+    elseif fishingSkill >= 30 and theRealGift == QUEST_COMPLETED and insideTheBelly == QUEST_AVAILABLE then
         player:startEvent(161)
     elseif mLvl >= 30 and mLvl < 39 and (insideTheBelly == QUEST_ACCEPTED or insideTheBelly == QUEST_COMPLETED) then
         player:startEvent(162, 5799, 4481, 5802, 4428)

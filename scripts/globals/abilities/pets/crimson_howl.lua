@@ -14,9 +14,9 @@ end
 
 function onPetAbility(target, pet, skill, summoner)
     local bonusTime = utils.clamp(summoner:getSkillLevel(tpz.skill.SUMMONING_MAGIC) - 300, 0, 200)
-    local duration = 60 + bonusTime
+    local duration = 300 + bonusTime
 
-    target:addStatusEffect(tpz.effect.WARCRY, 9, 0, duration)
+    target:addStatusEffect(tpz.effect.WARCRY, 15, 0, duration, 0, 200)
     skill:setMsg(tpz.msg.basic.SKILL_GAIN_EFFECT)
     return tpz.effect.WARCRY
 end

@@ -17,7 +17,7 @@ function onAbilityCheck(player, target, ability)
         return tpz.msg.basic.UNABLE_TO_USE_JA2, 0
     elseif (player:hasStatusEffect(tpz.effect.TRANCE)) then
         return 0, 0
-    elseif (player:getTP() < 200) then
+    elseif (player:getTP() < 150) then
         return tpz.msg.basic.NOT_ENOUGH_TP, 0
     else
         --[[ Apply "Waltz Ability Delay" reduction
@@ -42,7 +42,7 @@ end
 function onUseAbility(player, target, ability)
     -- Only remove TP if the player doesn't have Trance.
     if not player:hasStatusEffect(tpz.effect.TRANCE) then
-        player:delTP(200)
+        player:delTP(150)
     end
 
     --Grabbing variables.
@@ -56,11 +56,11 @@ function onUseAbility(player, target, ability)
 
     --Performing sj mj check.
     if mjob == tpz.job.DNC then
-        cure = (vit+chr)*0.25+60
+        cure = (vit+chr)*0.3+60
     end
 
     if sjob == tpz.job.DNC then
-        cure = (vit+chr)*0.125+60
+        cure = (vit+chr)*0.15+60
     end
 
     -- apply waltz modifiers

@@ -28,7 +28,7 @@ end
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.AHTU);
-    GetMobByID(ID.mob.AHTU):setRespawnTime(math.random(900, 10800));
+    GetMobByID(ID.mob.AHTU):setRespawnTime(900);
 
     for i = 0, 7 do
         registerRegionAroundNPC(zone, ID.npc.RAPTOR_FOOD_BASE + i, i + 1)

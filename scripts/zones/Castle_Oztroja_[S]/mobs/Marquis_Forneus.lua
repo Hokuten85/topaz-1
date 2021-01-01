@@ -10,5 +10,5 @@ end
 
 function onMobDespawn(mob)
     UpdateNMSpawnPoint(mob:getID())
-    mob:setRespawnTime(math.random(18000, 21600)) -- 5 to 6 hours
+    mob:setRespawnTime(900) -- 5 to 6 hours
 end

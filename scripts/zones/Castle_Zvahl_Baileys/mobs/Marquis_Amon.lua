@@ -7,9 +7,7 @@ function onMobDeath(mob, player, isKiller)
 end
 
 function onMobDespawn(mob)
-
-    -- Set Marquis_Amon's spawnpoint and respawn time (21-24 hours)
+	-- Set Marquis_Amon's spawnpoint and respawn time (21-24 hours)	
     UpdateNMSpawnPoint(mob:getID())
-    mob:setRespawnTime(math.random(75600, 86400))
-
+    mob:setRespawnTime(900)
 end

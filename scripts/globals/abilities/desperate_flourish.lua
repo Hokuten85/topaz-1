@@ -49,7 +49,7 @@ function onUseAbility(player, target, ability, action)
         isSneakValid = false
     end
 
-    local hitrate = getHitRate(player, target, true)
+    local hitrate = math.max(0.8, getHitRate(player, target, true))
 
     if (math.random() <= hitrate or isSneakValid) then
 

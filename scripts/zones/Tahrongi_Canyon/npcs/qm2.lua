@@ -24,7 +24,7 @@ function onTrade(player, npc, trade)
             end
 
             player:confirmTrade()
-            npc:setLocalVar("tradeCooldown", os.time() + 3000) -- 50 minute until next trade
+            npc:setLocalVar("tradeCooldown", os.time() + 900) -- 15 minute until next trade
         else
             player:messageSpecial(ID.text.SPROUT_DOES_NOT_NEED_WATER)
         end

@@ -8,7 +8,7 @@ require("scripts/globals/magic")
 require("scripts/globals/msg")
 -----------------------------------
 function onAdditionalEffect(player, target, damage)
-    local chance = 10
+    local chance = 25
 
     if (math.random(0, 99) >= chance or applyResistanceAddEffect(player, target, tpz.magic.ele.DARK, 0) <= 0.5) then
         return 0, 0, 0

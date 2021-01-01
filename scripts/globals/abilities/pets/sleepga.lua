@@ -14,7 +14,7 @@ function onAbilityCheck(player, target, ability)
 end
 
 function onPetAbility(target, pet, skill)
-    local duration = 90
+    local duration = 120
     local dINT = pet:getStat(tpz.mod.INT) - target:getStat(tpz.mod.INT)
     local bonus = getSummoningSkillOverCap(pet)
     local resm = applyPlayerResistance(pet, -1, target, dINT, bonus, tpz.magic.element.ICE)

@@ -14,7 +14,7 @@ end
 function onPetAbility(target, pet, skill)
     local numhits = 1
     local accmod = 1
-    local dmgmod = 12
+    local dmgmod = 15
     local dmgmodsubsequent = 0
     local totaldamage = 0
     local damage = AvatarPhysicalMove(pet, target, skill, numhits, accmod, dmgmod, dmgmodsubsequent, TP_NO_EFFECT, 1, 2, 3)

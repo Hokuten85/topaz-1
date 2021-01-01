@@ -8,7 +8,7 @@ require("scripts/globals/status")
 -----------------------------------------
 
 function onAdditionalEffect(player, target, damage)
-    local chance = 10
+    local chance = 25
 
     if math.random(100) <= chance then
         local mp = math.random(4, 16)

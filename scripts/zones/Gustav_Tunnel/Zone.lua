@@ -9,7 +9,7 @@ require("scripts/globals/conquest")
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.BUNE)
-    GetMobByID(ID.mob.BUNE):setRespawnTime(math.random(900, 10800))
+    GetMobByID(ID.mob.BUNE):setRespawnTime(900)
 end
 
 function onConquestUpdate(zone, updatetype)

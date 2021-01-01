@@ -1,5 +1,5 @@
 ---------------------------------------------
--- Aerial Armor
+-- Lunar Roar
 ---------------------------------------------
 require("scripts/globals/monstertpmoves")
 require("scripts/globals/settings")

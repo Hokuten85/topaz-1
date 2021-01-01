@@ -78,6 +78,8 @@ void CTreasurePool::AddMember(CCharEntity* PChar)
 
     members.push_back(PChar);
 
+    FreeClear(globalDropMap);
+
     if (m_TreasurePoolType == TREASUREPOOL_SOLO && members.size() > 1)
     {
         m_TreasurePoolType = TREASUREPOOL_PARTY;
@@ -98,6 +100,8 @@ void CTreasurePool::DelMember(CCharEntity* PChar)
 {
     TPZ_DEBUG_BREAK_IF(PChar == nullptr);
     TPZ_DEBUG_BREAK_IF(PChar->PTreasurePool != this);
+
+    FreeClear(globalDropMap);
 
     // if(m_TreasurePoolType != TREASUREPOOL_ZONE){
     // Zone drops e.g. Dynamis DO NOT remove previous lot info. Everything else does.
@@ -598,4 +602,26 @@ bool CTreasurePool::CanAddSeal()
     }
 
     return true;
+}
+
+void CTreasurePool::AddGlobalDrop(uint8 level, DropEquipList_t* dropList)
+{
+    if (globalDropMap.find(level) == globalDropMap.end()) // didn't find it so add it
+    {
+        globalDropMap.emplace(level, dropList);
+    }
+    else
+    {
+        delete globalDropMap.at(level);
+        globalDropMap[level] = dropList;
+    }
+}
+
+DropEquipList_t* CTreasurePool::GetGlobalDrop(uint8 level)
+{
+    if (globalDropMap.find(level) != globalDropMap.end())
+    {
+        return globalDropMap.at(level);
+    }
+    return nullptr;
 }

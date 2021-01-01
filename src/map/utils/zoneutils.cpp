@@ -39,9 +39,17 @@
 #include "../zone_instance.h"
 #include "mobutils.h"
 #include "zoneutils.h"
+#include "itemutils.h"
 
 std::map<uint16, CZone*> g_PZoneList; // глобальный массив указателей на игровые зоны
 CNpcEntity*              g_PTrigger;  // триггер для запуска событий
+
+std::map<uint8, BountyMobList_t*> bountyDropMap;
+
+BountyMob_t::BountyMob_t(CMobEntity* Mob, std::vector<CItem*> *Items)
+    : Mob(Mob)
+    , Items(Items)
+{ }
 
 namespace zoneutils
 {
@@ -450,10 +458,19 @@ namespace zoneutils
                     PMob->setModifier(Mod::LIGHTRES, (int16)((Sql_GetFloatData(SqlHandle, 46) - 1) * -100));
                     PMob->setModifier(Mod::DARKRES, (int16)((Sql_GetFloatData(SqlHandle, 47) - 1) * -100));
 
-                    PMob->m_Element     = (uint8)Sql_GetIntData(SqlHandle, 48);
-                    PMob->m_Family      = (uint16)Sql_GetIntData(SqlHandle, 49);
-                    PMob->m_name_prefix = (uint8)Sql_GetIntData(SqlHandle, 50);
-                    PMob->m_flags       = (uint32)Sql_GetIntData(SqlHandle, 51);
+				PMob->setModifier(Mod::FIREDEF, (int16)((Sql_GetFloatData(SqlHandle, 40) - 1) * -256)); // These are stored as floating percentages -- elemental def uses base 256
+				PMob->setModifier(Mod::ICEDEF, (int16)((Sql_GetFloatData(SqlHandle, 41) - 1) * -256)); // and need to be adjusted into modifier units.
+				PMob->setModifier(Mod::WINDDEF, (int16)((Sql_GetFloatData(SqlHandle, 42) - 1) * -256)); // Higher RES = lower damage.
+				PMob->setModifier(Mod::EARTHDEF, (int16)((Sql_GetFloatData(SqlHandle, 43) - 1) * -256)); // Negatives signify increase in damage.
+				PMob->setModifier(Mod::THUNDERDEF, (int16)((Sql_GetFloatData(SqlHandle, 44) - 1) * -256)); // Positives signify decrease in damage.
+				PMob->setModifier(Mod::WATERDEF, (int16)((Sql_GetFloatData(SqlHandle, 45) - 1) * -256));
+				PMob->setModifier(Mod::LIGHTDEF, (int16)((Sql_GetFloatData(SqlHandle, 46) - 1) * -256));
+				PMob->setModifier(Mod::DARKDEF, (int16)((Sql_GetFloatData(SqlHandle, 47) - 1) * -256));
+
+                PMob->m_Element     = (uint8)Sql_GetIntData(SqlHandle, 48);
+                PMob->m_Family      = (uint16)Sql_GetIntData(SqlHandle, 49);
+                PMob->m_name_prefix = (uint8)Sql_GetIntData(SqlHandle, 50);
+                PMob->m_flags       = (uint32)Sql_GetIntData(SqlHandle, 51);
 
                     // Cap Level if Necessary (Don't Cap NMs)
                     if (normalLevelRangeMin > 0 && !(PMob->m_Type & MOBTYPE_NOTORIOUS) && PMob->m_minLevel > normalLevelRangeMin)
@@ -510,20 +527,52 @@ namespace zoneutils
                     // must be here first to define mobmods
                     mobutils::InitializeMob(PMob, GetZone(ZoneID));
 
-                    GetZone(ZoneID)->InsertMOB(PMob);
+                GetZone(ZoneID)->InsertMOB(PMob);
+
+                if (GetZone(ZoneID)->GetType() & (ZONETYPE_OUTDOORS | ZONETYPE_DUNGEON) && (PMob->m_Type & MOBTYPE_NOTORIOUS) && !(PMob->m_Type & (MOBTYPE_BATTLEFIELD | MOBTYPE_EVENT)) && PMob->m_DropID > 0)
+                {
+                    DropList_t* dropList = itemutils::GetDropList(PMob->m_DropID);
+                    if (dropList != nullptr)
+                    {
+                        std::vector<CItem*> *items = new std::vector<CItem*>();
+                        for (uint8 i = 0; i < dropList->Items.size(); ++i)
+                        {
+                            DropItem_t& dropItem = dropList->Items.at(i);
+                            if (dropItem.ItemID && dropItem.DropRate > 0)
+                            {
+                                CItem* PItem = itemutils::GetItem(dropItem.ItemID);
+                                if (PItem->getFlag() & (ITEM_FLAG_EX | ITEM_FLAG_RARE) && (PItem->getID() < 4064 || PItem->getID() > 4073)) {
+                                    items->push_back(PItem);
+                                }
+                            }
+                        }
+
+                        if (items->size())
+                        {
+                            if (!bountyDropMap[PMob->m_minLevel])
+                            {
+                                bountyDropMap[PMob->m_minLevel] = new BountyMobList_t();
+                            }
+
+                            bountyDropMap[PMob->m_minLevel]->push_back(new BountyMob_t(PMob, items));
+                        }
+                    }
                 }
             }
         }
+    }
 
-        // handle mob initialise functions after they're all loaded
-        ForEachZone([](CZone* PZone) {
-            PZone->ForEachMob([](CMobEntity* PMob) {
-                luautils::OnMobInitialize(PMob);
-                luautils::ApplyMixins(PMob);
-                luautils::ApplyZoneMixins(PMob);
-                PMob->saveModifiers();
-                PMob->saveMobModifiers();
-                PMob->m_AllowRespawn = PMob->m_SpawnType == SPAWNTYPE_NORMAL;
+    // handle mob initialise functions after they're all loaded
+    ForEachZone([](CZone* PZone)
+    {
+        PZone->ForEachMob([](CMobEntity* PMob)
+        {
+            luautils::OnMobInitialize(PMob);
+            luautils::ApplyMixins(PMob);
+            luautils::ApplyZoneMixins(PMob);
+            PMob->saveModifiers();
+            PMob->saveMobModifiers();
+            PMob->m_AllowRespawn = PMob->m_SpawnType == SPAWNTYPE_NORMAL;
 
                 if (PMob->m_AllowRespawn)
                 {
@@ -1067,5 +1116,52 @@ namespace zoneutils
     {
         return PChar->m_moghouseID != 0;
     }
+
+BountyMob_t* GetBountyMob(uint8 charLevel, uint8 bountyType)
+{
+    uint8 minLevel = 1;
+    uint8 maxLevel = 99;
+
+    switch (bountyType)
+    {
+    case 2:
+        minLevel = charLevel;
+        maxLevel = charLevel + 10;
+        break;
+    case 3:
+        minLevel = charLevel + 10;
+        maxLevel = charLevel + 20;
+        break;
+    default:
+        maxLevel = charLevel;
+    }
+
+    uint16 nmPoolSize = 0;
+    for (uint8 i = minLevel; i < maxLevel; i++)
+    {
+        if (bountyDropMap[i] != nullptr)
+        {
+            nmPoolSize += bountyDropMap[i]->size();
+        }
+    }
+
+    uint16 randomNum = tpzrand::GetRandomNumber(nmPoolSize);
+    for (uint8 i = minLevel; i < maxLevel; i++)
+    {
+        if (bountyDropMap[i] != nullptr)
+        {
+            if (randomNum >= bountyDropMap[i]->size())
+            {
+                randomNum -= bountyDropMap[i]->size();
+            }
+            else
+            {
+                return bountyDropMap[i]->at(randomNum);
+            }
+        }
+    }
+
+    return nullptr;
+}
 
 }; // namespace zoneutils

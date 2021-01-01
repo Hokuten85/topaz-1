@@ -40,7 +40,7 @@ end
 function onUseAbility(player, target, ability)
 
     local playerHP = player:getHP()
-    local drainamount = (math.random(25, 35) / 100) * playerHP
+    local drainamount = (math.random(10, 15) / 100) * playerHP
     if (player:getPet():getHP() == player:getPet():getMaxHP()) then
         drainamount = 0 -- Prevents player HP lose if wyvern is at full HP
     end
@@ -67,7 +67,7 @@ function onUseAbility(player, target, ability)
     end
 
     local pet = player:getPet()
-    local healPet = drainamount * 2
+    local healPet = drainamount * 5
     local petTP = pet:getTP()
     local regenAmount = player:getMainLvl()/3 -- level/3 tic regen
 

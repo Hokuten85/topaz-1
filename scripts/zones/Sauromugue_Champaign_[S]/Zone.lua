@@ -10,7 +10,7 @@ require("scripts/globals/zone")
 
 function onInitialize(zone)
     UpdateNMSpawnPoint(ID.mob.COQUECIGRUE)
-    GetMobByID(ID.mob.COQUECIGRUE):setRespawnTime(math.random(7200, 7800))
+    GetMobByID(ID.mob.COQUECIGRUE):setRespawnTime(900)
 end
 
 function onZoneIn(player, prevZone)

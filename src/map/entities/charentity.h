@@ -371,6 +371,10 @@ public:
     virtual void addTrait(CTrait*) override;
     virtual void delTrait(CTrait*) override;
 
+    void      setCharMod(Mod type, int16 value);
+    int16     getCharMod(Mod type);
+    void      addCharMod(Mod type, int16 value);     // add
+
     virtual bool ValidTarget(CBattleEntity* PInitiator, uint16 targetFlags) override;
     virtual bool CanUseSpell(CSpell*) override;
 
@@ -437,7 +441,9 @@ private:
 
     PacketList_t PacketList; // the list of packets to be sent to the character during the next network cycle
 
-    std::mutex m_PacketListMutex;
+    std::mutex      m_PacketListMutex;
+
+    std::unordered_map<Mod, int16>     m_charModStat;
 };
 
 #endif

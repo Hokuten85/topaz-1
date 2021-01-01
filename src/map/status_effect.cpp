@@ -27,7 +27,7 @@
 #include "status_effect_container.h"
 #include <utility>
 
-CStatusEffect::CStatusEffect(EFFECT id, uint16 icon, uint16 power, uint32 tick, uint32 duration, uint32 subid, uint16 subPower, uint16 tier, uint32 flags)
+CStatusEffect::CStatusEffect(EFFECT id, uint16 icon, uint32 power, uint32 tick, uint32 duration, uint32 subid, uint32 subPower, uint16 tier, uint32 flags)
 : m_StatusID(id)
 , m_SubID(subid)
 , m_Icon(icon)
@@ -86,12 +86,12 @@ uint16 CStatusEffect::GetIcon() const
     return m_Icon;
 }
 
-uint16 CStatusEffect::GetPower() const
+uint32 CStatusEffect::GetPower() const
 {
     return m_Power;
 }
 
-uint16 CStatusEffect::GetSubPower() const
+uint32 CStatusEffect::GetSubPower() const
 {
     return m_SubPower;
 }
@@ -154,12 +154,12 @@ void CStatusEffect::SetSlot(uint8 Slot)
     m_Slot = Slot;
 }
 
-void CStatusEffect::SetPower(uint16 Power)
+void CStatusEffect::SetPower(uint32 Power)
 {
     m_Power = Power;
 }
 
-void CStatusEffect::SetSubPower(uint16 subPower)
+void CStatusEffect::SetSubPower(uint32 subPower)
 {
     m_SubPower = subPower;
 }

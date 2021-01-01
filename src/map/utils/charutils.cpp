@@ -794,6 +794,24 @@ namespace charutils
             PChar->menuConfigFlags.flags = (uint32)Sql_GetUIntData(SqlHandle, 2);
         }
 
+        fmtQuery = "SELECT modid, value "
+            "FROM char_mods "
+            "WHERE charid = %u;";
+
+        ret = Sql_Query(SqlHandle, fmtQuery, PChar->id);
+
+        if (ret != SQL_ERROR && Sql_NumRows(SqlHandle) != 0)
+        {
+            while (Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+            {
+                Mod ModID = (Mod)Sql_GetUIntData(SqlHandle, 0);
+                int16 ModValue = (int16)Sql_GetUIntData(SqlHandle, 1);
+
+                PChar->addModifier(ModID, ModValue);
+                PChar->setCharMod(ModID, ModValue);
+            }
+        }
+
         charutils::LoadInventory(PChar);
 
         CalculateStats(PChar);
@@ -2239,6 +2257,9 @@ namespace charutils
                 }
             }
         }
+
+        charutils::BuildingCharSkillsTable(PChar);
+
         if (equipSlotID == SLOT_MAIN || equipSlotID == SLOT_RANGED || equipSlotID == SLOT_SUB)
         {
             if (!PItem || !PItem->isType(ITEM_EQUIPMENT) ||
@@ -3146,6 +3167,27 @@ namespace charutils
         return hasBit(TraitID, PChar->m_TraitList, sizeof(PChar->m_TraitList));
     }
 
+	int32 getTraitValue(CCharEntity* PChar, uint8 TraitID)
+	{
+		if (PChar->objtype != TYPE_PC)
+		{
+			ShowError("charutils::hasTrait Attempt to reference a trait from a non-character entity: %s %i", PChar->name.c_str(), PChar->id);
+			return 0;
+		}
+
+		for (uint8 j = 0; j < PChar->TraitList.size(); ++j)
+		{
+			CTrait* PCharTrait = PChar->TraitList.at(j);
+
+			if (PCharTrait->getID() == TraitID)
+			{
+				return PCharTrait->getValue();
+			}
+		}
+
+		return 0;
+	}
+
     int32 addTrait(CCharEntity* PChar, uint8 TraitID)
     {
         if (PChar->objtype != TYPE_PC)
@@ -3566,15 +3608,15 @@ namespace charutils
                     // Per monster caps pulled from: https://ffxiclopedia.fandom.com/wiki/Experience_Points
                     if (PMember->GetMLevel() <= 50)
                     {
-                        exp = std::fmin(exp, 400.f);
+                        exp = std::fmin(exp, 200);
                     }
                     else if (PMember->GetMLevel() <= 60)
                     {
-                        exp = std::fmin(exp, 500.f);
+                        exp = std::fmin(exp, 250.f);
                     }
                     else
                     {
-                        exp = std::fmin(exp, 600.f);
+                        exp = std::fmin(exp, 300.f);
                     }
 
                     if (mobCheck > EMobDifficulty::DecentChallenge)
@@ -3603,7 +3645,7 @@ namespace charutils
                                     exp *= 1.5f;
                                     break;
                                 default:
-                                    exp *= 1.55f;
+                                    exp *= std::min(1.5f + PMember->expChain.chainNumber * 0.005f, 2.5f); break; // should cap at 2.5f on chain 200
                                     break;
                             }
                         }
@@ -4847,7 +4889,7 @@ namespace charutils
         {
             CStatusEffect* dedication = PChar->StatusEffectContainer->GetStatusEffect(EFFECT_DEDICATION);
             int16          percentage = dedication->GetPower();
-            int16          cap        = dedication->GetSubPower();
+            uint32         cap        = dedication->GetSubPower();
             bonus += std::clamp<int32>((int32)((exp * percentage) / 100), 0, cap);
             dedication->SetSubPower(cap -= bonus);
 
@@ -5520,5 +5562,13 @@ namespace charutils
     {
         auto* timerPacket = new CTimerBarUtilPacket();
         PChar->pushPacket(timerPacket);
+    }
+
+    void AddCharMod(CCharEntity* PChar, Mod type, int value)
+    {
+        PChar->addModifier(type, value);
+        PChar->addCharMod(type, value);
+
+        Sql_Query(SqlHandle, "INSERT INTO char_mods (charid, modid, value) VALUES(%u, %u, %u) ON DUPLICATE KEY UPDATE value = %u", PChar->id, (int)type, PChar->getCharMod(type), PChar->getCharMod(type));
     }
 }; // namespace charutils

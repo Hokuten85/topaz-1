@@ -14,7 +14,7 @@ require("scripts/globals/zone")
 function onInitialize(zone)
     local Kreutzet = GetMobByID(ID.mob.KREUTZET)
     UpdateNMSpawnPoint(ID.mob.KREUTZET)
-    Kreutzet:setRespawnTime(math.random(32400, 43200)) -- 9 to 12 hours
+    Kreutzet:setRespawnTime(900) -- 9 to 12 hours
     Kreutzet:setLocalVar("cooldown", os.time() + Kreutzet:getRespawnTime()/1000)
     DisallowRespawn(Kreutzet:getID(), true) -- prevents accidental 'pop' during no wind weather and immediate despawn
 

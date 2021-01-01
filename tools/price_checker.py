@@ -58,6 +58,10 @@ def process_npc(path):
                              'with buy price {1}'),
                             item_id,
                             buy_price)
+
+                        if not item_id in npc_items or int(npc_items[item_id]) > int(buy_price):
+                            npc_items[item_id] = int(buy_price)
+
                         if (item_id in sql_items
                                 and int(sql_items[item_id]) > int(buy_price)):
                             errors.append(('Found item {0}'
@@ -130,5 +134,11 @@ with open(os.path.join(local_path, '../sql/guild_shops.sql'), mode='r', errors='
 for error in errors:
     print(error)
 print('Found {0} errors'.format(len(errors)))
+
+f = open(os.path.join(local_path, '../sql/vendor_sales.txt'), "w")
+for item_id in npc_items:
+  f.write(('item_id: {0}, price {1}\n').format(item_id, npc_items[item_id]))
+
+f.close()
 
 sys.exit(len(errors))
