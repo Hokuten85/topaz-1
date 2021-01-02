@@ -1585,8 +1585,7 @@ tpz.mod =
     -- SPARE = 986, -- stuff
     -- SPARE = 987, -- stuff
     -- SPARE = 988, -- stuff
-}
-
+    
     ENMITY_CAP                  = 2000,
     DMG_II                      = 2001
 };

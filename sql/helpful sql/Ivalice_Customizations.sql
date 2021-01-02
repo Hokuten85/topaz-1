@@ -1,4 +1,4 @@
-update zone_settings set zoneip = '184.97.151.39';
+-- update zone_settings set zoneip = '97.119.224.179';
 
 -- Augments
 UPDATE augments SET multiplier = 100, value = 1 WHERE augmentId = 49;
@@ -34,7 +34,7 @@ UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 165; -- trance
 UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 194; -- tabula rasa
 UPDATE Abilities SET recastTime = 150 WHERE abilityId = 214; -- sekkanoki
 UPDATE Abilities SET recastTime = 45 WHERE abilityId IN (640,641,642,643,644,645,646); -- camisado, somnolence, nightmare, ultimate terror, noctoshield, dream shroud, nether blast
-INSERT INTO `abilities` VALUES (262,'divine_waltz_ii',19,75,27,20,190,306,0,11,2000,0,14,20.0,1,0,0,0,0,'WOTG');
+UPDATE abilities SET `level` = 75 WHERE abilityId = 262;
 
 -- MERITS
 UPDATE merits SET Value = 4 WHERE meritid = 516; -- barspell effect
@@ -215,7 +215,7 @@ CREATE TABLE newDrops (
 	PRIMARY KEY (newDropId)
 );
 -- Set @varMax = (SELECT MAX(dropid)+1 FROM mob_droplist);
-ALTER TABLE newDrops AUTO_INCREMENT = 3138 XXX; -- BREAK HERE BECAUSE NEED TO CHECK FOR NEW MAX DROP ID
+ALTER TABLE newDrops AUTO_INCREMENT = 3167; -- BREAK HERE BECAUSE NEED TO CHECK FOR NEW MAX DROP ID
 
 INSERT INTO newDrops (groupid, zoneid, oldDropId)
 SELECT DISTINCT mg.groupid, mg.zoneid, mg.dropid
@@ -502,8 +502,8 @@ UPDATE traits SET value = 55 WHERE traitid = 67 AND job = 2 AND level = 91 AND m
 UPDATE traits SET level = 30 WHERE traitid = 68 AND job = 6 AND level = 60;
 
 UPDATE traits SET value = 30 WHERE traitid = 84 AND job = 11 AND level = 20 AND modifier = 305;
-INSERT INTO `traits` VALUES (84,'recycle',11,40,2,305,40,'SOA',0);
-INSERT INTO `traits` VALUES (84,'recycle',11,50,3,305,50,'SOA',0);
+UPDATE traits SET VALUE = 40 WHERE traitid = 84 AND job = 11 AND level = 35 AND modifier = 305;
+UPDATE traits SET VALUE = 50 WHERE traitid = 84 AND job = 11 AND LEVEL = 50 AND modifier = 305;
 
 UPDATE traits SET level = 25 WHERE traitid = 106 AND job = 12 AND level = 78 AND rank = 1 AND modifier = 174;
 UPDATE traits SET level = 50 WHERE traitid = 106 AND job = 12 AND level = 88 AND rank = 2 AND modifier = 174;
