@@ -428,7 +428,7 @@ bool CTargetFind::validEntity(CBattleEntity* PTarget)
         }
         else if (m_findType == FIND_TYPE::PLAYER_PLAYER && PTarget->PMaster->objtype == TYPE_PC)
         {
-            return PTarget->objtype == TYPE_PET;
+            return PTarget->objtype == TYPE_PET || PTarget->objtype == TYPE_TRUST;
         }
         else if (m_findType == FIND_TYPE::MONSTER_MONSTER || m_findType == FIND_TYPE::PLAYER_PLAYER)
         {
