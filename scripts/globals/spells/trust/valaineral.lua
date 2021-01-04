@@ -36,14 +36,31 @@ function onMobSpawn(mob)
     mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_HAS_TOP_ENMITY, 0,
                         ai.r.JA, ai.s.SPECIFIC, tpz.ja.PROVOKE)
 
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, tpz.effect.FLASH,
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_HAS_TOP_ENMITY, 0,
                         ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.FLASH)
+                        
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_HAS_TOP_ENMITY, 0,
+                        ai.r.JA, ai.s.SPECIFIC, tpz.ja.SHIELD_BASH)
 
     mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.SENTINEL,
                         ai.r.JA, ai.s.SPECIFIC, tpz.ja.SENTINEL)
+                        
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.DEFENDER,
+                        ai.r.JA, ai.s.SPECIFIC, tpz.ja.DEFENDER)
+                        
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.HOLY_CIRCLE,
+                        ai.r.JA, ai.s.SPECIFIC, tpz.ja.HOLY_CIRCLE)
+                        
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.RAMPART,
+                        ai.r.JA, ai.s.SPECIFIC, tpz.ja.RAMPART)
+                        
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.WARCRY,
+                        ai.r.JA, ai.s.SPECIFIC, tpz.ja.WARCRY)
 
-    mob:addSimpleGambit(ai.t.PARTY, ai.c.HPP_LT, 50,
+    mob:addSimpleGambit(ai.t.PARTY, ai.c.HPP_LT, 70,
                         ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.CURE)
+                        
+    mob:addMod(tpz.mod.ACC, 200)
 end
 
 function onMobDespawn(mob)

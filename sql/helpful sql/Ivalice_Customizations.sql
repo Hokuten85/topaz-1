@@ -652,3 +652,26 @@ END//
 delimiter ;
 CALL myproc();
 DROP PROCEDURE myProc;
+
+-- MOB_SPELL_LISTS
+INSERT INTO mob_spell_lists VALUES ('TRUST_Kupipi', 310, 96, 55, 255); -- AUSPICE
+INSERT INTO mob_spell_lists VALUES ('TRUST_Kupipi', 310, 108, 21, 255); -- REGEN 1
+INSERT INTO mob_spell_lists VALUES ('TRUST_Kupipi', 310, 110, 44, 255); -- REGEN 2
+INSERT INTO mob_spell_lists VALUES ('TRUST_Kupipi', 310, 111, 66, 255); -- REGEN 3
+INSERT INTO mob_spell_lists VALUES ('TRUST_Kupipi', 310, 57, 40, 255); -- HASTE
+
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 254, 8, 255); -- BLIND
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 276, 75, 255); -- BLIND 2
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 230, 10, 255); -- BIO 
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 231, 36, 255); -- BIO 2
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 232, 75, 255); -- BIO 3
+-- RDM Nukes
+INSERT INTO mob_spell_lists
+SELECT 'TRUST_Koru-Moru', 364, sl.spellid, CAST(CONV(SUBSTR(HEX(jobs),9,2),16,10) AS INT), 255
+from spell_list sl
+where SUBSTR(HEX(sl.jobs),9,2) <> '00'
+AND sl.family IN (42,43,44,45,46,47);
+
+INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 266, 43, 255); -- absorb-str
+INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 267, 41, 255); -- absorb-dex
+INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 242, 61, 255); -- absorb-acc

@@ -23,24 +23,27 @@ function onMobSpawn(mob)
     tpz.trust.message(mob, message_page_offset, tpz.trust.message_offset.SPAWN)
 
     -- Stun all the things!
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_WS, 0,
-                        ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
-
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_MS, 0,
-                        ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
-
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_JA, 0,
-                        ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
-
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.CASTING_MA, 0,
-                        ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_WS, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_MS, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_JA, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.CASTING_MA, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
+    
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_WS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WEAPON_BASH)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_MS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WEAPON_BASH)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_JA, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WEAPON_BASH)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.CASTING_MA, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WEAPON_BASH)
 
     -- Non-stun things
-    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0,
-                        ai.r.JA, ai.s.SPECIFIC, tpz.ja.SOULEATER)
-
-    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0,
-                        ai.r.JA, ai.s.SPECIFIC, tpz.ja.LAST_RESORT)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.SOULEATER)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.LAST_RESORT)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.ARCANE_CIRCLE)
+                        
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.BERSERK)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WARCRY)
+    
+    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.STR_BOOST, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.ABSORB_STR)
+    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.DEX_BOOST, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.ABSORB_DEX)
+    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.ACCURACY_BOOST, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.ABSORB_ACC)
 
     mob:setTrustTPSkillSettings(ai.tp.CLOSER, ai.s.RANDOM)
 end
