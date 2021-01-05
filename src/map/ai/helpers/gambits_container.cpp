@@ -162,7 +162,7 @@ namespace gambits
         };
 
         // Didn't WS/MS, go for other Gambits
-        for (auto gambit : gambits)
+        for (auto& gambit : gambits)
         {
             if (tick < gambit.last_used + std::chrono::seconds(gambit.retry_delay))
             {
@@ -293,7 +293,7 @@ namespace gambits
                         auto spell_id = POwner->SpellContainer->GetBestAvailable(static_cast<SPELLFAMILY>(action.select_arg));
                         if (spell_id.has_value())
                         {
-                            controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
+                            auto junk = controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
                         }
                     }
                     else if (action.select == G_SELECT::LOWEST)
@@ -349,6 +349,53 @@ namespace gambits
                             controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
                         }
                     }
+                    else if (action.select == G_SELECT::WEAKNESS)
+                    {
+                        int16 lowestRes     = 0;
+                        std::vector<Mod> resistvector = { Mod::FIRERES, Mod::ICERES, Mod::WINDRES, Mod::EARTHRES, Mod::THUNDERRES, Mod::WATERRES };
+                        std::vector<SPELLFAMILY> familyvecotr = { SPELLFAMILY::SPELLFAMILY_FIRE,  SPELLFAMILY::SPELLFAMILY_BLIZZARD, SPELLFAMILY::SPELLFAMILY_AERO,
+                                                       SPELLFAMILY::SPELLFAMILY_STONE, SPELLFAMILY::SPELLFAMILY_THUNDER,  SPELLFAMILY::SPELLFAMILY_WATER };
+                        std::vector<int16>       resVector;
+                        for (int i = 0; i < resistvector.size(); i++)
+                        {
+                            int16 currentRes = target->getMod(resistvector.at(i));
+                            resVector.push_back(currentRes);
+                            if (currentRes < lowestRes)
+                            {
+                                lowestRes = currentRes;
+                            }
+                        }
+
+                        std::vector<SPELLFAMILY> weakFamily;
+                        for (int i = 0; i < resVector.size(); i++)
+                        {
+                            if (resVector.at(i) == lowestRes)
+                            {
+                                weakFamily.push_back(familyvecotr.at(i));
+                            }
+                        }
+
+                        std::optional<SpellID> spell_id;
+                        CSpell*                PSpell;
+                        for (auto& family : weakFamily) // access by reference to avoid copying
+                        {
+                            auto temp_id = POwner->SpellContainer->GetBestAvailable(static_cast<SPELLFAMILY>(family));
+                            if (temp_id.has_value())
+                            {
+                                auto* tempPSpell = spell::GetSpell(static_cast<SpellID>(temp_id.value()));
+                                if (!spell_id.has_value() || tempPSpell->getBase() > PSpell->getBase())
+                                {
+                                    spell_id = temp_id;
+                                    PSpell   = tempPSpell;
+                                }
+                            }
+                        }
+
+                        if (spell_id.has_value())
+                        {
+                            controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
+                        }
+                    }
                 }
                 else if (action.reaction == G_REACTION::JA)
                 {
@@ -376,7 +423,7 @@ namespace gambits
                 }
 
                 // Assume success
-                if (gambit.retry_delay != 0)
+                if (gambit.retry_delay > 0)
                 {
                     gambit.last_used = tick;
                 }

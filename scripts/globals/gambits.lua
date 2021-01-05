@@ -70,6 +70,7 @@ ai.select =
     RANDOM     = 3,
     MB_ELEMENT = 4,
     SPECIAL_AYAME = 5,
+    WEAKNESS   = 6,
 }
 ai.s = ai.select
 

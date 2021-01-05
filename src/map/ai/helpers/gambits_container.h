@@ -69,6 +69,7 @@ namespace gambits
         RANDOM        = 3,
         MB_ELEMENT    = 4,
         SPECIAL_AYAME = 5,
+        WEAKNESS      = 6,
     };
 
     enum class G_TP_TRIGGER : uint16
