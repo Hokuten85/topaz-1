@@ -598,8 +598,10 @@ void CCharEntity::PostTick()
             });
         }
         // Do not send an update packet when only the position has change
-        // if (updatemask ^ UPDATE_POS) // WHY THE FUCK NOT? IF THE POSITION CHANGES, SEND THE FUCKING PACKET
-        pushPacket(new CCharUpdatePacket(this));
+        if (updatemask & UPDATE_POS)
+        {
+            pushPacket(new CCharUpdatePacket(this));
+        }
         updatemask = 0;
     }
 }
