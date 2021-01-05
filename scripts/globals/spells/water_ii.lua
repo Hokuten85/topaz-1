@@ -13,7 +13,7 @@ end
 function onSpellCast(caster, target, spell)
     local spellParams = {}
 
-    if (caster:isPC()) then
+    if (caster:isPC() or caster:getObjType() == tpz.objType.TRUST) then
         spellParams = calculateElementalNukeSpellParams(caster, ELEMENTAL_TIER_2, NOT_AOE);
     else
         spellParams.hasMultipleTargetReduction = false

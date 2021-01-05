@@ -21,7 +21,7 @@ function onMobSpawn(mob)
 
     mob:addSimpleGambit(ai.t.TARGET, ai.c.MB_AVAILABLE, 0, ai.r.MA, ai.s.MB_ELEMENT, tpz.magic.spellFamily.NONE)
     -- mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_SC_AVAILABLE, 0, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.NONE, 45)
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_SC_AVAILABLE, 0, ai.r.MA, ai.s.WEAKNESS, tpz.magic.spellFamily.NONE, 20)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_SC_AVAILABLE, 0, ai.r.MA, ai.s.WEAKNESS, tpz.magic.spellFamily.NONE, 5)
 
     local power = mob:getMainLvl() / 5
     mob:addMod(tpz.mod.MATT, power)
