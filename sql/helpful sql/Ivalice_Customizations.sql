@@ -214,8 +214,11 @@ CREATE TABLE newDrops (
 	newDropId int AUTO_INCREMENT,
 	PRIMARY KEY (newDropId)
 );
--- Set @varMax = (SELECT MAX(dropid)+1 FROM mob_droplist);
-ALTER TABLE newDrops AUTO_INCREMENT = 3167; -- BREAK HERE BECAUSE NEED TO CHECK FOR NEW MAX DROP ID
+SET @varMax = (SELECT MAX(dropid)+1 FROM mob_droplist);
+SET @s = CONCAT('ALTER TABLE newDrops AUTO_INCREMENT =', @varMax);
+PREPARE stmt FROM @s;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 INSERT INTO newDrops (groupid, zoneid, oldDropId)
 SELECT DISTINCT mg.groupid, mg.zoneid, mg.dropid
@@ -365,66 +368,16 @@ UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 104; -
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 105; -- enwater
 UPDATE spell_list SET mpCost = 20, recastTime = 9000 WHERE spellid = 109; -- refresh
 UPDATE spell_list SET mpCost = 15, castTime = 1500 WHERE spellid = 143; -- erase
-UPDATE spell_list SET mpCost = 4 WHERE spellid = 144; -- fire
-UPDATE spell_list SET mpCost = 16 WHERE spellid = 145; -- fire 2
-UPDATE spell_list SET mpCost = 40 WHERE spellid = 146; -- fire 3
-UPDATE spell_list SET mpCost = 88 WHERE spellid = 147; -- fire 4
-UPDATE spell_list SET mpCost = 156 WHERE spellid = 148; -- fire 5
-UPDATE spell_list SET mpCost = 4 WHERE spellid = 149; -- blizzard
-UPDATE spell_list SET mpCost = 16 WHERE spellid = 150; -- blizzard 2
-UPDATE spell_list SET mpCost = 40 WHERE spellid = 151; -- blizzard 3
-UPDATE spell_list SET mpCost = 88 WHERE spellid = 152; -- blizzard 4
-UPDATE spell_list SET mpCost = 156 WHERE spellid = 153; -- blizzard 5
-UPDATE spell_list SET mpCost = 4 WHERE spellid = 154; -- aero
-UPDATE spell_list SET mpCost = 16 WHERE spellid = 155; -- aero 2
-UPDATE spell_list SET mpCost = 40 WHERE spellid = 156; -- aero 3
-UPDATE spell_list SET mpCost = 88 WHERE spellid = 157; -- aero 4
-UPDATE spell_list SET mpCost = 156 WHERE spellid = 158; -- aero 5
-UPDATE spell_list SET mpCost = 4 WHERE spellid = 159; -- stone
-UPDATE spell_list SET mpCost = 16 WHERE spellid = 160; -- stone 2
-UPDATE spell_list SET mpCost = 40 WHERE spellid = 161; -- stone 3
-UPDATE spell_list SET mpCost = 88 WHERE spellid = 162; -- stone 4
-UPDATE spell_list SET mpCost = 156 WHERE spellid = 163; -- stone 5
-UPDATE spell_list SET mpCost = 4 WHERE spellid = 164; -- thunder
-UPDATE spell_list SET mpCost = 16 WHERE spellid = 165; -- thunder 2
-UPDATE spell_list SET mpCost = 40 WHERE spellid = 166; -- thunder 3
-UPDATE spell_list SET mpCost = 88 WHERE spellid = 167; -- thunder 4
-UPDATE spell_list SET mpCost = 156 WHERE spellid = 168; -- thunder 5
-UPDATE spell_list SET mpCost = 4 WHERE spellid = 169; -- water
-UPDATE spell_list SET mpCost = 16 WHERE spellid = 170; -- water 2
-UPDATE spell_list SET mpCost = 40 WHERE spellid = 171; -- water 3
-UPDATE spell_list SET mpCost = 88 WHERE spellid = 172; -- water 4
-UPDATE spell_list SET mpCost = 156 WHERE spellid = 173; -- water 5
-UPDATE spell_list SET mpCost = 24 WHERE spellid = 174; -- firaga
-UPDATE spell_list SET mpCost = 93 WHERE spellid = 175; -- firaga 2
-UPDATE spell_list SET mpCost = 175 WHERE spellid = 176; -- firaga 3
-UPDATE spell_list SET mpCost = 345 WHERE spellid = 177; -- firaga 4
-UPDATE spell_list SET mpCost = 512 WHERE spellid = 178; -- firaga 5
-UPDATE spell_list SET mpCost = 24 WHERE spellid = 179; -- blizzaga
-UPDATE spell_list SET mpCost = 93 WHERE spellid = 180; -- blizzaga 2
-UPDATE spell_list SET mpCost = 175 WHERE spellid = 181; -- blizzaga 3
-UPDATE spell_list SET mpCost = 345 WHERE spellid = 182; -- blizzaga 4
-UPDATE spell_list SET mpCost = 512 WHERE spellid = 183; -- blizzaga 5
-UPDATE spell_list SET mpCost = 24 WHERE spellid = 184; -- aeroga
-UPDATE spell_list SET mpCost = 93 WHERE spellid = 185; -- aeroga 2
-UPDATE spell_list SET mpCost = 175 WHERE spellid = 186; -- aeroga 3
-UPDATE spell_list SET mpCost = 345 WHERE spellid = 187; -- aeroga 4
-UPDATE spell_list SET mpCost = 512 WHERE spellid = 188; -- aeroga 5
-UPDATE spell_list SET mpCost = 24 WHERE spellid = 189; -- stonega
-UPDATE spell_list SET mpCost = 93 WHERE spellid = 190; -- stonega 2
-UPDATE spell_list SET mpCost = 175 WHERE spellid = 191; -- stonega 3
-UPDATE spell_list SET mpCost = 345 WHERE spellid = 192; -- stonega 4
-UPDATE spell_list SET mpCost = 512 WHERE spellid = 193; -- stonega 5
-UPDATE spell_list SET mpCost = 24 WHERE spellid = 194; -- thundaga
-UPDATE spell_list SET mpCost = 93 WHERE spellid = 195; -- thundaga 2
-UPDATE spell_list SET mpCost = 175 WHERE spellid = 196; -- thundaga 3
-UPDATE spell_list SET mpCost = 345 WHERE spellid = 197; -- thundaga 4
-UPDATE spell_list SET mpCost = 512 WHERE spellid = 198; -- thundaga 5
-UPDATE spell_list SET mpCost = 24 WHERE spellid = 199; -- waterga
-UPDATE spell_list SET mpCost = 93 WHERE spellid = 200; -- waterga 2
-UPDATE spell_list SET mpCost = 175 WHERE spellid = 201; -- waterga 3
-UPDATE spell_list SET mpCost = 345 WHERE spellid = 202; -- waterga 4
-UPDATE spell_list SET mpCost = 512 WHERE spellid = 203; -- waterga 5
+UPDATE spell_list SET mpCost = 4, base = 10 WHERE spellid IN (144,149,154,159,164,169); -- fire,blizzard, aero, stone, thunder, water
+UPDATE spell_list SET mpCost = 16, base = 78 WHERE spellid IN (145,150,155,160,165,170); -- fire 2,blizzard 2, aero 2, stone 2, thunder 2, water 2
+UPDATE spell_list SET mpCost = 40, base = 210 WHERE spellid IN (146,151,156,161,166,171); -- fire 3,blizzard 3, aero 3, stone 3, thunder 3, water 3
+UPDATE spell_list SET mpCost = 8, base = 381 WHERE spellid IN (147,152,157,162,167,172); -- fire 4,blizzard 4, aero 4, stone 4, thunder 4, water 4
+UPDATE spell_list SET mpCost = 156, base = 626 WHERE spellid IN (148,153,158,163,168,173); -- fire 5,blizzard 5, aero 5, stone 5, thunder 5, water 5
+UPDATE spell_list SET mpCost = 24, base = 56 WHERE spellid IN (174,179,184,189,194,199); -- firaga, blizzaga, aeroga, stonega, thundaga, waterga
+UPDATE spell_list SET mpCost = 93, base = 201 WHERE spellid IN (175,180,185,190,195,200); -- firaga 2, blizzaga 2, aeroga 2, stonega 2, thundaga 2, waterga 2
+UPDATE spell_list SET mpCost = 175, base = 434 WHERE spellid IN (176,181,186,191,196,201); -- firaga 3, blizzaga 3, aeroga 3, stonega 3, thundaga 3, waterga 3
+UPDATE spell_list SET mpCost = 345, base = 667 WHERE spellid IN (177,182,187,192,197,202); -- firaga 4, blizzaga 4, aeroga 4, stonega 4, thundaga 4, waterga 4
+UPDATE spell_list SET mpCost = 512, base = 868 WHERE spellid IN (178,183,188,193,198,203); -- firaga 5, blizzaga 5, aeroga 5, stonega 5, thundaga 5, waterga 5
 UPDATE spell_list SET mpCost = 10, recastTime = 50000, VE = 320 WHERE spellid = 242; -- absorb-acc
 UPDATE spell_list SET mpCost = 10, recastTime = 50000, VE = 320 WHERE spellid = 266; -- absorb-str
 UPDATE spell_list SET mpCost = 10, recastTime = 50000, VE = 320 WHERE spellid = 267; -- absorb-dex
