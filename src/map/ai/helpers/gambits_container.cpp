@@ -41,6 +41,11 @@ namespace gambits
         }
     }
 
+    inline bool resistanceComparator(const Weakness_t& firstElem, const Weakness_t& secondElem)
+    {
+        return firstElem.resistance < secondElem.resistance;
+    }
+
     void CGambitsContainer::Tick(time_point tick)
     {
         TracyZoneScoped;
@@ -351,35 +356,18 @@ namespace gambits
                     }
                     else if (action.select == G_SELECT::WEAKNESS)
                     {
-                        int16 lowestRes     = 0;
-                        std::vector<Mod> resistvector = { Mod::FIRERES, Mod::ICERES, Mod::WINDRES, Mod::EARTHRES, Mod::THUNDERRES, Mod::WATERRES };
-                        std::vector<SPELLFAMILY> familyvecotr = { SPELLFAMILY::SPELLFAMILY_FIRE,  SPELLFAMILY::SPELLFAMILY_BLIZZARD, SPELLFAMILY::SPELLFAMILY_AERO,
-                                                       SPELLFAMILY::SPELLFAMILY_STONE, SPELLFAMILY::SPELLFAMILY_THUNDER,  SPELLFAMILY::SPELLFAMILY_WATER };
-                        std::vector<int16>       resVector;
-                        for (int i = 0; i < resistvector.size(); i++)
+                        for (auto& weakness : weaknessVector)
                         {
-                            int16 currentRes = target->getMod(resistvector.at(i));
-                            resVector.push_back(currentRes);
-                            if (currentRes < lowestRes)
-                            {
-                                lowestRes = currentRes;
-                            }
+                            weakness.resistance = target->getMod(weakness.mod);
                         }
 
-                        std::vector<SPELLFAMILY> weakFamily;
-                        for (int i = 0; i < resVector.size(); i++)
-                        {
-                            if (resVector.at(i) == lowestRes)
-                            {
-                                weakFamily.push_back(familyvecotr.at(i));
-                            }
-                        }
+                        std::stable_sort(weaknessVector.begin(), weaknessVector.end(), resistanceComparator);
 
                         std::optional<SpellID> spell_id;
                         CSpell*                PSpell;
-                        for (auto& family : weakFamily) // access by reference to avoid copying
+                        for (auto& weakness : weaknessVector) // access by reference to avoid copying
                         {
-                            auto temp_id = POwner->SpellContainer->GetBestAvailable(static_cast<SPELLFAMILY>(family));
+                            auto temp_id = POwner->SpellContainer->GetBestAvailable(static_cast<SPELLFAMILY>(weakness.family));
                             if (temp_id.has_value())
                             {
                                 auto* tempPSpell = spell::GetSpell(static_cast<SpellID>(temp_id.value()));

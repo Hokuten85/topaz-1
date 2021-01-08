@@ -628,3 +628,9 @@ AND sl.family IN (42,43,44,45,46,47);
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 266, 43, 255); -- absorb-str
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 267, 41, 255); -- absorb-dex
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 242, 61, 255); -- absorb-acc
+
+INSERT INTO mob_spell_lists
+SELECT 'TRUST_Shantotto_II', 428, spell_id, min_level, max_level
+FROM mob_spell_lists msl1
+WHERE spell_list_name = 'TRUST_Shantotto'
+AND msl1.spell_id NOT IN (144,149,154,159,164,169);

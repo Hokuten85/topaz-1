@@ -162,6 +162,13 @@ namespace gambits
         uint8      tertiary;
     };
 
+    struct Weakness_t
+    {
+        Mod         mod;
+        SPELLFAMILY family;
+        int16       resistance;
+    };
+
     class CGambitsContainer
     {
     public:
@@ -193,6 +200,12 @@ namespace gambits
 
         std::set<JOBTYPE> caster_jobs = {
             JOB_WHM, JOB_BLM, JOB_RDM, JOB_BRD, JOB_SMN, JOB_BLU, JOB_SCH, JOB_GEO, JOB_RUN,
+        };
+
+        std::vector<Weakness_t> weaknessVector = {
+            Weakness_t{ Mod::FIRERES, SPELLFAMILY::SPELLFAMILY_FIRE },       Weakness_t{ Mod::ICERES, SPELLFAMILY::SPELLFAMILY_BLIZZARD },
+            Weakness_t{ Mod::WINDRES, SPELLFAMILY::SPELLFAMILY_AERO },       Weakness_t{ Mod::EARTHRES, SPELLFAMILY::SPELLFAMILY_STONE },
+            Weakness_t{ Mod::THUNDERRES, SPELLFAMILY::SPELLFAMILY_THUNDER }, Weakness_t{ Mod::WATERRES, SPELLFAMILY::SPELLFAMILY_WATER }
         };
     };
 
