@@ -4,7 +4,7 @@ echo [%date% %time%] Restarting BROKER...
 F:
 cd F:\pydarkstar\bin
 
-set root=C:\ProgramData\Anaconda3
+set root=C:\Users\Kelly\anaconda3
 call %root%\Scripts\activate.bat pydarkstar
 
 python .\broker.py
