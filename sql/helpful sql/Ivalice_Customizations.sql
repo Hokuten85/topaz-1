@@ -179,13 +179,13 @@ INSERT INTO item_mods (itemid, modid, value) VALUES (16556, 431, 1);
 INSERT INTO item_mods (itemid, modid, value) VALUES (16609, 431, 1);
 INSERT INTO item_mods (itemid, modid, value) VALUES (17646, 431, 1);
 
-INSERT INTO synth_recipes (ID, Desynth, KeyItem, Wood, Smith, Gold, Cloth, Leather, Bone, Alchemy, Cook, Crystal, HQCrustal, Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Result, ResultHQ1, ResultHQ2, ResultHQ3, ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, ResultName)
+INSERT INTO synth_recipes (ID, Desynth, KeyItem, Wood, Smith, Gold, Cloth, Leather, Bone, Alchemy, Cook, Crystal, HQCrystal, Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Result, ResultHQ1, ResultHQ2, ResultHQ3, ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, ResultName)
 SELECT (select MAX(ID)+1 from synth_recipes) AS ID, Desynth, KeyItem, Wood, Smith, '20', Cloth, Leather, Bone, '61', Cook, Crystal, HQCrystal, '752', Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, '9040', '9040', '9040', '9040', ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, 'Stabilizer III'
 FROM synth_recipes
 WHERE id = (select id from synth_recipes where ResultName = 'Stabilizer II')
 AND NOT EXISTS (SELECT 1 FROM synth_recipes WHERE Result = 9040);
 
-INSERT INTO synth_recipes (ID, Desynth, KeyItem, Wood, Smith, Gold, Cloth, Leather, Bone, Alchemy, Cook, Crystal, HQCrustal, Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Result, ResultHQ1, ResultHQ2, ResultHQ3, ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, ResultName)
+INSERT INTO synth_recipes (ID, Desynth, KeyItem, Wood, Smith, Gold, Cloth, Leather, Bone, Alchemy, Cook, Crystal, HQCrystal, Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Result, ResultHQ1, ResultHQ2, ResultHQ3, ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, ResultName)
 SELECT (select MAX(ID)+1 from synth_recipes) AS ID, Desynth, KeyItem, Wood, Smith, '68', Cloth, Leather, Bone, '20', Cook, Crystal, HQCrystal, '752', Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, '9037', '9037', '9037', '9037', ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, 'Accelerator III'
 FROM synth_recipes
 WHERE id = (select id from synth_recipes where ResultName = 'Accelerator II')
