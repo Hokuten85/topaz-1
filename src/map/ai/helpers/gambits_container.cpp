@@ -409,6 +409,10 @@ namespace gambits
                         // trustutils::SendTrustMessage(POwner, action.select_arg);
                     }
                 }
+                else if (action.reaction == G_REACTION::ITEM)
+                {
+
+                }
 
                 // Assume success
                 if (gambit.retry_delay > 0)

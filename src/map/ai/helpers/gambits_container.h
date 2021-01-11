@@ -59,6 +59,7 @@ namespace gambits
         WS      = 4,
         MS      = 5,
         MSG     = 6,
+        ITEM    = 7,
     };
 
     enum class G_SELECT : uint16
