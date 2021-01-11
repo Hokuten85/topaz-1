@@ -33,79 +33,7 @@
 #include "../weapon_skill.h"
 #include "../zone_instance.h"
 
-struct TrustSpell_ID
-{
-    uint32 spellID;
-};
-
 std::vector<TrustSpell_ID*> g_PTrustIDList;
-
-struct Trust_t
-{
-    uint32    trustID;
-    look_t    look;        // appearance data
-    string_t  name;        // script name string
-    string_t  packet_name; // packet name string
-    ECOSYSTEM EcoSystem;   // ecosystem
-
-    uint8  name_prefix;
-    uint8  size; // размер модели
-    uint16 m_Family;
-
-    uint16 behaviour;
-
-    uint8 mJob;
-    uint8 sJob;
-    float HPscale; // HP boost percentage
-    float MPscale; // MP boost percentage
-
-    uint16 cmbDmgMult;
-    uint16 cmbDelay;
-    uint8  speed;
-    // stat ranks
-    uint8 strRank;
-    uint8 dexRank;
-    uint8 vitRank;
-    uint8 agiRank;
-    uint8 intRank;
-    uint8 mndRank;
-    uint8 chrRank;
-    uint8 attRank;
-    uint8 defRank;
-    uint8 evaRank;
-    uint8 accRank;
-
-    uint16 m_MobSkillList;
-
-    // magic stuff
-    bool   hasSpellScript;
-    uint16 spellList;
-
-    // resists
-    int16 slashres;
-    int16 pierceres;
-    int16 hthres;
-    int16 impactres;
-
-    int16 firedef;
-    int16 icedef;
-    int16 winddef;
-    int16 earthdef;
-    int16 thunderdef;
-    int16 waterdef;
-    int16 lightdef;
-    int16 darkdef;
-
-    int16 fireres;
-    int16 iceres;
-    int16 windres;
-    int16 earthres;
-    int16 thunderres;
-    int16 waterres;
-    int16 lightres;
-    int16 darkres;
-};
-
 std::vector<Trust_t*> g_PTrustList;
 
 namespace trustutils
@@ -312,6 +240,7 @@ namespace trustutils
         PTrust->SetSLevel(PMaster->GetSLevel());
 
         LoadTrustStatsAndSkills(PTrust);
+        LoadTrustEquipment(PTrust, PMaster);
 
         // Use Mob formulas to work out base "weapon" damage, but scale down to reasonable values.
         auto mobStyleDamage   = static_cast<float>(mobutils::GetWeaponDamage(PTrust));
@@ -626,6 +555,32 @@ namespace trustutils
             if (!canFormLv3Skillchain || PTrust->GetMLevel() >= 60 || onlyHasLc3Skillchains)
             {
                 controller->m_GambitsContainer->tp_skills.emplace_back(skill);
+            }
+        }
+    }
+
+    void LoadTrustEquipment(CTrustEntity* PTrust,  CCharEntity* PMaster)
+    {
+        if (PMaster->m_TrustEquipment.size() > 0)
+        {
+            auto iterator = PMaster->m_TrustEquipment.find(PTrust->m_TrustID);
+            if (iterator != PMaster->m_TrustEquipment.end())
+            {
+                for (int8 i = 0; i < iterator->second->size(); ++i)
+                {
+                    auto PItem = iterator->second->at(i);
+                    if (PItem != nullptr)
+                    {
+                        if (i > 16)
+                        {
+                            PTrust->food = (CItemUsable*)PItem;
+                        }
+                        else
+                        {
+                            PTrust->EquipItem((CItemEquipment*)PItem, i);
+                        }
+                    }
+                }
             }
         }
     }

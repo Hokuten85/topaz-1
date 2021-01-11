@@ -557,10 +557,10 @@ local augments = {
                     
 local npcMap = {
     -- South Sandy
-    [17719919] = {AugType = "Melee", Aug = "Aug1", AugIdx = 1},
-    [17719920] = {AugType = "Melee", Aug = "Aug2", AugIdx = 2},
-    [17719917] = {AugType = "Melee", Aug = "Aug3", AugIdx = 3},
-    [17719918] = {AugType = "Melee", Aug = "Aug4", AugIdx = 4},
+    [17719961] = {AugType = "Melee", Aug = "Aug1", AugIdx = 1},
+    [17719962] = {AugType = "Melee", Aug = "Aug2", AugIdx = 2},
+    [17719959] = {AugType = "Melee", Aug = "Aug3", AugIdx = 3},
+    [17719960] = {AugType = "Melee", Aug = "Aug4", AugIdx = 4},
     
     -- Port Sandy
     [17727673] = {AugType = "Ranged", Aug = "Aug1", AugIdx = 1},

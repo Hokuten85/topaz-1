@@ -6,45 +6,45 @@ UPDATE augments SET multiplier = -100, value = 1 WHERE augmentId = 50;
 UPDATE augments SET multiplier = 100, value = 1 WHERE augmentId = 111;
 
 -- ABILITIES
-UPDATE Abilities SET CE = 100, VE = 10000 WHERE abilityId = 6; -- invincible
-UPDATE Abilities SET recastTime = 90 WHERE abilityId = 16; -- warcry
-UPDATE Abilities SET CE = 200 WHERE abilityId = 19; -- provoke
-UPDATE Abilities SET recastTime = 120, isAOE = 1 WHERE abilityId = 22; -- chakra
-UPDATE Abilities SET recastTime = 60 WHERE abilityId = 25; -- steal
-UPDATE Abilities SET recastTime = 60 WHERE abilityId = 27; -- hide
-UPDATE Abilities SET recastTime = 60 WHERE abilityId = 29; -- mug
-UPDATE Abilities SET recastTime = 30, CE = 200, VE = 800 WHERE abilityId = 30; -- shield bash
-UPDATE Abilities SET recastTime = 300, CE = 100, VE = 80 WHERE abilityId = 31; -- holy circle
-UPDATE Abilities SET recastTime = 300 WHERE abilityId = 34; -- Arcane Circle
-UPDATE Abilities SET CE = 100, VE = 1860 WHERE abilityId = 32; -- sentinel
-UPDATE Abilities SET recastTime = 60 WHERE abilityId = 41; -- shadowbind
-UPDATE Abilities SET recastTime = 300 WHERE abilityId = 45; -- call wyvern
-UPDATE Abilities SET recastTime = 150 WHERE abilityId = 47; -- meditate
-UPDATE Abilities SET recastTime = 90 WHERE abilityId = 51; -- high jump
-UPDATE Abilities SET recastTime = 120 WHERE abilityId = 52; -- super jump
-UPDATE Abilities SET CE = 100, VE = 95 WHERE abilityId = 63; -- cover
-UPDATE Abilities SET recastTime = 120 WHERE abilityId = 66; -- chi blast
-UPDATE Abilities SET recastTime = 180 WHERE abilityId = 68; -- accomplice
-UPDATE Abilities SET recastTime = 45 WHERE abilityId = 75; -- blood pact rage
-UPDATE Abilities SET CE = 100, VE = 360 WHERE abilityId = 76; -- rampart
-UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 119; -- overdrive
-UPDATE Abilities SET recastTime = 60 WHERE abilityId = 151; -- shikikoyo
-UPDATE Abilities SET recastTime = 45 WHERE abilityId = 156; -- blood pact ward
-UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 165; -- trance
-UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 194; -- tabula rasa
-UPDATE Abilities SET recastTime = 150 WHERE abilityId = 214; -- sekkanoki
-UPDATE Abilities SET recastTime = 45 WHERE abilityId IN (640,641,642,643,644,645,646); -- camisado, somnolence, nightmare, ultimate terror, noctoshield, dream shroud, nether blast
-UPDATE abilities SET `level` = 75 WHERE abilityId = 262;
+UPDATE Abilities SET CE = 100, VE = 10000 WHERE abilityId = 22; -- invincible
+UPDATE Abilities SET recastTime = 90 WHERE abilityId = 32; -- warcry
+UPDATE Abilities SET CE = 200 WHERE abilityId = 35; -- provoke
+UPDATE Abilities SET recastTime = 120, isAOE = 1 WHERE abilityId = 38; -- chakra
+UPDATE Abilities SET recastTime = 60 WHERE abilityId = 41; -- steal
+UPDATE Abilities SET recastTime = 60 WHERE abilityId = 43; -- hide
+UPDATE Abilities SET recastTime = 60 WHERE abilityId = 45; -- mug
+UPDATE Abilities SET recastTime = 30, CE = 200, VE = 800 WHERE abilityId = 46; -- shield bash
+UPDATE Abilities SET recastTime = 300, CE = 100, VE = 80 WHERE abilityId = 47; -- holy circle
+UPDATE Abilities SET CE = 100, VE = 1860 WHERE abilityId = 48; -- sentinel
+UPDATE Abilities SET recastTime = 300 WHERE abilityId = 50; -- Arcane Circle
+UPDATE Abilities SET recastTime = 60 WHERE abilityId = 57; -- shadowbind
+UPDATE Abilities SET recastTime = 300 WHERE abilityId = 61; -- call wyvern
+UPDATE Abilities SET recastTime = 150 WHERE abilityId = 63; -- meditate
+UPDATE Abilities SET recastTime = 90 WHERE abilityId = 67; -- high jump
+UPDATE Abilities SET recastTime = 120 WHERE abilityId = 68; -- super jump
+UPDATE Abilities SET CE = 100, VE = 95 WHERE abilityId = 79; -- cover
+UPDATE Abilities SET recastTime = 120 WHERE abilityId = 82; -- chi blast
+UPDATE Abilities SET recastTime = 180 WHERE abilityId = 84; -- accomplice
+UPDATE Abilities SET recastTime = 45 WHERE abilityId = 91; -- blood pact rage
+UPDATE Abilities SET CE = 100, VE = 360 WHERE abilityId = 92; -- rampart
+UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 135; -- overdrive
+UPDATE Abilities SET recastTime = 60 WHERE abilityId = 167; -- shikikoyo
+UPDATE Abilities SET recastTime = 45 WHERE abilityId = 172; -- blood pact ward
+UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 181; -- trance
+UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 210; -- tabula rasa
+UPDATE Abilities SET recastTime = 150 WHERE abilityId = 230; -- sekkanoki
+UPDATE abilities SET `level` = 75 WHERE abilityId = 278; -- palisade
+UPDATE Abilities SET recastTime = 45 WHERE abilityId IN (656,657,658,659,660,661,662); -- camisado, somnolence, nightmare, ultimate terror, noctoshield, dream shroud, nether blast
 
 -- MERITS
 UPDATE merits SET Value = 4 WHERE meritid = 516; -- barspell effect
 UPDATE merits SET Value = 1 WHERE meritid = 768; -- shield base recast
 
 -- NPC LIST
-UPDATE npc_list SET pos_rot = 66, pos_x = 1, pos_y = -3, pos_z = -29, namevis = 0, status = 0 WHERE npcid = 17719919;
-UPDATE npc_list SET pos_rot = 64, pos_x = -1, pos_y = -3, pos_z = -29, namevis = 0, status = 0 WHERE npcid = 17719920;
-UPDATE npc_list SET pos_rot = 52, pos_x = -3, pos_y = -3, pos_z = -29, namevis = 0, status = 0 WHERE npcid = 17719917;
-UPDATE npc_list SET pos_rot = 72, pos_x = 3, pos_y = -3, pos_z = -29, namevis = 0, status = 0 WHERE npcid = 17719918;
+UPDATE npc_list SET pos_rot = 66, pos_x = 1, pos_y = -3, pos_z = -29, namevis = 0, status = 0 WHERE npcid = 17719961;
+UPDATE npc_list SET pos_rot = 64, pos_x = -1, pos_y = -3, pos_z = -29, namevis = 0, status = 0 WHERE npcid = 17719962;
+UPDATE npc_list SET pos_rot = 52, pos_x = -3, pos_y = -3, pos_z = -29, namevis = 0, status = 0 WHERE npcid = 17719959;
+UPDATE npc_list SET pos_rot = 72, pos_x = 3, pos_y = -3, pos_z = -29, namevis = 0, status = 0 WHERE npcid = 17719960;
 
 UPDATE npc_list SET pos_rot = 235, pos_x = -38, pos_y = -8, pos_z = -155, namevis = 0, status = 0 WHERE npcid = 17727673;
 UPDATE npc_list SET pos_rot = 237, pos_x = -38, pos_y = -8, pos_z = -153, namevis = 0, status = 0 WHERE npcid = 17727674;
@@ -179,14 +179,17 @@ INSERT INTO item_mods (itemid, modid, value) VALUES (16556, 431, 1);
 INSERT INTO item_mods (itemid, modid, value) VALUES (16609, 431, 1);
 INSERT INTO item_mods (itemid, modid, value) VALUES (17646, 431, 1);
 
-INSERT INTO synth_recipes
-SELECT (select MAX(ID)+1 from synth_recipes) AS ID, Desynth, KeyItem, '61', Bone, Cloth, Cook, '50', Leather, Smith, Wood, Crystal, HQCrystal, '752', Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, '9040', '9040', '9040', '9040', ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, 'Stabilizer III'
+INSERT INTO synth_recipes (ID, Desynth, KeyItem, Wood, Smith, Gold, Cloth, Leather, Bone, Alchemy, Cook, Crystal, HQCrustal, Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Result, ResultHQ1, ResultHQ2, ResultHQ3, ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, ResultName)
+SELECT (select MAX(ID)+1 from synth_recipes) AS ID, Desynth, KeyItem, Wood, Smith, '20', Cloth, Leather, Bone, '61', Cook, Crystal, HQCrystal, '752', Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, '9040', '9040', '9040', '9040', ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, 'Stabilizer III'
 FROM synth_recipes
-WHERE id = 1242
+WHERE id = (select id from synth_recipes where ResultName = 'Stabilizer II')
 AND NOT EXISTS (SELECT 1 FROM synth_recipes WHERE Result = 9040);
 
-UPDATE synth_recipes SET Result = 9037, ResultHQ1 = 9037, ResultHQ2 = 9037, ResultHQ3 = 9037 WHERE ID = 4184;
-UPDATE synth_recipes SET Result = 9039, ResultHQ1 = 9039, ResultHQ2 = 9039, ResultHQ3 = 9039 WHERE ID = 4375;
+INSERT INTO synth_recipes (ID, Desynth, KeyItem, Wood, Smith, Gold, Cloth, Leather, Bone, Alchemy, Cook, Crystal, HQCrustal, Ingredient1, Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, Result, ResultHQ1, ResultHQ2, ResultHQ3, ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, ResultName)
+SELECT (select MAX(ID)+1 from synth_recipes) AS ID, Desynth, KeyItem, Wood, Smith, '68', Cloth, Leather, Bone, '20', Cook, Crystal, HQCrystal, '752', Ingredient2, Ingredient3, Ingredient4, Ingredient5, Ingredient6, Ingredient7, Ingredient8, '9037', '9037', '9037', '9037', ResultQty, ResultHQ1Qty, ResultHQ2Qty, ResultHQ3Qty, 'Accelerator III'
+FROM synth_recipes
+WHERE id = (select id from synth_recipes where ResultName = 'Accelerator II')
+AND NOT EXISTS (SELECT 1 FROM synth_recipes WHERE Result = 9037);
 
 UPDATE mob_spawn_points SET pos_x = 1 WHERE mobid = 17580341; -- make aroma fly spawnable
 

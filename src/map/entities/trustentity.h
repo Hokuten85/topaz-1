@@ -23,6 +23,8 @@
 #define _CTRUSTENTITY_H
 
 #include "mobentity.h"
+#include "../items/item_equipment.h"
+#include "../items/item_usable.h"
 
 // PTrust->m_MovementType is read from 'behaviour' in a trust's mob_pool entry
 enum TRUST_MOVEMENT_TYPE
@@ -41,6 +43,8 @@ class CDespawnState;
 class CMagicState;
 class CMobSkillState;
 class CWeaponSkillState;
+class CItemEquipment;
+class CItemUsable;
 
 class CTrustEntity : public CMobEntity
 {
@@ -60,9 +64,13 @@ public:
     void OnCastFinished(CMagicState& state, action_t& action) override;
     void OnMobSkillFinished(CMobSkillState& state, action_t& action) override;
     void OnWeaponSkillFinished(CWeaponSkillState& state, action_t& action) override;
+    void EquipItem(CItemEquipment* PItem, int8 slotId);
+    void HandleTrade(CCharEntity* PChar);
 
     uint32              m_TrustID{};
     TRUST_MOVEMENT_TYPE m_MovementType;
+    CItemEquipment*     equip[16];
+    CItemUsable*        food;
 };
 
 #endif

@@ -794,9 +794,9 @@ namespace charutils
             PChar->menuConfigFlags.flags = (uint32)Sql_GetUIntData(SqlHandle, 2);
         }
 
-        fmtQuery = "SELECT modid, value "
-            "FROM char_mods "
-            "WHERE charid = %u;";
+        fmtQuery = "SELECT modid, value"
+            " FROM char_mods"
+            " WHERE charid = %u;";
 
         ret = Sql_Query(SqlHandle, fmtQuery, PChar->id);
 
@@ -811,6 +811,8 @@ namespace charutils
                 PChar->setCharMod(ModID, ModValue);
             }
         }
+
+        charutils::LoadTrustEquipment(PChar);
 
         charutils::LoadInventory(PChar);
 
@@ -871,6 +873,66 @@ namespace charutils
                 if (spell::GetSpell(static_cast<SpellID>(spellId)) != nullptr)
                 {
                     PChar->m_SpellList.set(spellId);
+                }
+            }
+        }
+    }
+
+    void LoadTrustEquipment(CCharEntity* PChar)
+    {
+        const char* fmtQuery = "SELECT trustid, itemid, equipslotid, quantity, extra"
+                               " FROM trust_equipment"
+                               " WHERE charid = %u;";
+
+        int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id);
+
+        if (ret != SQL_ERROR && Sql_NumRows(SqlHandle) != 0)
+        {
+            while (Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+            {
+                uint16 trustID = (uint16)Sql_GetUIntData(SqlHandle, 0);
+
+                CItem* PItem = itemutils::GetItem(Sql_GetIntData(SqlHandle, 1));
+                if (PItem != nullptr)
+                {
+                    auto equipSlotId = Sql_GetUIntData(SqlHandle, 2);
+                    PItem->setQuantity(Sql_GetUIntData(SqlHandle, 3));
+
+                    size_t length = 0;
+                    char*  extra  = nullptr;
+                    Sql_GetData(SqlHandle, 4, &extra, &length);
+                    memcpy(PItem->m_extra, extra, (length > sizeof(PItem->m_extra) ? sizeof(PItem->m_extra) : length));
+
+                    auto iterator = PChar->m_TrustEquipment.find(trustID);
+                    if (iterator == PChar->m_TrustEquipment.end())
+                    {
+                        CCharEntity::TrustEquipList_t* trustEquipmentList(new CCharEntity::TrustEquipList_t());
+                        trustEquipmentList->at(equipSlotId) = PItem;
+                        PChar->m_TrustEquipment.insert(std::pair<uint16, CCharEntity::TrustEquipList_t*>(trustID, trustEquipmentList));
+                    }
+                    else
+                    {
+                        iterator->second->at(equipSlotId) = PItem;
+                    }
+                }
+            }
+        }
+
+        for (auto& equipList : PChar->m_TrustEquipment)
+        {
+            for (int8 i = 0; i < equipList.second->size(); ++i)
+            {
+                auto PItem = equipList.second->at(i);
+                if (PItem != nullptr && ((PItem->isType(ITEM_EQUIPMENT) || PItem->isType(ITEM_WEAPON)) && !PItem->isSubType(ITEM_CHARGED)))
+                {
+                    for (uint8 j = 0; j < 4; ++j)
+                    {
+                        // found a match, apply the augment
+                        if (((CItemEquipment*)PItem)->getAugment(j) != 0)
+                        {
+                            ((CItemEquipment*)PItem)->ApplyAugment(j);
+                        }
+                    }
                 }
             }
         }

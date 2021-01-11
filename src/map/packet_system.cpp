@@ -1422,7 +1422,7 @@ void SmallPacket0x036(map_session_data_t* const PSession, CCharEntity* const PCh
     uint32 npcid  = data.ref<uint32>(0x04);
     uint16 targid = data.ref<uint16>(0x3A);
 
-    CBaseEntity* PNpc = PChar->GetEntity(targid, TYPE_NPC);
+    CBaseEntity* PNpc = PChar->GetEntity(targid, TYPE_NPC | TYPE_TRUST);
 
     if ((PNpc != nullptr) && (PNpc->id == npcid) && distance(PNpc->loc.p, PChar->loc.p) <= 10)
     {
@@ -1453,7 +1453,14 @@ void SmallPacket0x036(map_session_data_t* const PSession, CCharEntity* const PCh
             PChar->TradeContainer->setItem(slotID, PItem->getID(), invSlotID, Quantity, PItem);
         }
 
-        luautils::OnTrade(PChar, PNpc);
+        if (PNpc->objtype == TYPE_TRUST && ((CTrustEntity*)PNpc)->PMaster->id == PChar->id) // if trust and Trust Master == Trading Character
+        {
+            ((CTrustEntity*)PNpc)->HandleTrade(PChar);
+        }
+        else
+        {
+            luautils::OnTrade(PChar, PNpc);
+        }
         PChar->TradeContainer->unreserveUnconfirmed();
     }
 }

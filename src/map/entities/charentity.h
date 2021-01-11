@@ -167,6 +167,7 @@ class CAbilityState;
 class CRangeState;
 class CItemState;
 class CItemUsable;
+class CItem;
 
 typedef std::deque<CBasicPacket*>      PacketList_t;
 typedef std::map<uint32, CBaseEntity*> SpawnIDList_t;
@@ -221,6 +222,9 @@ public:
     CAutomatonEntity*     PAutomaton;            // Automaton statistics
 
     std::vector<CTrustEntity*> PTrusts; // Active trusts
+    typedef std::array<CItem*, 17>      TrustEquipList_t;
+    std::map<uint16, TrustEquipList_t*> m_TrustEquipment;
+    
     template <typename F, typename... Args>
     void ForPartyWithTrusts(F func, Args&&... args)
     {
