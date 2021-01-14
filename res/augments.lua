@@ -354,9 +354,9 @@ return {
     [351] = {id=351,en="Occ. quickens spellcasting %+d%% ",ja="クイックマジック%+d%% "},
     [352] = {id=352,en="Occ. grants dmg. bonus based on TP %+d%% ",ja="時々自身のTPに比例した攻撃力修正%+d%% "},
     [353] = {id=353,en="TP Bonus %+d ",ja="TPボーナス%+d "},
-    [354] = {id=354,en="Quadruple Attack %+d",ja="クワッドアタック%+d "},
+    [354] = {id=354,en="Quadruple Attack %+d%%",ja="クワッドアタック%+d%% "},
     [355] = {id=355,en="Enhancing magic recast delay -%d ",ja="強化魔法再詠唱間隔-%d "},
-    [356] = {id=356,en="Potency of \"Cure\" effect received %+d%% ",ja="被ケアル回復量%+d%% "},
+    [356] = {id=356,en="Pot. of \"Cure\" effect rec. %+d%% ",ja="被ケアル回復量%+d%% "},
     [357] = {id=357,en="358",ja="358"},
     [358] = {id=358,en="359",ja="359"},
     [359] = {id=359,en="360",ja="360"},
@@ -374,7 +374,7 @@ return {
     [371] = {id=371,en="\"Regen\" potency %+d ",ja="リジェネ回復量%+d "},
     [372] = {id=372,en="\"Embolden\"%+d ",ja="エンボルド%+d "},
     [373] = {id=373,en="374",ja="374"},
-    [374] = {id=374,en="375",ja="375"},
+    [374] = {id=374,en="Enh. Mag. received dur. %+d%% ",ja="被強化魔法効果時間%+d%%"},
     [375] = {id=375,en="376",ja="376"},
     [376] = {id=376,en="377",ja="377"},
     [377] = {id=377,en="378",ja="378"},
@@ -923,7 +923,7 @@ return {
     [920] = {id=920,en="Enhances \"Yonin\" and \"Innin\" effect",ja="陽忍効果アップ\n陰忍効果アップ"},
     [921] = {id=921,en="Enhances \"Sange\" effect",ja="散華効果アップ"},
     [922] = {id=922,en="Enh. \"Ninja Tool Expertise\" effect",ja="忍具の知識効果アップ"},
-    [923] = {id=923,en="Enh. Ninj. Mag. Acc/Cast Time Red.",ja="忍術の魔命アップ\n忍術の魔攻アップ"},
+    [923] = {id=923,en="Enh. Ninj. Mag. Acc./Atk.",ja="忍術の魔命アップ\n忍術の魔攻アップ"},
     [924] = {id=924,en="925",ja="925"},
     [925] = {id=925,en="926",ja="926"},
     [926] = {id=926,en="Enhances \"Deep Breathing\" effect",ja="ディープブリージング効果アップ"},
@@ -2050,7 +2050,7 @@ return {
 }, {"id", "en", "ja"}
 
 --[[
-Copyright © 2013-2020, Windower
+Copyright © 2013-2021, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

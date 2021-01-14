@@ -1041,6 +1041,16 @@ return {
     [1049] = {id=1049,en="Blessed by the Avatars",ja="大いなる力の継承者"},
     [1050] = {id=1050,en="Seer of Songs",ja="星唄に乗せて歩み続ける者"},
     [1051] = {id=1051,en="The Eternal Wind",ja="悠久の風"},
+    [1052] = {id=1052,en="Dealan-dhe Dimmer",ja="デランデディマー"},
+    [1053] = {id=1053,en="Sgili Stomper",ja="シグリストンパー"},
+    [1054] = {id=1054,en="U Bnai Underminer",ja="ウブナイアンダーマイナー"},
+    [1055] = {id=1055,en="Gogmagog Grinder",ja="ゴグマゴググラインダー"},
+    [1056] = {id=1056,en="Aristaeus Assailer",ja="アリステウスアセーラー"},
+    [1057] = {id=1057,en="Marmorkrebs Mauler",ja="マーモルクレブモーラー"},
+    [1058] = {id=1058,en="Gigelorum Gagger",ja="ギゲローラムガガー"},
+    [1059] = {id=1059,en="Raskovniche Render",ja="ラスコフニチェレンダー"},
+    [1060] = {id=1060,en="Procne Punisher",ja="プロクネパニシャー"},
+    [1061] = {id=1061,en="Henwen Harrier",ja="ヘンウェンハリア"},
     [1116] = {id=1116,en="Raptor Wrangler",ja="爆速ラプトルライダー"},
     [1117] = {id=1117,en="Gardener for the Ages",ja="疾走ガーデンライダー"},
     [1118] = {id=1118,en="Lagoon Explorer",ja="伝説ラグーンライダー"},
@@ -1054,10 +1064,13 @@ return {
     [1126] = {id=1126,en="Legendary Alchemist",ja="運斤成風の錬金術師"},
     [1127] = {id=1127,en="Legendary Culinarian",ja="運斤成風の調理師"},
     [1128] = {id=1128,en="Eternal Communer",ja="大いなる自然の継承者"},
+    [1129] = {id=1129,en="Destiny Destroyer...Destroyer",ja="ディスティニーデストロイヤー団デストロイヤー"},
+    [1130] = {id=1130,en="Fully-Baked Hero",ja="完熟ヒーロー"},
+    [1131] = {id=1131,en="Ghdwk Vshdnhu",ja="ケテロテククムウラケミニ"},
 }, {"id", "en", "ja"}
 
 --[[
-Copyright © 2013-2020, Windower
+Copyright © 2013-2021, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
