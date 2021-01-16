@@ -26,6 +26,7 @@
 
 class CBattleEntity;
 class CCharEntity;
+class CTrustEntity;
 class CItemUsable;
 
 struct action_t;
@@ -33,7 +34,7 @@ struct action_t;
 class CItemState : public CState
 {
 public:
-    CItemState(CCharEntity* PEntity, uint16 targid, uint8 loc, uint8 slotid);
+    CItemState(CBattleEntity* PEntity, uint16 targid, uint8 loc, uint8 slotid);
     virtual bool Update(time_point tick) override;
     virtual void Cleanup(time_point tick) override;
     virtual bool CanChangeState() override;
@@ -56,7 +57,7 @@ public:
 protected:
     bool HasMoved();
 
-    CCharEntity* m_PEntity;
+    CBattleEntity* m_PEntity;
     CItemUsable* m_PItem;
     uint8        m_location;
     uint8        m_slot;

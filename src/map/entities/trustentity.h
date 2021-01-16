@@ -40,9 +40,11 @@ class CCharEntity;
 class CAbilityState;
 class CRangeState;
 class CDespawnState;
+class CItemState;
 class CMagicState;
 class CMobSkillState;
 class CWeaponSkillState;
+class CUContainer;
 class CItemEquipment;
 class CItemUsable;
 
@@ -66,11 +68,13 @@ public:
     void OnWeaponSkillFinished(CWeaponSkillState& state, action_t& action) override;
     void EquipItem(CItemEquipment* PItem, int8 slotId);
     void HandleTrade(CCharEntity* PChar);
+    virtual void OnItemFinish(CItemState&, action_t&);
 
     uint32              m_TrustID{};
     TRUST_MOVEMENT_TYPE m_MovementType;
     CItemEquipment*     equip[16];
     CItemUsable*        food;
+    CUContainer*        UContainer; // container used for universal actions -- used for trading at least despite the dedicated trading container above
 };
 
 #endif

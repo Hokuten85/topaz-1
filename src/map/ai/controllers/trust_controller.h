@@ -45,6 +45,7 @@ public:
 
     bool Ability(uint16 targid, uint16 abilityid) override;
     bool Cast(uint16 targid, SpellID spellid) override;
+    virtual bool UseItem(uint16 targid);
 
     bool RangedAttack(uint16 targid);
 

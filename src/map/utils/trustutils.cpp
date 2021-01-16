@@ -571,7 +571,7 @@ namespace trustutils
                     auto PItem = iterator->second->at(i);
                     if (PItem != nullptr)
                     {
-                        if (i > 16)
+                        if (i > 15)
                         {
                             PTrust->food = (CItemUsable*)PItem;
                         }

@@ -293,7 +293,7 @@ bool CAIContainer::Internal_Raise()
 
 bool CAIContainer::Internal_UseItem(uint16 targetid, uint8 loc, uint8 slotid)
 {
-    auto* entity{ dynamic_cast<CCharEntity*>(PEntity) };
+    auto* entity{ dynamic_cast<CBattleEntity*>(PEntity) };
     if (entity)
     {
         return ChangeState<CItemState>(entity, targetid, loc, slotid);

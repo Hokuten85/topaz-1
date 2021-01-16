@@ -411,7 +411,10 @@ namespace gambits
                 }
                 else if (action.reaction == G_REACTION::ITEM)
                 {
-
+                    if (POwner->food != nullptr && POwner->food->getQuantity() > 0)
+                    {
+                        controller->UseItem(target->targid);
+                    }
                 }
 
                 // Assume success

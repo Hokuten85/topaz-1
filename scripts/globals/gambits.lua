@@ -58,6 +58,7 @@ ai.reaction =
     WS      = 4,
     MS      = 5,
     MSG     = 6,
+    ITEM    = 7,
 }
 ai.r = ai.reaction
 

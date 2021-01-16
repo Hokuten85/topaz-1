@@ -23,6 +23,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 
 #include "../../entities/battleentity.h"
 #include "../../entities/charentity.h"
+#include "../../entities/trustentity.h"
 #include "../ai_container.h"
 
 #include "../../item_container.h"
@@ -36,16 +37,23 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 
 #include "../../utils/battleutils.h"
 #include "../../utils/charutils.h"
+#include "../../utils/trustutils.h"
 
-CItemState::CItemState(CCharEntity* PEntity, uint16 targid, uint8 loc, uint8 slotid)
+CItemState::CItemState(CBattleEntity* PEntity, uint16 targid, uint8 loc, uint8 slotid)
 : CState(PEntity, targid)
 , m_PEntity(PEntity)
 , m_PItem(nullptr)
 , m_location(loc)
 , m_slot(slotid)
 {
-    auto* PItem = dynamic_cast<CItemUsable*>(m_PEntity->getStorage(loc)->GetItem(slotid));
-    m_PItem     = PItem;
+    if (m_PEntity->objtype == TYPE_TRUST)
+    {
+        m_PItem = dynamic_cast<CItemUsable*>(((CTrustEntity*)m_PEntity)->food);
+    }
+    else
+    {
+        m_PItem = dynamic_cast<CItemUsable*>(((CCharEntity*)m_PEntity)->getStorage(loc)->GetItem(slotid));
+    }
 
     if (m_PItem && m_PItem->isType(ITEM_USABLE))
     {
@@ -55,7 +63,7 @@ CItemState::CItemState(CCharEntity* PEntity, uint16 targid, uint8 loc, uint8 slo
             bool found = false;
             for (auto equipslot = 0; equipslot < 18; ++equipslot)
             {
-                if (m_PEntity->getEquip((SLOTTYPE)equipslot) == m_PItem && m_PItem->getCurrentCharges() > 0)
+                if (((CCharEntity*)m_PEntity)->getEquip((SLOTTYPE)equipslot) == m_PItem && m_PItem->getCurrentCharges() > 0)
                 {
                     found = true;
                     break;
@@ -77,7 +85,8 @@ CItemState::CItemState(CCharEntity* PEntity, uint16 targid, uint8 loc, uint8 slo
         throw CStateInitException(std::make_unique<CMessageBasicPacket>(m_PEntity, m_PEntity, 0, 0, 56));
     }
 
-    auto* PTarget = m_PEntity->IsValidTarget(targid, m_PItem->getValidTarget(), m_errorMsg);
+    auto* PTarget = m_PEntity->objtype == TYPE_TRUST ? m_PEntity->IsValidTarget(targid, m_PItem->getValidTarget(), m_errorMsg)
+                                                        : ((CCharEntity*)m_PEntity)->IsValidTarget(targid, m_PItem->getValidTarget(), m_errorMsg);
 
     if (!PTarget || m_errorMsg)
     {
@@ -101,14 +110,22 @@ CItemState::CItemState(CCharEntity* PEntity, uint16 targid, uint8 loc, uint8 slo
         }
     }
 
-    m_PEntity->UContainer->SetType(UCONTAINER_USEITEM);
-    m_PEntity->UContainer->SetItem(0, m_PItem);
+    if (m_PEntity->objtype == TYPE_TRUST)
+    {
+        ((CTrustEntity*)m_PEntity)->UContainer->SetType(UCONTAINER_USEITEM);
+        ((CTrustEntity*)m_PEntity)->UContainer->SetItem(0, m_PItem);
+    }
+    else
+    {
+        ((CCharEntity*)m_PEntity)->UContainer->SetType(UCONTAINER_USEITEM);
+        ((CCharEntity*)m_PEntity)->UContainer->SetItem(0, m_PItem);
+    }
 
     CState::UpdateTarget(m_targid);
 
     m_startPos      = m_PEntity->loc.p;
     m_castTime      = std::chrono::milliseconds(m_PItem->getActivationTime());
-    m_animationTime = std::chrono::milliseconds(PItem->getAnimationTime());
+    m_animationTime = std::chrono::milliseconds(m_PItem->getAnimationTime());
 
     action_t action;
     action.id         = m_PEntity->id;
@@ -131,8 +148,11 @@ CItemState::CItemState(CCharEntity* PEntity, uint16 targid, uint8 loc, uint8 slo
 
     m_PItem->setSubType(ITEM_LOCKED);
 
-    m_PEntity->pushPacket(new CInventoryAssignPacket(m_PItem, INV_NOSELECT));
-    m_PEntity->pushPacket(new CInventoryFinishPacket());
+    if (m_PEntity->objtype == TYPE_PC)
+    {
+        ((CCharEntity*)m_PEntity)->pushPacket(new CInventoryAssignPacket(m_PItem, INV_NOSELECT));
+        ((CCharEntity*)m_PEntity)->pushPacket(new CInventoryFinishPacket());
+    }
 }
 
 bool CItemState::Update(time_point tick)
@@ -166,26 +186,37 @@ bool CItemState::Update(time_point tick)
 
 void CItemState::Cleanup(time_point tick)
 {
-    m_PEntity->UContainer->Clean();
+    if (m_PEntity->objtype == TYPE_TRUST)
+    {
+        ((CTrustEntity*)m_PEntity)->UContainer->Clean();
+    }
+    else
+    {
+        ((CCharEntity*)m_PEntity)->UContainer->Clean();
+    }
 
     if ((m_interrupted || !IsCompleted()) && !m_PItem->isType(ITEM_EQUIPMENT))
     {
         m_PItem->setSubType(ITEM_UNLOCKED);
     }
 
-    auto* PItem = m_PEntity->getStorage(m_location)->GetItem(m_slot);
-
-    if (PItem && PItem == m_PItem)
+    if (m_PEntity->objtype == TYPE_PC)
     {
-        m_PEntity->pushPacket(new CInventoryAssignPacket(m_PItem, INV_NORMAL));
-    }
-    else
-    {
-        m_PItem = nullptr;
-    }
+        auto PEntity = (CCharEntity*)m_PEntity;
+        auto PItem   = PEntity->getStorage(m_location)->GetItem(m_slot);
 
-    m_PEntity->pushPacket(new CInventoryItemPacket(m_PItem, m_location, m_slot));
-    m_PEntity->pushPacket(new CInventoryFinishPacket());
+        if (PItem && PItem == m_PItem)
+        {
+            PEntity->pushPacket(new CInventoryAssignPacket(m_PItem, INV_NORMAL));
+        }
+        else
+        {
+            m_PItem = nullptr;
+        }
+
+        PEntity->pushPacket(new CInventoryItemPacket(m_PItem, m_location, m_slot));
+        PEntity->pushPacket(new CInventoryFinishPacket());
+    }
 }
 
 bool CItemState::CanChangeState()
@@ -259,13 +290,23 @@ void CItemState::InterruptItem(action_t& action)
         actionTarget.messageID  = 0;
         actionTarget.knockback  = 0;
 
-        m_PEntity->pushPacket(m_errorMsg.release());
+        if (m_PEntity->objtype == TYPE_PC)
+        {
+            ((CCharEntity*)m_PEntity)->pushPacket(m_errorMsg.release());
+        }
     }
 }
 
 void CItemState::FinishItem(action_t& action)
 {
-    m_PEntity->OnItemFinish(*this, action);
+    if (m_PEntity->objtype == TYPE_TRUST)
+    {
+        ((CTrustEntity*)m_PEntity)->OnItemFinish(*this, action);
+    }
+    else
+    {
+        ((CCharEntity*)m_PEntity)->OnItemFinish(*this, action);
+    }
 }
 
 bool CItemState::HasMoved()

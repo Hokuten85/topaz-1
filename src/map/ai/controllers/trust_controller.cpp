@@ -433,3 +433,13 @@ uint8 CTrustController::GetPartyPosition()
     }
     return 0;
 }
+
+bool CTrustController::UseItem(uint16 targid)
+{
+    auto* PTrust = static_cast<CTrustEntity*>(POwner);
+    if (PTrust->PAI->CanChangeState())
+    {
+        return PTrust->PAI->Internal_UseItem(targid, 0, 0);
+    }
+    return false;
+}

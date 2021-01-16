@@ -26,6 +26,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "../ai/helpers/targetfind.h"
 #include "../ai/states/ability_state.h"
 #include "../ai/states/attack_state.h"
+#include "../ai/states/item_state.h"
 #include "../ai/states/magic_state.h"
 #include "../ai/states/mobskill_state.h"
 #include "../ai/states/range_state.h"
@@ -41,6 +42,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "../utils/battleutils.h"
 #include "../utils/trustutils.h"
 #include "../trade_container.h"
+#include "../universal_container.h"
 #include "../utils/charutils.h"
 #include "../item_container.h"
 #include "../utils/itemutils.h"
@@ -52,6 +54,7 @@ CTrustEntity::CTrustEntity(CCharEntity* PChar)
     allegiance     = ALLEGIANCE_TYPE::PLAYER;
     m_MobSkillList = 0;
     PMaster        = PChar;
+    UContainer     = new CUContainer();
     PAI            = std::make_unique<CAIContainer>(this, std::make_unique<CPathFind>(this), std::make_unique<CTrustController>(PChar, this),
                                          std::make_unique<CTargetFind>(this));
 }
@@ -646,7 +649,7 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
             {
                 oldItem    = (CItemUsable*)this->food;
                 this->food = (CItemUsable*)newPItem;
-                slotId     = 17;
+                slotId     = 16;
             }
 
             if (slotId != -1)
@@ -700,4 +703,47 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
     }
 
     PChar->TradeContainer->Clean();
+}
+
+void CTrustEntity::OnItemFinish(CItemState& state, action_t& action)
+{
+    auto* PTarget = static_cast<CBattleEntity*>(state.GetTarget());
+    auto* PItem   = static_cast<CItemUsable*>(state.GetItem());
+
+    //#TODO: I'm sure this is supposed to be in the action packet... (animation, message)
+    if (PItem->getAoE())
+    {
+        static_cast<CCharEntity*>(PTarget->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
+            if (!PMember->isDead() && distance(PTarget->loc.p, PMember->loc.p) <= 10)
+            {
+                luautils::OnItemUse(PMember, PItem);
+            }
+        });
+    }
+    else
+    {
+        luautils::OnItemUse(PTarget, PItem);
+    }
+
+    action.id         = this->id;
+    action.actiontype = ACTION_ITEM_FINISH;
+    action.actionid   = PItem->getID();
+
+    actionList_t& actionList  = action.getNewActionList();
+    actionList.ActionTargetID = PTarget->id;
+
+    actionTarget_t& actionTarget = actionList.getNewActionTarget();
+    actionTarget.animation       = PItem->getAnimationID();
+
+    PItem->setSubType(ITEM_UNLOCKED);
+
+    auto newQuantity = PItem->getQuantity() - 1;
+
+    const char* Query = "UPDATE trust_equipment "
+                        "SET quantity = %u "
+                        "WHERE charid = %u AND trustid = %u AND equipslotid = %u;";
+
+    Sql_Query(SqlHandle, Query, newQuantity, this->PMaster->id, this->m_TrustID, 16);
+
+    this->food->setQuantity(newQuantity);
 }
