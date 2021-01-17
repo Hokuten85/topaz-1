@@ -1696,6 +1696,20 @@ namespace battleutils
                 return 0;
             }
         }
+        else if (PDefender->objtype == TYPE_TRUST)
+        {
+            CTrustEntity*   PTrust = (CTrustEntity*)PDefender;
+            CItemEquipment* PItem  = (CItemEquipment*)PTrust->equip[SLOT_SUB];
+
+            if (PItem && PItem->IsShield())
+            {
+                shieldSize = PItem->getShieldSize();
+            }
+            else
+            {
+                return 0;
+            }
+        }
         else if (PDefender->objtype == TYPE_MOB && PDefender->GetMJob() == JOB_PLD)
         {
             CMobEntity* PMob = (CMobEntity*)PDefender;
@@ -1946,6 +1960,20 @@ namespace battleutils
                         // Shield Mastery
                         if ((std::max(damage - (PDefender->getMod(Mod::PHALANX) + PDefender->getMod(Mod::STONESKIN)), 0) > 0) &&
                             charutils::hasTrait((CCharEntity*)PDefender, TRAIT_SHIELD_MASTERY))
+                        {
+                            // If the player blocked with a shield and has shield mastery, add shield mastery TP bonus
+                            // unblocked damage (before block but as if affected by stoneskin/phalanx) must be greater than zero
+                            PDefender->addTP(PDefender->getMod(Mod::SHIELD_MASTERY_TP));
+                        }
+                    }
+                    else if (PDefender->objtype == TYPE_TRUST)
+                    {
+                        absorb = std::clamp(100 - PDefender->m_Weapons[SLOT_SUB]->getShieldAbsorption(), 0, 100);
+                        absorb -= PDefender->getMod(Mod::SHIELD_DEF_BONUS); // Include Shield Defense Bonus in absorb amount
+
+                        // Shield Mastery
+                        if ((std::max(damage - (PDefender->getMod(Mod::PHALANX) + PDefender->getMod(Mod::STONESKIN)), 0) > 0) &&
+                            PDefender->hasTrait(TRAIT_SHIELD_MASTERY))
                         {
                             // If the player blocked with a shield and has shield mastery, add shield mastery TP bonus
                             // unblocked damage (before block but as if affected by stoneskin/phalanx) must be greater than zero
@@ -4141,8 +4169,9 @@ namespace battleutils
      *   Effect from soul eater                                              *
      *                                                                       *
      ************************************************************************/
-    uint16 doSoulEaterEffect(CCharEntity* m_PChar, uint32 damage)
+    uint16 doSoulEaterEffect(CBattleEntity* m_PChar, uint32 damage)
     {
+        int32 drainHP = 0;
         // Souleater has no effect <10HP.
         if (m_PChar->GetMJob() == JOB_DRK && m_PChar->health.hp >= 10 && m_PChar->StatusEffectContainer->HasStatusEffect(EFFECT_SOULEATER))
         {
@@ -4154,14 +4183,27 @@ namespace battleutils
             drainPercent          = drainPercent + std::min(0.02f, 0.01f * gearBonusPercent);
 
             damage += (uint32)(m_PChar->health.hp * drainPercent);
-            m_PChar->addHP(-HandleStoneskin(m_PChar, (int32)(m_PChar->health.hp * (drainPercent - m_PChar->getMod(Mod::STALWART_SOUL) * 0.001f) * 0.5)));
+            drainHP = -HandleStoneskin(m_PChar, (int32)(m_PChar->health.hp * (drainPercent - m_PChar->getMod(Mod::STALWART_SOUL) * 0.001f) * 0.5));
         }
         else if (m_PChar->GetSJob() == JOB_DRK && m_PChar->health.hp >= 10 && m_PChar->StatusEffectContainer->HasStatusEffect(EFFECT_SOULEATER))
         {
             // lose 10% Current HP, only HALF (5%) converted to damage
             damage += (uint32)(m_PChar->health.hp * 0.05f);
-            m_PChar->addHP(-HandleStoneskin(m_PChar, (int32)(m_PChar->health.hp * 0.05f)));
+            drainHP = -HandleStoneskin(m_PChar, (int32)(m_PChar->health.hp * 0.05f));
         }
+
+        if (drainHP != 0)
+        {
+            if (m_PChar->objtype == TYPE_TRUST)
+            {
+                m_PChar->addHP(drainHP);
+            }
+            else
+            {
+                ((CCharEntity*)m_PChar)->addHP(drainHP);
+            }
+        }
+
         return damage;
     }
 
@@ -4417,9 +4459,9 @@ namespace battleutils
         }
 
         // check for soul eater
-        if (PAttacker->objtype == TYPE_PC)
+        if (PAttacker->objtype == TYPE_PC || PAttacker->objtype == TYPE_TRUST)
         {
-            totalDamage = battleutils::doSoulEaterEffect((CCharEntity*)PAttacker, totalDamage);
+            totalDamage = battleutils::doSoulEaterEffect(PAttacker, totalDamage);
         }
 
         // bonus jump tp is added even if damage is 0, will not add if jump misses

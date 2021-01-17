@@ -1248,6 +1248,18 @@ void CBattleEntity::delTrait(CTrait* PTrait)
     TraitList.erase(std::remove(TraitList.begin(), TraitList.end(), PTrait), TraitList.end());
 }
 
+bool CBattleEntity::hasTrait(uint8 TraitID)
+{
+    for (auto& trait : TraitList)
+    {
+        if (trait->getID() == TraitID)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool CBattleEntity::ValidTarget(CBattleEntity* PInitiator, uint16 targetFlags)
 {
     if (targetFlags & TARGET_ENEMY)

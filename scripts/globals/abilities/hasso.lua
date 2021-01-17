@@ -23,7 +23,7 @@ function onUseAbility(player, target, ability)
     if (target:getMainJob()~=12) then --sjob sam, use sub level
         strboost = target:getSubLvl()/7
     end
-    if (target:isWeaponTwoHanded()) then
+    if (target:isWeaponTwoHanded() or not target:isPC()) then
         target:delStatusEffect(tpz.effect.HASSO)
         target:delStatusEffect(tpz.effect.SEIGAN)
         target:addStatusEffect(tpz.effect.HASSO, strboost, 0, 3600)

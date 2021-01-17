@@ -19,6 +19,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 ===========================================================================
 */
 
+#include "fmt/printf.h"
 #include "trustentity.h"
 #include "../ai/ai_container.h"
 #include "../ai/controllers/trust_controller.h"
@@ -37,6 +38,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "../packets/char_health.h"
 #include "../packets/entity_update.h"
 #include "../packets/trust_sync.h"
+#include "../packets/chat_message.h"
 #include "../recast_container.h"
 #include "../status_effect_container.h"
 #include "../utils/battleutils.h"
@@ -531,6 +533,11 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
         this->addModifier(mod.getModID(), mod.getModAmount());
     }
 
+    if (slotId >= 0 && slotId <= 3)
+    {
+        this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+    }
+
     this->UpdateHealth();
 }
 
@@ -541,8 +548,9 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
         if (PChar->TradeContainer->getItemID(tradeSlotID) > 0)
         {
             auto PItem = PChar->TradeContainer->getItem(tradeSlotID);
+            auto tradeQuantity = PChar->TradeContainer->getQuantity(tradeSlotID);
             auto newPItem = itemutils::GetItem(PItem->getID());
-            newPItem->setQuantity(PItem->getQuantity());
+            newPItem->setQuantity(tradeQuantity);
             memcpy(newPItem->m_extra, PItem->m_extra, sizeof(PItem->m_extra));
 
             if ((PItem->isType(ITEM_EQUIPMENT) || PItem->isType(ITEM_WEAPON)) && !PItem->isSubType(ITEM_CHARGED))
@@ -654,7 +662,7 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
 
             if (slotId != -1)
             {
-                PChar->TradeContainer->setConfirmedStatus(tradeSlotID, PItem->getQuantity());
+                PChar->TradeContainer->setConfirmedStatus(tradeSlotID, tradeQuantity);
 
                 uint8 confirmedItems = PChar->TradeContainer->getConfirmedStatus(tradeSlotID);
                 auto  quantity       = (int32)std::min<uint32>(PChar->TradeContainer->getQuantity(tradeSlotID), confirmedItems);
@@ -739,11 +747,44 @@ void CTrustEntity::OnItemFinish(CItemState& state, action_t& action)
 
     auto newQuantity = PItem->getQuantity() - 1;
 
-    const char* Query = "UPDATE trust_equipment "
-                        "SET quantity = %u "
-                        "WHERE charid = %u AND trustid = %u AND equipslotid = %u;";
+    std::string itemName = (const char*)PItem->getName();
+    std::transform(itemName.begin(), itemName.end(), itemName.begin(), [](char ch) { return ch == '_' ? ' ' : ch; });
 
-    Sql_Query(SqlHandle, Query, newQuantity, this->PMaster->id, this->m_TrustID, 16);
+    ((CCharEntity*)this->PMaster)->pushPacket(new CChatMessagePacket((CCharEntity*)this->PMaster, CHAT_MESSAGE_TYPE::MESSAGE_PARTY, fmt::sprintf("%s, I have %u %s remaining.", this->PMaster->GetName(), newQuantity, itemName), this->packetName));
 
-    this->food->setQuantity(newQuantity);
+    if (newQuantity == 0)
+    {
+        const char* Query = "DELETE FROM trust_equipment WHERE charid = %u AND trustid = %u AND equipslotid = %u;";
+
+        Sql_Query(SqlHandle, Query, this->PMaster->id, this->m_TrustID, 16);
+
+        delete PItem;
+    }
+    else
+    {
+        const char* Query = "UPDATE trust_equipment "
+                            "SET quantity = %u "
+                            "WHERE charid = %u AND trustid = %u AND equipslotid = %u;";
+
+        Sql_Query(SqlHandle, Query, newQuantity, this->PMaster->id, this->m_TrustID, 16);
+
+        this->food->setQuantity(newQuantity);
+    }
+}
+
+int8 CTrustEntity::getShieldSize()
+{
+    CItemEquipment* PItem = (CItemEquipment*)(this->equip[SLOT_SUB]);
+
+    if (PItem == nullptr)
+    {
+        return 0;
+    }
+
+    if (!PItem->IsShield())
+    {
+        return 0;
+    }
+
+    return PItem->getShieldSize();
 }

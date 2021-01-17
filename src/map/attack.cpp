@@ -516,9 +516,9 @@ void CAttack::ProcessDamage()
     }
 
     // Soul eater.
-    if (m_attacker->objtype == TYPE_PC)
+    if (m_attacker->objtype == TYPE_PC || m_attacker->objtype == TYPE_TRUST)
     {
-        m_damage = battleutils::doSoulEaterEffect((CCharEntity*)m_attacker, m_damage);
+        m_damage = battleutils::doSoulEaterEffect(m_attacker, m_damage);
     }
 
     // Consume mana

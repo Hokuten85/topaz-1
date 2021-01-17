@@ -4574,11 +4574,16 @@ inline int32 CLuaBaseEntity::unlockEquipSlot(lua_State* L)
 inline int32 CLuaBaseEntity::getShieldSize(lua_State* L)
 {
     TPZ_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC && m_PBaseEntity->objtype != TYPE_PET);
+    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC && m_PBaseEntity->objtype != TYPE_PET && m_PBaseEntity->objtype != TYPE_TRUST);
 
     if (m_PBaseEntity->objtype == TYPE_PC)
     {
         lua_pushinteger(L, ((CCharEntity*)m_PBaseEntity)->getShieldSize());
+        return 1;
+    }
+    else if (m_PBaseEntity->objtype == TYPE_TRUST)
+    {
+        lua_pushinteger(L, ((CTrustEntity*)m_PBaseEntity)->getShieldSize());
         return 1;
     }
 

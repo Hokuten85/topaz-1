@@ -21,6 +21,8 @@ end
 
 function onMobSpawn(mob)
     tpz.trust.message(mob, message_page_offset, tpz.trust.message_offset.SPAWN)
+    
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.FOOD, ai.r.ITEM)
 
     -- Stun all the things!
     mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_WS, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
@@ -46,6 +48,7 @@ function onMobSpawn(mob)
     -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.ACCURACY_BOOST, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.ABSORB_ACC)
 
     mob:setTrustTPSkillSettings(ai.tp.CLOSER, ai.s.RANDOM)
+    mob:addMod(tpz.mod.ACC, 200)
 end
 
 function onMobDespawn(mob)

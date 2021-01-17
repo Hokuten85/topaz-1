@@ -69,6 +69,7 @@ public:
     void EquipItem(CItemEquipment* PItem, int8 slotId);
     void HandleTrade(CCharEntity* PChar);
     virtual void OnItemFinish(CItemState&, action_t&);
+    int8 getShieldSize();
 
     uint32              m_TrustID{};
     TRUST_MOVEMENT_TYPE m_MovementType;
