@@ -680,7 +680,7 @@ uint16 CBattleEntity::RACC(uint8 skill, uint16 bonusSkill)
 
 uint16 CBattleEntity::ACC(uint8 attackNumber, uint8 offsetAccuracy)
 {
-    if (this->objtype & TYPE_PC)
+    if (this->objtype & TYPE_PC || this->objtype == TYPE_TRUST)
     {
         uint8  skill     = 0;
         uint16 iLvlSkill = 0;

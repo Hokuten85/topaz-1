@@ -474,7 +474,7 @@ namespace trustutils
 
         for (int i = SKILL_HAND_TO_HAND; i <= SKILL_STAFF; i++)
         {
-            uint16 maxSkill = battleutils::GetMaxSkill((SKILLTYPE)i, mLvl > 99 ? 99 : mLvl);
+            uint16 maxSkill = battleutils::GetMaxSkill((SKILLTYPE)i, mJob, mLvl > 99 ? 99 : mLvl);
             if (maxSkill != 0)
             {
                 PTrust->WorkingSkills.skill[i] = static_cast<uint16>(maxSkill * map_config.alter_ego_skill_multiplier);

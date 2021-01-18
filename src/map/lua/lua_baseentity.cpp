@@ -13223,6 +13223,13 @@ inline int32 CLuaBaseEntity::addFullGambit(lua_State* L)
         gambit_error = true;
     }
 
+    lua_getfield(L, 1, "retry_delay");
+    if (!lua_isnil(L, -1) && lua_isnumber(L, -1))
+    {
+        auto retry_delay = (uint16)lua_tointeger(L, -1);
+        g.retry_delay    = retry_delay;
+    }
+
     lua_pop(L, 1);
 
     lua_pop(L, 1); // Main table

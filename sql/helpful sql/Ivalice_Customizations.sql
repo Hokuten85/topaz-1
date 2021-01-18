@@ -637,3 +637,12 @@ SELECT 'TRUST_Shantotto_II', 428, spell_id, min_level, max_level
 FROM mob_spell_lists msl1
 WHERE spell_list_name = 'TRUST_Shantotto'
 AND msl1.spell_id NOT IN (144,149,154,159,164,169);
+
+-- TRUST mob_family_system
+UPDATE mob_family_system mfs
+INNER JOIN mob_pools mp
+	ON mfs.familyid = mp.familyid
+INNER JOIN  spell_list sl
+	ON mp.poolid = sl.spellid+5000
+SET mfs.ATT = 1, mfs.DEF = 1, mfs.ACC = 1, mfs.EVA = 1
+WHERE sl.spellid >= 896;

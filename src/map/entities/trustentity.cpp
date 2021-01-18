@@ -517,28 +517,24 @@ void CTrustEntity::OnWeaponSkillFinished(CWeaponSkillState& state, action_t& act
 
 void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
 {
-    auto oldItem = this->equip[slotId];
-    if (oldItem != nullptr)
+    if (PItem->getJobs() & (1 << (this->GetMJob() - 1)))
     {
-        for (auto& mod : oldItem->modList)
+        auto oldItem = this->equip[slotId];
+        if (oldItem != nullptr)
         {
-            this->delModifier(mod.getModID(), mod.getModAmount());
+            this->delEquipModifiers(&oldItem->modList, oldItem->getReqLvl(), slotId);
         }
+
+        this->equip[slotId] = PItem;
+        this->addEquipModifiers(&PItem->modList, PItem->getReqLvl(), slotId);
+
+        if (slotId >= 0 && slotId <= 3)
+        {
+            this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+        }
+
+        this->UpdateHealth();
     }
-
-    this->equip[slotId] = PItem;
-
-    for (auto& mod : PItem->modList)
-    {
-        this->addModifier(mod.getModID(), mod.getModAmount());
-    }
-
-    if (slotId >= 0 && slotId <= 3)
-    {
-        this->m_Weapons[(SLOTTYPE)slotId] = PItem;
-    }
-
-    this->UpdateHealth();
 }
 
 void CTrustEntity::HandleTrade(CCharEntity* PChar)
@@ -565,10 +561,18 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
                 }
             }
 
-            CItem* oldItem;
-            int8   slotId = -1;
+            int8 slotId = -1;
             if (PItem->isType(ITEM_EQUIPMENT))
             {
+                if (!(((CItemEquipment*)PItem)->getJobs() & (1 << (this->GetMJob() - 1))))
+                {
+                    std::string itemName = (const char*)PItem->getName();
+                    std::transform(itemName.begin(), itemName.end(), itemName.begin(), [](char ch) { return ch == '_' ? ' ' : ch; });
+
+                    ((CCharEntity*)this->PMaster)->pushPacket(new CChatMessagePacket((CCharEntity*)this->PMaster, CHAT_MESSAGE_TYPE::MESSAGE_PARTY, fmt::sprintf("%s, I cannot use this %s.", this->PMaster->GetName(), itemName), this->packetName));
+                    continue;
+                }
+
                 auto equipSlotId = ((CItemEquipment*)newPItem)->getEquipSlotId();
                 if (equipSlotId & (1 << SLOT_MAIN))
                 {
@@ -649,62 +653,44 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
 
                 if (slotId != -1)
                 {
-                    oldItem = (CItemEquipment*)this->equip[slotId];
                     EquipItem((CItemEquipment*)newPItem, slotId);
                 }
             }
             else if (PItem->isType(ITEM_USABLE))
             {
-                oldItem    = (CItemUsable*)this->food;
                 this->food = (CItemUsable*)newPItem;
                 slotId     = 16;
             }
 
             if (slotId != -1)
             {
-                PChar->TradeContainer->setConfirmedStatus(tradeSlotID, tradeQuantity);
+                const char* Query = "INSERT INTO trust_equipment ("
+                                    " charid,"
+                                    " trustid,"
+                                    " equipslotid,"
+                                    " itemid,"
+                                    " quantity,"
+                                    " extra)"
+                                    " VALUES(%u,%u,%u,%u,%u,'%s')"
+                                    " ON DUPLICATE KEY UPDATE"
+                                    " itemid = VALUES(itemid),"
+                                    " quantity = VALUES(quantity),"
+                                    " extra = VALUES(extra)";
 
-                uint8 confirmedItems = PChar->TradeContainer->getConfirmedStatus(tradeSlotID);
-                auto  quantity       = (int32)std::min<uint32>(PChar->TradeContainer->getQuantity(tradeSlotID), confirmedItems);
-                PItem->setReserve(PItem->getReserve() - quantity);
+                char extra[sizeof(newPItem->m_extra) * 2 + 1];
+                Sql_EscapeStringLen(SqlHandle, extra, (const char*)newPItem->m_extra, sizeof(newPItem->m_extra));
 
-                if (confirmedItems > 0)
+                if (Sql_Query(SqlHandle, Query, PChar->id, this->m_TrustID, slotId, newPItem->getID(), newPItem->getQuantity(), extra) == SQL_ERROR)
                 {
-                    const char* Query = "INSERT INTO trust_equipment ("
-                                        " charid,"
-                                        " trustid,"
-                                        " equipslotid,"
-                                        " itemid,"
-                                        " quantity,"
-                                        " extra)"
-                                        " VALUES(%u,%u,%u,%u,%u,'%s')"
-                                        " ON DUPLICATE KEY UPDATE"
-                                        " itemid = VALUES(itemid),"
-                                        " quantity = VALUES(quantity),"
-                                        " extra = VALUES(extra)";
+                    ShowError(CL_RED "trustentity::HandleTrade: Cannot insert item to database\n" CL_RESET);
+                    return;
+                }
 
-                    char extra[sizeof(newPItem->m_extra) * 2 + 1];
-                    Sql_EscapeStringLen(SqlHandle, extra, (const char*)newPItem->m_extra, sizeof(newPItem->m_extra));
-
-                    if (Sql_Query(SqlHandle, Query, PChar->id, this->m_TrustID, slotId, newPItem->getID(), newPItem->getQuantity(), extra) == SQL_ERROR)
-                    {
-                        ShowError(CL_RED "trustentity::HandleTrade: Cannot insert item to database\n" CL_RESET);
-                        return;
-                    }
-
-                    auto iterator = PChar->m_TrustEquipment.find(this->m_TrustID);
-                    if (iterator != PChar->m_TrustEquipment.end())
-                    {
-                        auto trustEquipmentList        = iterator->second;
-                        trustEquipmentList->at(slotId) = newPItem;
-                    }
-
-                    uint8 invSlotID = PChar->TradeContainer->getInvSlotID(tradeSlotID);
-                    charutils::UpdateItem(PChar, LOC_INVENTORY, invSlotID, -quantity);
-                    if (oldItem != nullptr)
-                    {
-                        charutils::AddItem(PChar, LOC_INVENTORY, oldItem);
-                    }
+                auto iterator = PChar->m_TrustEquipment.find(this->m_TrustID);
+                if (iterator != PChar->m_TrustEquipment.end())
+                {
+                    auto trustEquipmentList        = iterator->second;
+                    trustEquipmentList->at(slotId) = newPItem;
                 }
             }
         }

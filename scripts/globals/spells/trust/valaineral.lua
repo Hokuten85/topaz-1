@@ -35,7 +35,7 @@ function onMobSpawn(mob)
     
     mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.FOOD, ai.r.ITEM)
 
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_HAS_TOP_ENMITY, 0,
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0,
                         ai.r.JA, ai.s.SPECIFIC, tpz.ja.PROVOKE)
 
     mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_HAS_TOP_ENMITY, 0,
@@ -56,13 +56,13 @@ function onMobSpawn(mob)
     mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.RAMPART,
                         ai.r.JA, ai.s.SPECIFIC, tpz.ja.RAMPART)
                         
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.WARCRY,
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_HAS_TOP_ENMITY, tpz.effect.WARCRY,
                         ai.r.JA, ai.s.SPECIFIC, tpz.ja.WARCRY)
 
     mob:addSimpleGambit(ai.t.PARTY, ai.c.HPP_LT, 70,
                         ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.CURE)
                         
-    mob:addMod(tpz.mod.ACC, 200)
+    --mob:addMod(tpz.mod.ACC, 200)
 end
 
 function onMobDespawn(mob)
