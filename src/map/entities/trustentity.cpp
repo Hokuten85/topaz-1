@@ -530,7 +530,20 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
 
         if (slotId >= 0 && slotId <= 3)
         {
-            this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+            if (PItem->isType(ITEM_WEAPON))
+            {
+                auto dmg   = dynamic_cast<CItemWeapon*>(PItem)->getDamage();
+                auto delay = dynamic_cast<CItemWeapon*>(PItem)->getDelay();
+
+                auto oldWeapon = dynamic_cast<CItemWeapon*>(this->m_Weapons[(SLOTTYPE)slotId]);
+                auto oldDmg    = oldWeapon->getDamage();
+                auto oldDelay  = oldWeapon->getDelay();
+
+                if (dmg > 0 && delay > 0 && (dmg / delay) > (oldDmg / oldDelay)) // if new DPS is better than old DPS, then switch weapon
+                {
+                    this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+                }
+            }
         }
 
         this->UpdateHealth();

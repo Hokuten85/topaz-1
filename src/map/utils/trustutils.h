@@ -34,6 +34,7 @@ struct Trust_t
     float HPscale; // HP boost percentage
     float MPscale; // MP boost percentage
 
+    uint8  cmbSkill;
     uint16 cmbDmgMult;
     uint16 cmbDelay;
     uint8  speed;
