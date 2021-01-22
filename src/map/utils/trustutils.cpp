@@ -243,21 +243,6 @@ namespace trustutils
 
         LoadTrustStatsAndSkills(PTrust);
 
-        // Use Mob formulas to work out base "weapon" damage, but scale down to reasonable values.
-        auto mobStyleDamage   = static_cast<float>(mobutils::GetWeaponDamage(PTrust));
-        auto baseDamage       = mobStyleDamage * 0.5f;
-        auto damageMultiplier = static_cast<float>(trustData->cmbDmgMult) / 100.0f;
-        auto adjustedDamage   = baseDamage * damageMultiplier;
-        auto finalDamage      = std::max(adjustedDamage, 1.0f);
-        auto finaldelay       = (trustData->cmbDelay * 1000) / 60;
-
-        for (auto& weapon : PTrust->m_Weapons)
-        {
-            dynamic_cast<CItemWeapon*>(weapon)->setDamage(static_cast<uint16>(finalDamage));
-            dynamic_cast<CItemWeapon*>(weapon)->setDelay(static_cast<uint16>(finaldelay));
-            dynamic_cast<CItemWeapon*>(weapon)->setBaseDelay(static_cast<uint16>(finaldelay));
-        }
-        
         switch (trustData->cmbSkill)
         {
             case SKILL_ARCHERY:
@@ -272,6 +257,30 @@ namespace trustutils
         }
 
         LoadTrustEquipment(PTrust, PMaster);
+
+        // Use Mob formulas to work out base "weapon" damage, but scale down to reasonable values. If these numbers are better than equiped item, then use these numbers
+        auto mobStyleDamage   = static_cast<float>(mobutils::GetWeaponDamage(PTrust));
+        auto baseDamage       = mobStyleDamage * 0.5f;
+        auto damageMultiplier = static_cast<float>(trustData->cmbDmgMult) / 100.0f;
+        auto adjustedDamage   = baseDamage * damageMultiplier;
+        auto finalDamage      = std::max(adjustedDamage, 1.0f);
+        auto finalDelay       = (trustData->cmbDelay * 1000) / 60;
+
+        for (auto& equipment : PTrust->m_Weapons)
+        {
+            auto weapon = dynamic_cast<CItemWeapon*>(equipment);
+            if (weapon->getDamage() / weapon->getDelay() < finalDamage / finalDelay)
+            {
+                weapon->setDamage(static_cast<uint16>(finalDamage));
+                weapon->setDelay(static_cast<uint16>(finalDelay));
+                weapon->setBaseDelay(static_cast<uint16>(finalDelay));
+            }
+
+            if (equipment->isType(ITEM_WEAPON) && weapon->getSkillType() == SKILL_NONE)
+            {
+
+            }
+        }
 
         // Spell lists
         auto* spellList = mobSpellList::GetMobSpellList(trustData->spellList);
