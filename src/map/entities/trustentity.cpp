@@ -59,6 +59,9 @@ CTrustEntity::CTrustEntity(CCharEntity* PChar)
     UContainer     = new CUContainer();
     PAI            = std::make_unique<CAIContainer>(this, std::make_unique<CPathFind>(this), std::make_unique<CTrustController>(PChar, this),
                                          std::make_unique<CTargetFind>(this));
+
+    memset(&equip, 0, sizeof(equip));
+    food = nullptr;
 }
 
 void CTrustEntity::PostTick()

@@ -269,16 +269,11 @@ namespace trustutils
         for (auto& equipment : PTrust->m_Weapons)
         {
             auto weapon = dynamic_cast<CItemWeapon*>(equipment);
-            if (weapon->getDamage() / weapon->getDelay() < finalDamage / finalDelay)
+            if (static_cast<float>(weapon->getDamage()) / weapon->getDelay() < finalDamage / finalDelay)
             {
                 weapon->setDamage(static_cast<uint16>(finalDamage));
                 weapon->setDelay(static_cast<uint16>(finalDelay));
                 weapon->setBaseDelay(static_cast<uint16>(finalDelay));
-            }
-
-            if (equipment->isType(ITEM_WEAPON) && weapon->getSkillType() == SKILL_NONE)
-            {
-
             }
         }
 

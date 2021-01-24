@@ -298,7 +298,7 @@ namespace gambits
                         auto spell_id = POwner->SpellContainer->GetBestAvailable(static_cast<SPELLFAMILY>(action.select_arg));
                         if (spell_id.has_value())
                         {
-                            auto junk = controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
+                            controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
                         }
                     }
                     else if (action.select == G_SELECT::LOWEST)

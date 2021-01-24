@@ -646,3 +646,13 @@ INNER JOIN  spell_list sl
 	ON mp.poolid = sl.spellid+5000
 SET mfs.ATT = 1, mfs.DEF = 1, mfs.ACC = 1, mfs.EVA = 1
 WHERE sl.spellid >= 896;
+
+-- TRUST mob_pools
+UPDATE  mob_pools mp
+INNER JOIN spell_list sl
+	ON sl.spellid+5000 = mp.poolid
+INNER JOIN mob_family_system mfs
+	ON mp.familyid = mfs.familyid
+SET mp.behavior = 3
+WHERE sl.spellid >= 896
+AND sl.spellid IN (898, 952);

@@ -125,7 +125,7 @@ void CTrustController::DoCombatTick(time_point tick)
 
             switch (PTrust->m_MovementType)
             {
-                case NO_MOVE:
+                case TRUST_MOVEMENT_TYPE::NO_MOVE:
                 {
                     if (currentDistanceToMaster > CastingDistance)
                     {
@@ -137,17 +137,17 @@ void CTrustController::DoCombatTick(time_point tick)
                     }
                     break;
                 }
-                case MID_RANGE:
+                case TRUST_MOVEMENT_TYPE::MID_RANGE:
                 {
                     PathOutToDistance(PTarget, 6.0f);
                     break;
                 }
-                case LONG_RANGE:
+                case TRUST_MOVEMENT_TYPE::LONG_RANGE:
                 {
                     PathOutToDistance(PTarget, 12.0f);
                     break;
                 }
-                case MELEE_RANGE:
+                case TRUST_MOVEMENT_TYPE::MELEE_RANGE:
                 default:
                 {
                     std::unique_ptr<CBasicPacket> err;

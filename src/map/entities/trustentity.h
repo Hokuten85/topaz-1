@@ -27,7 +27,7 @@
 #include "../items/item_usable.h"
 
 // PTrust->m_MovementType is read from 'behaviour' in a trust's mob_pool entry
-enum TRUST_MOVEMENT_TYPE
+enum class TRUST_MOVEMENT_TYPE
 {
     MELEE_RANGE        = 0, // Default
     NO_MOVE            = 1,

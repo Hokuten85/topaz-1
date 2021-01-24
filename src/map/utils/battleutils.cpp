@@ -2476,7 +2476,7 @@ namespace battleutils
             bool isOffhand   = attackNumber == 1;
             bool isTwoHanded = targ_weapon && targ_weapon->isTwoHanded();
 
-            if (isOffhand || isTwoHanded)
+            if (isTwoHanded)
             {
                 maxHitRate = 95;
             }
