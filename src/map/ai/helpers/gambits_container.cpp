@@ -174,6 +174,8 @@ namespace gambits
                 continue;
             }
 
+            bool actionStarted = false;
+
             for (auto& action : gambit.actions)
             {
                 // Make sure that the predicates remain true for each action in a gambit
@@ -281,7 +283,7 @@ namespace gambits
 
                 if (action.reaction == G_REACTION::RATTACK)
                 {
-                    controller->RangedAttack(target->targid);
+                    actionStarted = controller->RangedAttack(target->targid);
                 }
                 else if (action.reaction == G_REACTION::MA)
                 {
@@ -290,7 +292,7 @@ namespace gambits
                         auto spell_id = POwner->SpellContainer->GetAvailable(static_cast<SpellID>(action.select_arg));
                         if (spell_id.has_value())
                         {
-                            controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
+                            actionStarted = controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
                         }
                     }
                     else if (action.select == G_SELECT::HIGHEST)
@@ -298,7 +300,7 @@ namespace gambits
                         auto spell_id = POwner->SpellContainer->GetBestAvailable(static_cast<SPELLFAMILY>(action.select_arg));
                         if (spell_id.has_value())
                         {
-                            controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
+                            actionStarted = controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
                         }
                     }
                     else if (action.select == G_SELECT::LOWEST)
@@ -315,7 +317,7 @@ namespace gambits
                         auto spell_id = POwner->SpellContainer->GetSpell();
                         if (spell_id.has_value())
                         {
-                            controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
+                            actionStarted = controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
                         }
                     }
                     else if (action.select == G_SELECT::MB_ELEMENT)
@@ -351,7 +353,7 @@ namespace gambits
 
                         if (spell_id.has_value())
                         {
-                            controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
+                            actionStarted = controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
                         }
                     }
                     else if (action.select == G_SELECT::WEAKNESS)
@@ -381,7 +383,7 @@ namespace gambits
 
                         if (spell_id.has_value())
                         {
-                            controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
+                            actionStarted = controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
                         }
                     }
                 }
@@ -399,7 +401,7 @@ namespace gambits
 
                     if (action.select == G_SELECT::SPECIFIC)
                     {
-                        controller->Ability(target->targid, PAbility->getID());
+                        actionStarted = controller->Ability(target->targid, PAbility->getID());
                     }
                 }
                 else if (action.reaction == G_REACTION::MSG)
@@ -413,15 +415,20 @@ namespace gambits
                 {
                     if (POwner->food != nullptr && POwner->food->getQuantity() > 0)
                     {
-                        controller->UseItem(target->targid);
+                        actionStarted = controller->UseItem(target->targid);
                     }
                 }
 
                 // Assume success
-                if (gambit.retry_delay > 0)
+                if (gambit.retry_delay != 0)
                 {
                     gambit.last_used = tick;
                 }
+            }
+
+            if (actionStarted)
+            {
+                break;
             }
         }
     }

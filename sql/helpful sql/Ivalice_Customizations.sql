@@ -632,6 +632,13 @@ INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 266, 43, 255); -- abso
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 267, 41, 255); -- absorb-dex
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 242, 61, 255); -- absorb-acc
 
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 58, 6, 255); -- paralyze
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 80, 75, 255); -- paralyze II
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 220, 5, 255); -- poison
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 221, 46, 255); -- poison II
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 843, 42, 255); -- frazzle
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 844, 92, 255); -- frazzle II
+
 INSERT INTO mob_spell_lists
 SELECT 'TRUST_Shantotto_II', 428, spell_id, min_level, max_level
 FROM mob_spell_lists msl1
