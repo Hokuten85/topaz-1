@@ -116,11 +116,12 @@ static const MeritCategoryInfo_t meritCatInfo[] = {
 
     { 14, 70, 8 }, // MCATEGORY_WS
 
-    { 0, 0, 8 }, // MCATEGORY_UNK_0	26
-    { 0, 0, 8 }, // MCATEGORY_UNK_1
-    { 0, 0, 8 }, // MCATEGORY_UNK_2
-    { 0, 0, 8 }, // MCATEGORY_UNK_3
-    { 0, 0, 8 }, // MCATEGORY_UNK_4	30
+    { 5, 10, 6 },   // MCATEGORY_GEO_1       catNumber 26
+    { 0, 0, 6 },    // MCATEGORY_RUN_1       catNumber 27 (not in yet)
+
+    { 0, 0, 8 },    // MCATEGORY_UNK_0       catNumber 28
+    { 0, 0, 8 },    // MCATEGORY_UNK_1       catNumber 29
+    { 0, 0, 8 },    // MCATEGORY_UNK_2       catNumber 30
 
     { 4, 40, 7 },  // MCATEGORY_WAR_2
     { 4, 40, 7 },  // MCATEGORY_MNK_2
@@ -192,14 +193,15 @@ CMeritPoints::CMeritPoints(CCharEntity* PChar)
 void CMeritPoints::LoadMeritPoints(uint32 charid)
 {
     uint8 catNumber = 0;
+    uint8 maxCatCount = 53;
 
     for (uint16 i = 0; i < MERITS_COUNT; ++i)
     {
-        if ((catNumber < 51 && i == meritNameSpace::groupOffset[catNumber]) || (catNumber > 25 && catNumber < 31))
+        if ((catNumber <= maxCatCount && i == meritNameSpace::groupOffset[catNumber]) || (catNumber > 26 && catNumber < 31) || catNumber == 51)
         {
-            if (catNumber > 25 && catNumber < 31)
-            { // point these to valid merits to prevent crash
-                Categories[catNumber] = &merits[163];
+            if ((catNumber > 26 && catNumber < 31) || catNumber == 51)
+            {
+                Categories[catNumber] = &merits[163]; // point these to valid merits to prevent crash
             }
             else
             {
