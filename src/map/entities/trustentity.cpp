@@ -715,6 +715,12 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
                     auto trustEquipmentList        = iterator->second;
                     trustEquipmentList->at(slotId) = newPItem;
                 }
+                else
+                {
+                    CCharEntity::TrustEquipList_t* trustEquipmentList(new CCharEntity::TrustEquipList_t());
+                    trustEquipmentList->at(slotId) = PItem;
+                    PChar->m_TrustEquipment.insert(std::pair<uint16, CCharEntity::TrustEquipList_t*>(this->m_TrustID, trustEquipmentList));
+                }
             }
         }
     }

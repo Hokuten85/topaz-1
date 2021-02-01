@@ -107,7 +107,22 @@ void CTrustController::DoCombatTick(time_point tick)
 
     CTrustEntity* PTrust  = static_cast<CTrustEntity*>(POwner);
     CCharEntity*  PMaster = static_cast<CCharEntity*>(POwner->PMaster);
-    PTarget               = POwner->GetBattleTarget();
+    
+
+    if (moveSpell != nullptr)
+    {
+        PTarget = (CBattleEntity*)POwner->GetEntity(moveSpell->targId);
+        if (PTarget == nullptr)
+        {
+            PTarget = POwner->GetBattleTarget();
+            delete moveSpell;
+            moveSpell = nullptr;
+        }
+    }
+    else
+    {
+        PTarget = POwner->GetBattleTarget();
+    }
 
     if (PTarget)
     {
@@ -123,56 +138,84 @@ void CTrustController::DoCombatTick(time_point tick)
 
             POwner->PAI->PathFind->LookAt(PTarget->loc.p);
 
-            switch (PTrust->m_MovementType)
+            if (moveSpell != nullptr)
             {
-                case TRUST_MOVEMENT_TYPE::NO_MOVE:
+                auto PSpell   = spell::GetSpell(moveSpell->spellId);
+                auto distance = PSpell->getValidTarget() == TARGET_SELF && PSpell->getAOE() == SPELLAOE_RADIAL && PSpell->getRange() == 0
+                                    ? PSpell->getRadius() / 2
+                                    : std::max(0.0f, PSpell->getRange() - 2.6f);
+
+                if (currentDistanceToTarget > distance)
                 {
-                    if (currentDistanceToMaster > CastingDistance)
+                    if (POwner->PAI->PathFind->CanSeePoint(PTarget->loc.p, false))
                     {
-                        PathOutToDistance(PTarget, 9.0f);
+                        PathOutToDistance(PTarget, distance);
                     }
-                    else if (currentDistanceToTarget > CastingDistance)
+                    else
                     {
-                        PathOutToDistance(PTarget, 9.0f);
+                        POwner->PAI->PathFind->WarpTo(PTarget->loc.p);
                     }
-                    break;
                 }
-                case TRUST_MOVEMENT_TYPE::MID_RANGE:
+                else
                 {
-                    PathOutToDistance(PTarget, 6.0f);
-                    break;
-                }
-                case TRUST_MOVEMENT_TYPE::LONG_RANGE:
-                {
-                    PathOutToDistance(PTarget, 12.0f);
-                    break;
-                }
-                case TRUST_MOVEMENT_TYPE::MELEE_RANGE:
-                default:
-                {
-                    std::unique_ptr<CBasicPacket> err;
-                    if (!POwner->CanAttack(PTarget, err) && POwner->speed > 0)
-                    {
-                        if (currentDistanceToTarget > RoamDistance)
-                        {
-                            if (currentDistanceToTarget < RoamDistance * 3.0f &&
-                                POwner->PAI->PathFind->PathAround(PTarget->loc.p, RoamDistance, PATHFLAG_RUN | PATHFLAG_WALLHACK))
-                            {
-                                POwner->PAI->PathFind->FollowPath();
-                            }
-                            else if (POwner->GetSpeed() > 0)
-                            {
-                                POwner->PAI->PathFind->StepTo(PTarget->loc.p, true);
-                            }
-                        }
-                    }
-                    break;
+                    this->Cast(moveSpell->targId, moveSpell->spellId);
+                    delete moveSpell;
+                    moveSpell = nullptr;
                 }
             }
-
-            if (!POwner->PAI->PathFind->IsFollowingPath())
+            else
             {
-                Declump(PMaster, PTarget);
+                switch (PTrust->m_MovementType)
+                {
+                    case TRUST_MOVEMENT_TYPE::NO_MOVE:
+                    {
+                        if (currentDistanceToMaster > CastingDistance)
+                        {
+                            PathOutToDistance(PTarget, 9.0f);
+                        }
+                        else if (currentDistanceToTarget > CastingDistance)
+                        {
+                            PathOutToDistance(PTarget, 9.0f);
+                        }
+                        break;
+                    }
+                    case TRUST_MOVEMENT_TYPE::MID_RANGE:
+                    {
+                        PathOutToDistance(PTarget, 6.0f);
+                        break;
+                    }
+                    case TRUST_MOVEMENT_TYPE::LONG_RANGE:
+                    {
+                        PathOutToDistance(PTarget, 12.0f);
+                        break;
+                    }
+                    case TRUST_MOVEMENT_TYPE::MELEE_RANGE:
+                    default:
+                    {
+                        std::unique_ptr<CBasicPacket> err;
+                        if (!POwner->CanAttack(PTarget, err) && POwner->speed > 0)
+                        {
+                            if (currentDistanceToTarget > RoamDistance)
+                            {
+                                if (currentDistanceToTarget < RoamDistance * 3.0f &&
+                                    POwner->PAI->PathFind->PathAround(PTarget->loc.p, RoamDistance, PATHFLAG_RUN | PATHFLAG_WALLHACK))
+                                {
+                                    POwner->PAI->PathFind->FollowPath();
+                                }
+                                else if (POwner->GetSpeed() > 0)
+                                {
+                                    POwner->PAI->PathFind->StepTo(PTarget->loc.p, true);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                if (!POwner->PAI->PathFind->IsFollowingPath())
+                {
+                    Declump(PMaster, PTarget);
+                }
             }
         }
 
@@ -181,7 +224,10 @@ void CTrustController::DoCombatTick(time_point tick)
             POwner->PAI->PathFind->FollowPath();
         }
 
-        m_GambitsContainer->Tick(tick);
+        if (moveSpell == nullptr)
+        {
+            m_GambitsContainer->Tick(tick);
+        }
 
         POwner->PAI->EventHandler.triggerListener("COMBAT_TICK", POwner, POwner->PMaster, PTarget);
     }
@@ -291,6 +337,8 @@ void CTrustController::Declump(CCharEntity* PMaster, CBattleEntity* PTarget)
 void CTrustController::PathOutToDistance(CBattleEntity* PTarget, float amount)
 {
     TracyZoneScoped;
+
+    auto junk = amount;
 
     float      currentDistanceToTarget = distance(POwner->loc.p, PTarget->loc.p);
     position_t target_position         = POwner->loc.p;
@@ -412,6 +460,11 @@ bool CTrustController::Cast(uint16 targid, SpellID spellid)
     auto Target = POwner->GetEntity(targid);
     if (distance(POwner->loc.p, Target->loc.p) > PSpell->getRange()) // check casting distance
     {
+        if (static_cast<CTrustEntity*>(POwner)->m_MovementType != TRUST_MOVEMENT_TYPE::MELEE_RANGE) // melee characters don't move to cast
+        {
+            moveSpell = new SpellRequiresMove_t{ targid, spellid };
+        }
+        
         return false;
     }
 

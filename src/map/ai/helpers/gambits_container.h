@@ -86,6 +86,7 @@ namespace gambits
         G_TARGET    target;
         G_CONDITION condition;
         uint32      condition_arg = 0;
+        bool        isActionTarget = false;
 
         bool parseInput(std::string key, uint32 value)
         {
@@ -100,6 +101,10 @@ namespace gambits
             else if (key.compare("argument") == 0)
             {
                 condition_arg = value;
+            }
+            else if (key.compare("actionTarget") == 0)
+            {
+                isActionTarget = (bool)value;
             }
             else
             {
@@ -180,6 +185,7 @@ namespace gambits
         ~CGambitsContainer() = default;
 
         void AddGambit(const Gambit_t& gambit);
+        bool RunPredicate(Predicate_t& predicate);
         void Tick(time_point tick);
 
         // TODO: make private

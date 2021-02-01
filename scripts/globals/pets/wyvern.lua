@@ -80,7 +80,7 @@ function onMobSpawn(mob)
     local strafe_trait = master:getMod(tpz.mod.WYVERN_BREATH_MACC)
     local strafe_effect_merit = master:getMerit(tpz.merit.STRAFE_EFFECT)
     
-    mob:addMod(tpz.mod.DMG, -40)
+    -- mob:addMod(tpz.mod.DMG, -40)
     mob:addMod(tpz.mod.MACC, strafe_trait + strafe_effect_merit)
 
     if master:getMod(tpz.mod.WYVERN_SUBJOB_TRAITS) > 0 then

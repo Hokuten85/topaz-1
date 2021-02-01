@@ -34,6 +34,12 @@ namespace gambits
     class CGambitsContainer;
 }
 
+struct SpellRequiresMove_t
+{
+    uint16  targId;
+    SpellID spellId;
+};
+
 class CTrustController : public CMobController
 {
 public:
@@ -51,12 +57,14 @@ public:
 
     static constexpr float RoamDistance    = { 2.0f };
     static constexpr float SpawnDistance   = { 3.0f };
-    static constexpr float CastingDistance = { 15.0f };
+    static constexpr float CastingDistance = { 18.0f };
     static constexpr float WarpDistance    = { 30.0f };
 
     CBattleEntity* GetTopEnmity();
 
     std::unique_ptr<gambits::CGambitsContainer> m_GambitsContainer;
+
+    SpellRequiresMove_t* moveSpell = nullptr;
 
 private:
     void DoCombatTick(time_point tick) override;

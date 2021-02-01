@@ -29,7 +29,7 @@ function onMobSpawn(mob)
         ['predicates'] =
         {
             {
-                ['target'] = ai.t.TARGET, ['condition'] = ai.c.NOT_SC_AVAILABLE, ['argument'] = 0,
+                ['target'] = ai.t.TARGET, ['condition'] = ai.c.NOT_SC_AVAILABLE, ['argument'] = 0, ['actionTarget'] = 1
             },
             {
                 ['target'] = ai.t.SELF, ['condition'] = ai.c.NOT_HAS_TOP_ENMITY, ['argument'] = 0,

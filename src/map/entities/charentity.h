@@ -252,6 +252,45 @@ public:
         }
     }
 
+    template <typename F, typename... Args>
+    bool ForPartyWithTrusts_If(F func, Args&&... args)
+    {
+        if (PParty)
+        {
+            for (auto PMember : PParty->members)
+            {
+                bool result = func(PMember, std::forward<Args>(args)...);
+                if (result)
+                {
+                    return true;
+                }
+
+                for (auto PTrust : static_cast<CCharEntity*>(PMember)->PTrusts)
+                {
+                    bool result = func(PTrust, std::forward<Args>(args)...);
+                    if (result)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        else
+        {
+            func(this, std::forward<Args>(args)...);
+            for (auto PTrust : this->PTrusts)
+            {
+                bool result = func(PTrust, std::forward<Args>(args)...);
+                if (result)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     CBattleEntity* PClaimedMob;
 
     // These missions do not need a list of completed, because client automatically

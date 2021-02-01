@@ -13108,9 +13108,10 @@ inline int32 CLuaBaseEntity::addSimpleGambit(lua_State* L)
 
     using namespace gambits;
 
-    auto target        = static_cast<G_TARGET>(lua_tointeger(L, 1));
-    auto condition     = static_cast<G_CONDITION>(lua_tointeger(L, 2));
-    auto condition_arg = static_cast<uint32>(lua_tointeger(L, 3));
+    auto target         = static_cast<G_TARGET>(lua_tointeger(L, 1));
+    auto condition      = static_cast<G_CONDITION>(lua_tointeger(L, 2));
+    auto condition_arg  = static_cast<uint32>(lua_tointeger(L, 3));
+    auto isActionTarget = true; // simple gambit target is always the action target
 
     auto reaction     = static_cast<G_REACTION>(lua_tointeger(L, 4));
     auto selector     = static_cast<G_SELECT>(lua_tointeger(L, 5));
@@ -13124,7 +13125,7 @@ inline int32 CLuaBaseEntity::addSimpleGambit(lua_State* L)
     }
 
     Gambit_t g;
-    g.predicates.emplace_back(Predicate_t{ target, condition, condition_arg });
+    g.predicates.emplace_back(Predicate_t{ target, condition, condition_arg, isActionTarget });
     g.actions.emplace_back(Action_t{ reaction, selector, selector_arg });
     g.retry_delay = retry_delay;
 

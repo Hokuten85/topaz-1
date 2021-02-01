@@ -477,7 +477,7 @@ namespace spell
                 if (PSpell->getAOE())
                 {
                     // default radius
-                    PSpell->setRadius(10);
+                    PSpell-> setRadius(10);
                 }
 
                 PSpellList[static_cast<uint16>(PSpell->getID())] = PSpell;

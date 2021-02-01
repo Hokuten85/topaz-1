@@ -46,6 +46,69 @@ namespace gambits
         return firstElem.resistance < secondElem.resistance;
     }
 
+    bool CGambitsContainer::RunPredicate(Predicate_t& predicate)
+    {
+        auto isValidMember = [&](CBattleEntity* PPartyTarget) -> bool {
+            return PPartyTarget->isAlive() && POwner->loc.zone == PPartyTarget->loc.zone && distance(POwner->loc.p, PPartyTarget->loc.p) <= 40.0f;
+        };
+
+        if (predicate.target == G_TARGET::SELF)
+        {
+            return CheckTrigger(POwner, predicate);
+        }
+        else if (predicate.target == G_TARGET::TARGET)
+        {
+            return CheckTrigger(POwner->GetBattleTarget(), predicate);
+        }
+        else if (predicate.target == G_TARGET::PARTY)
+        {
+            return static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                return (isValidMember(PMember) && CheckTrigger(PMember, predicate));
+            });
+        }
+        else if (predicate.target == G_TARGET::MASTER)
+        {
+            return CheckTrigger(POwner->PMaster, predicate);
+        }
+        else if (predicate.target == G_TARGET::TANK)
+        {
+            return static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                return (isValidMember(PMember) && CheckTrigger(PMember, predicate) && (PMember->GetMJob() == JOB_PLD || PMember->GetMJob() == JOB_RUN));
+            });
+        }
+        else if (predicate.target == G_TARGET::MELEE)
+        {
+            return static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                return (isValidMember(PMember) && CheckTrigger(PMember, predicate) && melee_jobs.find(PMember->GetMJob()) != melee_jobs.end());
+            });
+        }
+        else if (predicate.target == G_TARGET::RANGED)
+        {
+            return static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                return (isValidMember(PMember) && CheckTrigger(PMember, predicate) && (PMember->GetMJob() == JOB_RNG || PMember->GetMJob() == JOB_COR));
+            });
+        }
+        else if (predicate.target == G_TARGET::CASTER)
+        {
+            return static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                return (isValidMember(PMember) && CheckTrigger(PMember, predicate) && caster_jobs.find(PMember->GetMJob()) != caster_jobs.end());
+            });
+        }
+        else if (predicate.target == G_TARGET::TOP_ENMITY)
+        {
+            if (auto* PMob = dynamic_cast<CMobEntity*>(POwner->GetBattleTarget()))
+            {
+                return static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                    return (isValidMember(PMember) && CheckTrigger(PMember, predicate) && PMob->PEnmityContainer->GetHighestEnmity() == PMember);
+                });
+            }
+            return false;
+        }
+
+        // Fallthrough
+        return false;
+    }
+
     void CGambitsContainer::Tick(time_point tick)
     {
         TracyZoneScoped;
@@ -75,97 +138,6 @@ namespace gambits
             return;
         }
 
-        auto runPredicate = [&](Predicate_t& predicate) -> bool {
-            auto isValidMember = [&](CBattleEntity* PPartyTarget) -> bool {
-                return PPartyTarget->isAlive() && POwner->loc.zone == PPartyTarget->loc.zone && distance(POwner->loc.p, PPartyTarget->loc.p) <= 15.0f;
-            };
-
-            if (predicate.target == G_TARGET::SELF)
-            {
-                return CheckTrigger(POwner, predicate);
-            }
-            else if (predicate.target == G_TARGET::TARGET)
-            {
-                return CheckTrigger(POwner->GetBattleTarget(), predicate);
-            }
-            else if (predicate.target == G_TARGET::PARTY)
-            {
-                auto result = false;
-                static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                    if (isValidMember(PMember) && CheckTrigger(PMember, predicate))
-                    {
-                        result = true;
-                    }
-                });
-                return result;
-            }
-            else if (predicate.target == G_TARGET::MASTER)
-            {
-                return CheckTrigger(POwner->PMaster, predicate);
-            }
-            else if (predicate.target == G_TARGET::TANK)
-            {
-                auto result = false;
-                static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                    if (isValidMember(PMember) && CheckTrigger(PMember, predicate) && (PMember->GetMJob() == JOB_PLD || PMember->GetMJob() == JOB_RUN))
-                    {
-                        result = true;
-                    }
-                });
-                return result;
-            }
-            else if (predicate.target == G_TARGET::MELEE)
-            {
-                auto result = false;
-                static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                    if (isValidMember(PMember) && CheckTrigger(PMember, predicate) && melee_jobs.find(PMember->GetMJob()) != melee_jobs.end())
-                    {
-                        result = true;
-                    }
-                });
-                return result;
-            }
-            else if (predicate.target == G_TARGET::RANGED)
-            {
-                auto result = false;
-                static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                    if (isValidMember(PMember) && CheckTrigger(PMember, predicate) && (PMember->GetMJob() == JOB_RNG || PMember->GetMJob() == JOB_COR))
-                    {
-                        result = true;
-                    }
-                });
-                return result;
-            }
-            else if (predicate.target == G_TARGET::CASTER)
-            {
-                auto result = false;
-                static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                    if (isValidMember(PMember) && CheckTrigger(PMember, predicate) && caster_jobs.find(PMember->GetMJob()) != caster_jobs.end())
-                    {
-                        result = true;
-                    }
-                });
-                return result;
-            }
-            else if (predicate.target == G_TARGET::TOP_ENMITY)
-            {
-                auto result = false;
-                if (auto* PMob = dynamic_cast<CMobEntity*>(POwner->GetBattleTarget()))
-                {
-                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                        if (isValidMember(PMember) && CheckTrigger(PMember, predicate) && PMob->PEnmityContainer->GetHighestEnmity() == PMember)
-                        {
-                            result = true;
-                        }
-                    });
-                }
-                return result;
-            }
-
-            // Fallthrough
-            return false;
-        };
-
         // Didn't WS/MS, go for other Gambits
         for (auto& gambit : gambits)
         {
@@ -178,11 +150,16 @@ namespace gambits
 
             for (auto& action : gambit.actions)
             {
+                Predicate_t& targetPredicate = gambit.predicates[0]; // save the predicate that dicates target
                 // Make sure that the predicates remain true for each action in a gambit
                 bool all_predicates_true = true;
                 for (auto& predicate : gambit.predicates)
                 {
-                    if (!runPredicate(predicate))
+                    if (predicate.isActionTarget)
+                    {
+                        targetPredicate = predicate;
+                    }
+                    if (!RunPredicate(predicate))
                     {
                         all_predicates_true = false;
                     }
@@ -194,84 +171,96 @@ namespace gambits
 
                 auto isValidMember = [this](CBattleEntity* PSettableTarget, CBattleEntity* PPartyTarget) {
                     return !PSettableTarget && PPartyTarget->isAlive() && POwner->loc.zone == PPartyTarget->loc.zone &&
-                           distance(POwner->loc.p, PPartyTarget->loc.p) <= 15.0f;
+                           distance(POwner->loc.p, PPartyTarget->loc.p) <= 40.0f;
                 };
 
                 // TODO: This whole section is messy and bonkers
                 // Try and extract target out the first predicate
-                CBattleEntity* target = nullptr;
-                if (gambit.predicates[0].target == G_TARGET::SELF)
+                CBattleEntity* target = nullptr;                
+                if (targetPredicate.target == G_TARGET::SELF)
                 {
-                    target = CheckTrigger(POwner, gambit.predicates[0]) ? POwner : nullptr;
+                    target = CheckTrigger(POwner, targetPredicate) ? POwner : nullptr;
                 }
-                else if (gambit.predicates[0].target == G_TARGET::TARGET)
+                else if (targetPredicate.target == G_TARGET::TARGET)
                 {
                     auto* mob = POwner->GetBattleTarget();
-                    target    = CheckTrigger(mob, gambit.predicates[0]) ? mob : nullptr;
+                    target    = CheckTrigger(mob, targetPredicate) ? mob : nullptr;
                 }
                 else if (gambit.predicates[0].target == G_TARGET::PARTY)
                 {
-                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                        if (isValidMember(target, PMember) && CheckTrigger(PMember, gambit.predicates[0]))
+                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                        if (isValidMember(target, PMember) && CheckTrigger(PMember, targetPredicate))
                         {
                             target = PMember;
+                            return true;
                         }
+                        return false;
                     });
                 }
-                else if (gambit.predicates[0].target == G_TARGET::MASTER)
+                else if (targetPredicate.target == G_TARGET::MASTER)
                 {
                     target = POwner->PMaster;
                 }
-                else if (gambit.predicates[0].target == G_TARGET::TANK)
+                else if (targetPredicate.target == G_TARGET::TANK)
                 {
-                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                        if (isValidMember(target, PMember) && CheckTrigger(PMember, gambit.predicates[0]) &&
+                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                        if (isValidMember(target, PMember) && CheckTrigger(PMember, targetPredicate) &&
                             (PMember->GetMJob() == JOB_PLD || PMember->GetMJob() == JOB_RUN))
                         {
                             target = PMember;
+                            return true;
                         }
+                        return false;
                     });
                 }
-                else if (gambit.predicates[0].target == G_TARGET::MELEE)
+                else if (targetPredicate.target == G_TARGET::MELEE)
                 {
-                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                        if (isValidMember(target, PMember) && CheckTrigger(PMember, gambit.predicates[0]) &&
+                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                        if (isValidMember(target, PMember) && CheckTrigger(PMember, targetPredicate) &&
                             melee_jobs.find(PMember->GetMJob()) != melee_jobs.end())
                         {
                             target = PMember;
+                            return true;
                         }
+                        return false;
                     });
                 }
-                else if (gambit.predicates[0].target == G_TARGET::RANGED)
+                else if (targetPredicate.target == G_TARGET::RANGED)
                 {
-                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                        if (isValidMember(target, PMember) && CheckTrigger(PMember, gambit.predicates[0]) &&
+                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                        if (isValidMember(target, PMember) && CheckTrigger(PMember, targetPredicate) &&
                             (PMember->GetMJob() == JOB_RNG || PMember->GetMJob() == JOB_COR))
                         {
                             target = PMember;
+                            return true;
                         }
+                        return false;
                     });
                 }
-                else if (gambit.predicates[0].target == G_TARGET::CASTER)
+                else if (targetPredicate.target == G_TARGET::CASTER)
                 {
-                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                        if (isValidMember(target, PMember) && CheckTrigger(PMember, gambit.predicates[0]) &&
+                    static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                        if (isValidMember(target, PMember) && CheckTrigger(PMember, targetPredicate) &&
                             caster_jobs.find(PMember->GetMJob()) != caster_jobs.end())
                         {
                             target = PMember;
+                            return true;
                         }
+                        return false;
                     });
                 }
-                else if (gambit.predicates[0].target == G_TARGET::TOP_ENMITY)
+                else if (targetPredicate.target == G_TARGET::TOP_ENMITY)
                 {
                     if (auto* PMob = dynamic_cast<CMobEntity*>(POwner->GetBattleTarget()))
                     {
-                        static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
-                            if (isValidMember(target, PMember) && CheckTrigger(PMember, gambit.predicates[0]) &&
+                        static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                            if (isValidMember(target, PMember) && CheckTrigger(PMember, targetPredicate) &&
                                 PMob->PEnmityContainer->GetHighestEnmity() == PMember)
                             {
                                 target = PMember;
+                                return true;
                             }
+                            return false;
                         });
                     }
                 }
@@ -426,7 +415,7 @@ namespace gambits
                 }
             }
 
-            if (actionStarted)
+            if (actionStarted || controller->moveSpell != nullptr)
             {
                 break;
             }
