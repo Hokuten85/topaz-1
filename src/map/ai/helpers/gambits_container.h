@@ -48,6 +48,8 @@ namespace gambits
         READYING_JA        = 16,
         CASTING_MA         = 17,
         RANDOM             = 18,
+        CAN_CAST           = 19,
+        CAN_CAST_HIGHEST   = 20
     };
 
     enum class G_REACTION : uint16

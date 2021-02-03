@@ -15,6 +15,7 @@
 
 #include "../../weapon_skill.h"
 #include "../controllers/player_controller.h"
+#include <map/recast_container.h>
 
 namespace gambits
 {
@@ -525,6 +526,29 @@ namespace gambits
             case G_CONDITION::RANDOM:
             {
                 return tpzrand::GetRandomNumber<uint16>(100) < (int16)predicate.condition_arg;
+                break;
+            }
+            case G_CONDITION::CAN_CAST:
+            {
+                uint16 spellId = static_cast<uint16>(predicate.condition_arg);
+                auto   PSpell  = spell::GetSpell((SpellID)spellId);
+                return trigger_target->CanUseSpell(PSpell)
+                    && PSpell->getMPCost() <= trigger_target->health.mp
+                    && !static_cast<CMobEntity*>(trigger_target)->PRecastContainer->Has(RECAST_MAGIC, spellId)
+                    && !trigger_target->StatusEffectContainer->HasStatusEffect({ EFFECT_SILENCE, EFFECT_MUTE, EFFECT_OMERTA });
+                break;
+            }
+            case G_CONDITION::CAN_CAST_HIGHEST:
+            {
+                auto spellId = POwner->SpellContainer->GetBestAvailable(static_cast<SPELLFAMILY>(predicate.condition_arg));
+                if (spellId.has_value())
+                {
+                    auto PSpell   = spell::GetSpell((SpellID)spellId.value());
+                    return trigger_target->CanUseSpell(PSpell)
+                        && PSpell->getMPCost() <= trigger_target->health.mp
+                        && !static_cast<CMobEntity*>(trigger_target)->PRecastContainer->Has(RECAST_MAGIC, static_cast<uint16>(spellId.value()))
+                        && !trigger_target->StatusEffectContainer->HasStatusEffect({ EFFECT_SILENCE, EFFECT_MUTE, EFFECT_OMERTA });
+                }
                 break;
             }
             default:

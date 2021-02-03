@@ -451,12 +451,7 @@ bool CTrustController::Cast(uint16 targid, SpellID spellid)
         return false;
     }
 
-    auto* PSpell = spell::GetSpell(spellid);
-    if (PSpell->getValidTarget() == TARGET_SELF)
-    {
-        targid = POwner->targid;
-    }
-
+    auto PSpell = spell::GetSpell(spellid);
     auto Target = POwner->GetEntity(targid);
     if (distance(POwner->loc.p, Target->loc.p) > PSpell->getRange()) // check casting distance
     {
@@ -466,6 +461,11 @@ bool CTrustController::Cast(uint16 targid, SpellID spellid)
         }
         
         return false;
+    }
+
+    if (PSpell->getValidTarget() == TARGET_SELF)
+    {
+        targid = POwner->targid;
     }
 
     return CMobController::Cast(targid, spellid);

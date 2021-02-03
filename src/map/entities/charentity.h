@@ -169,6 +169,11 @@ class CItemState;
 class CItemUsable;
 class CItem;
 
+namespace gambits
+{
+    class CGambitsContainer;
+}
+
 typedef std::deque<CBasicPacket*>      PacketList_t;
 typedef std::map<uint32, CBaseEntity*> SpawnIDList_t;
 typedef std::vector<EntityID_t>        BazaarList_t;
@@ -224,7 +229,10 @@ public:
     std::vector<CTrustEntity*> PTrusts; // Active trusts
     typedef std::array<CItem*, 17>      TrustEquipList_t;
     std::map<uint16, TrustEquipList_t*> m_TrustEquipment;
-    
+    std::map<uint16, std::unique_ptr<gambits::CGambitsContainer>> m_TrustGambits;
+
+    //std::unique_ptr<gambits::CGambitsContainer> m_GambitsContainer;
+
     template <typename F, typename... Args>
     void ForPartyWithTrusts(F func, Args&&... args)
     {

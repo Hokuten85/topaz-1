@@ -43,6 +43,7 @@
 #include "../ai/ai_container.h"
 #include "../ai/controllers/player_controller.h"
 #include "../ai/helpers/targetfind.h"
+#include "../ai/helpers/gambits_container.h"
 #include "../ai/states/ability_state.h"
 #include "../ai/states/attack_state.h"
 #include "../ai/states/death_state.h"

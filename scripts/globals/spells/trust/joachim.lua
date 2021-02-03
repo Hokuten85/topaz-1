@@ -39,8 +39,29 @@ function onMobSpawn(mob)
 
     -- TODO: Better logic than this
     mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.MARCH, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.MARCH)
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.BALLAD, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.MAGES_BALLAD)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.MINUET, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.VALOR_MINUET)
     mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.MADRIGAL, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.MADRIGAL)
+    
+     mob:addFullGambit({
+        ['predicates'] =
+        {
+            {
+                ['target'] = ai.t.CASTER, ['condition'] = ai.c.NOT_STATUS, ['argument'] = tpz.effect.BALLAD, ['actionTarget'] = 1
+            },
+            {
+                ['target'] = ai.t.self, ['condition'] = ai.c.CAN_CAST_HIGHEST, ['argument'] = tpz.magic.spellFamily.MAGES_BALLAD
+            }
+        },
+        ['actions'] =
+        {
+            {
+                ['reaction'] = ai.r.JA, ['select'] = ai.s.SPECIFIC, ['argument'] = tpz.ja.PIANISSIMO,
+            },
+            {
+                ['reaction'] = ai.r.MA, ['select'] = ai.s.HIGHEST, ['argument'] = tpz.magic.spellFamily.MAGES_BALLAD,
+            }
+        }
+    })
 
     mob:addSimpleGambit(ai.t.PARTY, ai.c.HPP_LT, 75, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.CURE)
 
