@@ -645,6 +645,11 @@ FROM mob_spell_lists msl1
 WHERE spell_list_name = 'TRUST_Shantotto'
 AND msl1.spell_id NOT IN (144,149,154,159,164,169);
 
+INSERT INTO mob_spell_lists
+SELECT 'TRUST_Joachim', 323, sl.spellid , CAST(CONV(SUBSTR(HEX(jobs),19,2),16,10) AS INT), 255
+FROM spell_list sl
+WHERE sl.spellid IN (394, 395, 396, 397, 398);
+
 -- TRUST mob_family_system
 UPDATE mob_family_system mfs
 INNER JOIN mob_pools mp

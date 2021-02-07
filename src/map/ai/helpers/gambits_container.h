@@ -177,6 +177,12 @@ namespace gambits
         int16       resistance;
     };
 
+    struct PredicateResult_t
+    {
+        bool result;
+        CBattleEntity* target;
+    };
+
     class CGambitsContainer
     {
     public:
@@ -187,7 +193,7 @@ namespace gambits
         ~CGambitsContainer() = default;
 
         void AddGambit(const Gambit_t& gambit);
-        bool RunPredicate(Predicate_t& predicate);
+        PredicateResult_t RunPredicate(Predicate_t& predicate);
         void Tick(time_point tick);
 
         // TODO: make private
