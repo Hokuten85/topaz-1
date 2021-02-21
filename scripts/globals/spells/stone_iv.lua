@@ -1,16 +1,17 @@
------------------------------------------
+-----------------------------------
 -- Spell: Stone IV
 -- Deals earth damage to an enemy.
------------------------------------------
+-----------------------------------
 require("scripts/globals/status")
 require("scripts/globals/magic")
------------------------------------------
+-----------------------------------
+local spell_object = {}
 
-function onMagicCastingCheck(caster, target, spell)
+spell_object.onMagicCastingCheck = function(caster, target, spell)
     return 0
 end
 
-function onSpellCast(caster, target, spell)
+spell_object.onSpellCast = function(caster, target, spell)
     local spellParams = {}
 
     if (caster:isPC() or caster:getObjType() == tpz.objType.TRUST) then
@@ -33,3 +34,5 @@ function onSpellCast(caster, target, spell)
 
     return doElementalNuke(caster, spell, target, spellParams)
 end
+
+return spell_object

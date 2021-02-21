@@ -151,12 +151,24 @@ local GearSets =  {
              {id = 196, items = {26085, 23329, 23664, 23262, 23597, 23195, 23530, 23128, 23463, 23061, 23396}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.ACC, 15, 0, 0}, {tpz.mod.RACC, 15, 0, 0}, {tpz.mod.MACC, 15, 0, 0}} }, -- AF1 119 +2/3 GEO
              {id = 199, items = {26191, 23330, 23665, 23263, 23598, 23196, 23531, 23129, 23464, 23062, 23397}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.ACC, 15, 0, 0}, {tpz.mod.RACC, 15, 0, 0}, {tpz.mod.MACC, 15, 0, 0}} }, -- AF1 119 +2/3 RUN
 
-             {id = 200, items = {27740, 27881, 28029, 28168, 28306},  matches = 5, matchType = matchtype.any, mods = {{tpz.mod.DMGPHYS, -10, 0, 0}} },          -- Outrider set (Phys damage taken -10%)
-             {id = 201, items = {27741, 27882, 28030, 28169, 28307},  matches = 5, matchType = matchtype.any, mods = {{tpz.mod.CRIT_DMG_INCREASE, 10, 0, 0}} }, -- Espial set (Crit damage +10%)
-             {id = 202, items = {27742, 27883, 28031, 28170, 28308},  matches = 5, matchType = matchtype.any, mods = {{tpz.mod.REFRESH, 3, 0, 0}} },            -- Wayfarer set (Refresh+3)
+             {id = 202, items = {27740, 27881, 28029, 28168, 28306},  matches = 5, matchType = matchtype.any, mods = {{tpz.mod.DMGPHYS, -10, 0, 0}} },          -- Outrider set (Phys damage taken -10%)
+             {id = 203, items = {27741, 27882, 28030, 28169, 28307},  matches = 5, matchType = matchtype.any, mods = {{tpz.mod.CRIT_DMG_INCREASE, 10, 0, 0}} }, -- Espial set (Crit damage +10%)
+             {id = 204, items = {27742, 27883, 28031, 28170, 28308},  matches = 5, matchType = matchtype.any, mods = {{tpz.mod.REFRESH, 3, 0, 0}} },            -- Wayfarer set (Refresh+3)
+             {id = 205, items = {26677, 26853, 27029, 27205, 27381}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.BP_DAMAGE, 4, 2, 0}} }, -- Apogee +1
+             {id = 206, items = {25612, 25685, 27116, 27301, 27472}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.ATT, 20, 10, 0}} }, -- Ryuo +1
+             {id = 207, items = {26671, 26847, 27023, 27199, 27375}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.DMG, -4, -2, 0}} }, -- Souveran +1
+             {id = 208, items = {25610, 25683, 27114, 27299, 27470}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.DOUBLE_ATTACK, 4, 2, 0}} }, -- Emicho +1
+             {id = 209, items = {25618, 25691, 27122, 27307, 27478}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.CURE_POTENCY_II, 4, 2, 0}} }, -- Kaykaus +1
+             {id = 210, items = {26675, 26851, 27027, 27203, 27379}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.MARTIAL_ARTS, 8, 4, 0}} }, -- Rao +1
+             {id = 211, items = {25614, 25687, 27118, 27303, 27474}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.CRITHITRATE, 4, 2, 0}} }, -- Adhemar +1
+             {id = 212, items = {26679, 26855, 27031, 27207, 27383}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.ACC, 20, 10, 0}} }, -- Carmine +1
+             {id = 213, items = {26669, 26845, 27021, 27197, 27373}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.ALL_WSDMG_FIRST_HIT, 4, 2, 0}} }, -- Lustratio +1
+             {id = 214, items = {26673, 26849, 27025, 27201, 27377}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.DOUBLE_ATTACK, 4, 2, 0}} }, -- Argosy +1
+             {id = 215, items = {25616, 25689, 27120, 27305, 27476}, matches = 2, matchType = matchtype.any, mods = {{tpz.mod.MATT, 20, 10, 0}} }, -- Amalric +1
         }
 
-             -- increment id by (number of mods in previous gearset - 1)
+             -- increment id by the number of mods in previous gearset (e.g. id 199 has 3 mods, 199 + 3 = 202)
+             -- so in this example, the next usable id after 199 would be 202.
 
 --              {id, {item, ids, in, no, particular, order}, minimum matches required, match type, mods{id, value, modvalue for each additional match, additional whole set bonus}
 
@@ -189,9 +201,9 @@ local HipsterSets = {
     {id = 199, hipster = true},
 }
 
-------------------------------------------
+-----------------------------------
 -- Checks for gear sets present on a player
--------------------------------------------
+-----------------------------------
 function checkForGearSet(player)
     -- print("---Removed existing gear set mods!---\n")
     player:clearGearSetMods()
@@ -259,9 +271,9 @@ function FindMatchByType(gearset, gearMatch)
     return false
 end
 
----------------------------------------
+-----------------------------------
 -- Applys a gear set mod
----------------------------------------
+-----------------------------------
 function ApplyMod(player, gearset, matches)
 
     for _, set in pairs(HipsterSets) do
@@ -362,7 +374,7 @@ Stronghold NM(WOTG)
 =======
 
 -- Molione's Sickle Set
--------------
+-----------------------------------
 18947 -- Molione's Sickle
 15818 -- Molione's Ring
 -- Set Bonus: +5 Accuracy
@@ -373,7 +385,7 @@ Empyrean +2
 =======
 
 --Aoidos' Attire +2 Set
--------------
+-----------------------------------
 11073 -- Aoidos' Calot+2
 11093 -- Aoidos' Hongreline +2
 11113 -- Aoidos' Manchettes +2
@@ -383,7 +395,7 @@ Empyrean +2
 -- Enhancing songs add an attribute bonus that corresponds to the element of the song (i.e. Thunder-based songs add +DEX). The attribute bonus begins at +1 for 2 pieces, increases by 1 for each additional piece, up to +5 for the whole set. For Dark-based songs, there is a bonus of +10 MP for 2 pieces, and increases by 10 for each additional piece.
 
 --Ferine' Attire +2 Set
--------------
+-----------------------------------
 11072 -- Ferine Cabasset+2
 11092 -- Ferine Gausape+2
 11112 -- Ferine Manoplas+2
@@ -394,7 +406,7 @@ Empyrean +2
 -- 5% Proc Rate
 
 --Goetia Attire +2 Set
--------------
+-----------------------------------
 11067 -- Goetia Petasos+2
 11087 -- Goetia Coat+2
 11107 -- Goetia Gloves+2
@@ -404,7 +416,7 @@ Empyrean +2
 -- Occasionally increases damage of elemental spells when Conserve MP is triggered. Increased amount is proportional to twice the ratio of MP conserved.
 
 --Mavi Attire +2 Set
--------------
+-----------------------------------
 11079 -- Mavi Kavuk+2
 11099 -- Mavi Mintan+2
 11119 -- Mavi Bazubands+2
@@ -415,7 +427,7 @@ Empyrean +2
 
 
 --Bale Armor +2 Set
--------------
+-----------------------------------
 11071 -- Bale Burgeonet+2
 11091 -- Bale Cuirass+2
 11111 -- Bale Gauntlets+2
@@ -425,7 +437,7 @@ Empyrean +2
 -- Occasionally increases damage in direct proportion to the percentage of current HP. At 100% HP, damage is doubled when triggered, at 50% HP, damage increases by 50%, and so on.
 
 --Lancer's Armor +2 Set
--------------
+-----------------------------------
 11077 -- Lancer's Mezail+2
 11097 -- Lancer's Plackart+2
 11117 -- Lancer's Vambrace+2
@@ -436,7 +448,7 @@ Empyrean +2
 
 
 --Cirque Attire +2 Set
--------------
+-----------------------------------
 11081 -- Cirque Capello+2
 11101 -- Cirque Farsetto+2
 11121 -- Cirque Gaunti+2
@@ -446,7 +458,7 @@ Empyrean +2
 -- Occasionally increases damage in direct proportion to the percentage of Automaton's current HP. At 100% HP, damage is doubled when triggered, at 50% HP, damage increases by 50%, and so on.
 
 --Estoqueur's Attire +2 Set
--------------
+-----------------------------------
 11068 -- Estoqueur's Chappel+2
 11088 -- Estoqueur's Sayon+2
 11108 -- Estoqueur's Gantherots+2
@@ -456,7 +468,7 @@ Empyrean +2
 -- Enhances duration of Enhancing Magic cast on OTHERS while under the effect of Composure by 10% for the first 2 pieces, and 15% for any additional pieces thereafter, up to 35% increase for 4 pieces and 50% for all 5 pieces. The "Increases enhancing magic effect duration" of the Estoqueur's Cape, Estoqueur's Houseaux +1 and Estoqueur's Houseaux +2 is multiplicative to this total.
 
 --Caller's Attire +2 Set
--------------
+-----------------------------------
 11078 -- Caller's Horn+2
 11098 -- Caller's Doublet+2
 11118 -- Caller's Bracers+2

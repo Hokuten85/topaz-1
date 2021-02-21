@@ -2,12 +2,17 @@
 -- Area: Castle Zvahl Baileys (161)
 --   NM: Duke Haborym
 -----------------------------------
+local entity = {}
 
-function onMobDeath(mob, player, isKiller)
+entity.onMobDeath = function(mob, player, isKiller)
 end
 
-function onMobDespawn(mob)
-	-- Set Duke_Haborym's spawnpoint and respawn time (21-24 hours)	
-    UpdateNMSpawnPoint(mob:getID())	
+entity.onMobDespawn = function(mob)
+
+    -- Set Duke_Haborym's spawnpoint and respawn time (21-24 hours)
+    UpdateNMSpawnPoint(mob:getID())
     mob:setRespawnTime(900)
+
 end
+
+return entity

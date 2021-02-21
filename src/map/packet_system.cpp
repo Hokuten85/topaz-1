@@ -3223,8 +3223,8 @@ void SmallPacket0x060(map_session_data_t* const PSession, CCharEntity* const PCh
 {
     TracyZoneScoped;
     // uint32 charid = data.ref<uint32>(0x04);
-    int8* string = data[12];
-    luautils::OnEventUpdate(PChar, string);
+    std::string updateString = std::string((char*)data[12]);
+    luautils::OnEventUpdate(PChar, updateString);
 
     PChar->pushPacket(new CReleasePacket(PChar, RELEASE_TYPE::EVENT));
     PChar->pushPacket(new CReleasePacket(PChar, RELEASE_TYPE::UNKNOWN));
@@ -4293,7 +4293,7 @@ void SmallPacket0x0AD(map_session_data_t* const PSession, CCharEntity* const PCh
 void SmallPacket0x0B5(map_session_data_t* const PSession, CCharEntity* const PChar, CBasicPacket data)
 {
     TracyZoneScoped;
-    if (data.ref<uint8>(0x06) == '!' && !jailutils::InPrison(PChar) && CmdHandler.call(PChar, (const int8*)data[7]) == 0)
+    if (data.ref<uint8>(0x06) == '!' && !jailutils::InPrison(PChar) && CCommandHandler::call(luautils::lua, PChar, (const int8*)data[7]) == 0)
     {
         // this makes sure a command isn't sent to chat
     }

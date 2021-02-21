@@ -332,6 +332,9 @@ namespace zoneutils
                     memcpy(&PNpc->look, Sql_GetData(SqlHandle, 14), 20);
 
                     GetZone(ZoneID)->InsertNPC(PNpc);
+
+                    // Cache NPC Lua
+                    luautils::OnEntityLoad(PNpc);
                 }
             }
         }
@@ -527,36 +530,10 @@ namespace zoneutils
                     // must be here first to define mobmods
                     mobutils::InitializeMob(PMob, GetZone(ZoneID));
 
-                GetZone(ZoneID)->InsertMOB(PMob);
+                    GetZone(ZoneID)->InsertMOB(PMob);
 
-                if (GetZone(ZoneID)->GetType() & (ZONE_TYPE::OUTDOORS | ZONE_TYPE::DUNGEON) && (PMob->m_Type & MOBTYPE_NOTORIOUS) && !(PMob->m_Type & (MOBTYPE_BATTLEFIELD | MOBTYPE_EVENT)) && PMob->m_DropID > 0)
-                {
-                    DropList_t* dropList = itemutils::GetDropList(PMob->m_DropID);
-                    if (dropList != nullptr)
-                    {
-                        std::vector<CItem*> *items = new std::vector<CItem*>();
-                        for (uint8 i = 0; i < dropList->Items.size(); ++i)
-                        {
-                            DropItem_t& dropItem = dropList->Items.at(i);
-                            if (dropItem.ItemID && dropItem.DropRate > 0)
-                            {
-                                CItem* PItem = itemutils::GetItem(dropItem.ItemID);
-                                if (PItem->getFlag() & (ITEM_FLAG_EX | ITEM_FLAG_RARE) && (PItem->getID() < 4064 || PItem->getID() > 4073)) {
-                                    items->push_back(PItem);
-                                }
-                            }
-                        }
-
-                        if (items->size())
-                        {
-                            if (!bountyDropMap[PMob->m_minLevel])
-                            {
-                                bountyDropMap[PMob->m_minLevel] = new BountyMobList_t();
-                            }
-
-                            bountyDropMap[PMob->m_minLevel]->push_back(new BountyMob_t(PMob, items));
-                        }
-                    }
+                    // Cache Mob Lua
+                    luautils::OnEntityLoad(PMob);
                 }
             }
         }

@@ -477,6 +477,9 @@ namespace itemutils
                         ((CItemFurnishing*)PItem)->setAura(Sql_GetUIntData(SqlHandle, 36));
                     }
                     g_pItemList[PItem->getID()] = PItem;
+
+                    auto filename = fmt::format("./scripts/globals/items/{}.lua", PItem->getName());
+                    luautils::CacheLuaObjectFromFile(filename);
                 }
             }
         }

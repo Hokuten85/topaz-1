@@ -2,10 +2,13 @@
 -- Area: Ve'Lugannon Palace
 --   NM: Steam Cleaner
 -----------------------------------
+local entity = {}
 
-function onMobDeath(mob, player, isKiller)
+entity.onMobDeath = function(mob, player, isKiller)
 end
 
-function onMobDespawn(mob)
+entity.onMobDespawn = function(mob)
     mob:setRespawnTime(900) -- 2 to 4 hours
 end
+
+return entity

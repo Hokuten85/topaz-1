@@ -2,13 +2,17 @@
 -- Area: Gustav Tunnel
 --   NM: Bune
 -----------------------------------
+local entity = {}
 
-function onMobDeath(mob, player, isKiller)
+entity.onMobDeath = function(mob, player, isKiller)
 end
 
-function onMobDespawn(mob)
+entity.onMobDespawn = function(mob)
 
     -- Set Bune's spawnpoint and respawn time (21-24 hours)
-    UpdateNMSpawnPoint(mob:getID());
-	mob:setRespawnTime(900);
-end;
+    UpdateNMSpawnPoint(mob:getID())
+    mob:setRespawnTime(900)
+
+end
+
+return entity

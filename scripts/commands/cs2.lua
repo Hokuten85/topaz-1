@@ -1,12 +1,12 @@
----------------------------------------------------------------------------------------------------
+-----------------------------------
 -- func: cs2
 -- desc: Starts the given event for the player.
----------------------------------------------------------------------------------------------------
+-----------------------------------
 
 cmdprops =
 {
-    permission = 2,
-    parameters = "sssssiiiiiiii"
+    permission = 1,
+    parameters = "issssiiiiiiii"
 }
 
 function error(player, msg)

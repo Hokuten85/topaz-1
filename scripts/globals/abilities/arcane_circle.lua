@@ -7,12 +7,13 @@
 -----------------------------------
 require("scripts/globals/status")
 -----------------------------------
+local ability_object = {}
 
-function onAbilityCheck(player, target, ability)
+ability_object.onAbilityCheck = function(player, target, ability)
     return 0, 0
 end
 
-function onUseAbility(player, target, ability)
+ability_object.onUseAbility = function(player, target, ability)
     local duration = 180 + player:getMod(tpz.mod.ARCANE_CIRCLE_DURATION)
     
     if (player:getID() ~= target:getID()) then
@@ -31,3 +32,5 @@ function onUseAbility(player, target, ability)
         target:addStatusEffect(tpz.effect.ARCANE_CIRCLE,15,0,duration);
     end
 end
+
+return ability_object
