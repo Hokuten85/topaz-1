@@ -10666,9 +10666,6 @@ void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_
 
     auto target    = static_cast<G_TARGET>(targ);
     auto condition = static_cast<G_CONDITION>(cond);
-    auto target         = static_cast<G_TARGET>(lua_tointeger(L, 1));
-    auto condition      = static_cast<G_CONDITION>(lua_tointeger(L, 2));
-    auto condition_arg  = static_cast<uint32>(lua_tointeger(L, 3));
     auto isActionTarget = true; // simple gambit target is always the action target
 
     auto reaction = static_cast<G_REACTION>(react);
@@ -10695,105 +10692,77 @@ void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_
  *  Notes   : Adds a behaviour to the gambit system
  ************************************************************************/
 
-inline int32 CLuaBaseEntity::addFullGambit(lua_State* L)
+inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
     TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_TRUST);
-    TPZ_DEBUG_BREAK_IF(lua_isnil(L, 1) || !lua_istable(L, 1));
 
     using namespace gambits;
-
-    // ===
 
     Gambit_t g;
 
     bool gambit_error = false;
 
-    uint32 stackTop = lua_gettop(L);
-
-    lua_pushvalue(L, 1); // Push main table onto stack
-
-    lua_getfield(L, 1, "predicates"); // Acts as push
-    if (lua_istable(L, -1))           // Found
+    auto predicates = fullGambit.get<sol::optional<sol::table>>("predicates");
+    if (predicates.has_value() && !predicates.value().empty())
     {
-        auto table = lua_gettop(L);
-        lua_pushnil(L);
-        while (lua_next(L, table) != 0)
+        for (const auto& kvp : predicates.value())
         {
             Predicate_t new_predicate;
-            auto        sub_table = lua_gettop(L);
-            lua_pushnil(L);
-            while (lua_next(L, sub_table) != 0)
+            sol::table  subTable = (sol::table)kvp.second;
+
+            for (const auto& keyValuePair : subTable)
             {
-                auto key   = std::string(lua_tostring(L, -2));
-                auto value = static_cast<uint32>(lua_tonumber(L, -1));
-                lua_pop(L, 1);
+                auto key   = keyValuePair.first.as<std::string>();
+                auto value = keyValuePair.second.as<uint32>();
 
                 if (!new_predicate.parseInput(key, value))
                 {
-                    gambit_error = true;
+                    ShowWarning("Invalid Gambit: Bad predicate");
+                    return 0;
                 }
             }
             g.predicates.emplace_back(new_predicate);
-            lua_pop(L, 1);
         }
-        lua_pop(L, 1);
     }
-    else // No predicates block found!
+    else
     {
-        gambit_error = true;
+        ShowWarning("Invalid Gambit: No predicate");
+        return 0;
     }
 
-    lua_getfield(L, 1, "actions");
-    if (lua_istable(L, -1))
+    auto actions = fullGambit.get<sol::optional<sol::table>>("actions");
+    if (actions.has_value() && !actions.value().empty())
     {
-        auto table = lua_gettop(L);
-        lua_pushnil(L);
-        while (lua_next(L, table) != 0)
+        for (const auto& kvp : actions.value())
         {
             Action_t new_action;
-            auto     sub_table = lua_gettop(L);
-            lua_pushnil(L);
-            while (lua_next(L, sub_table) != 0)
-            {
-                auto key   = std::string(lua_tostring(L, -2));
-                auto value = static_cast<uint32>(lua_tonumber(L, -1));
-                lua_pop(L, 1);
+            sol::table  subTable = (sol::table)kvp.second;
 
-                if (!new_action.parseInput(key, (uint32)value))
+            for (const auto& keyValuePair : subTable)
+            {
+                auto key   = keyValuePair.first.as<std::string>();
+                auto value = keyValuePair.second.as<uint32>();
+
+                if (!new_action.parseInput(key, value))
                 {
-                    gambit_error = true;
+                    ShowWarning("Invalid Gambit: Bad action");
+                    return 0;
                 }
             }
             g.actions.emplace_back(new_action);
-            lua_pop(L, 1);
         }
-        lua_pop(L, 1);
     }
-    else // No actions block found!
+    else
     {
-        gambit_error = true;
+        ShowWarning("Invalid Gambit: No action");
+        return 0;
     }
 
-    lua_getfield(L, 1, "retry_delay");
-    if (!lua_isnil(L, -1) && lua_isnumber(L, -1))
+    auto retry_delay = fullGambit.get<sol::optional<uint16>>("retry_delay");
+    if (retry_delay.has_value())
     {
-        auto retry_delay = (uint16)lua_tointeger(L, -1);
-        g.retry_delay    = retry_delay;
+        g.retry_delay = retry_delay.value();
     }
-
-    lua_pop(L, 1);
-
-    lua_pop(L, 1); // Main table
-
-    if (gambit_error)
-    {
-        ShowWarning("Invalid Gambit");
-    }
-
-    lua_settop(L, stackTop);
-
-    // ===
 
     auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
     auto* controller = static_cast<CTrustController*>(trust->PAI->GetController());
@@ -12505,43 +12474,32 @@ void CLuaBaseEntity::addDropListModification(uint16 id, uint16 newRate, sol::var
     PMob->m_DropListModifications[id] = std::pair<uint16, uint8>(newRate, dropType);
 }
 
-inline int32 CLuaBaseEntity::addCharMod(lua_State* L)
+inline int32 CLuaBaseEntity::addCharMod(uint16 modid, int16 modValue)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
     TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
-    TPZ_DEBUG_BREAK_IF(lua_isnil(L, 1) || !lua_isnumber(L, 1));
-    TPZ_DEBUG_BREAK_IF(lua_isnil(L, 2) || !lua_isnumber(L, 2));
+    auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
+    auto  mod   = static_cast<Mod>(modid);
 
-    charutils::AddCharMod(((CCharEntity*)m_PBaseEntity), static_cast<Mod>(lua_tointeger(L, 1)), (int16)lua_tointeger(L, 2));
-
-    /*((CCharEntity*)m_PBaseEntity)->addCharMod(
-        static_cast<Mod>(lua_tointeger(L, 1)),
-        (int16)lua_tointeger(L, 2));*/
+    charutils::AddCharMod(PChar, mod, modValue);
     return 0;
 }
 
-inline int32 CLuaBaseEntity::getCharMod(lua_State* L)
+inline int32 CLuaBaseEntity::getCharMod(uint16 modid)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
     TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
-    TPZ_DEBUG_BREAK_IF(lua_isnil(L, 1) || !lua_isnumber(L, 1));
+    auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
+    auto  mod   = static_cast<Mod>(modid);
 
-    lua_pushinteger(L, ((CCharEntity*)m_PBaseEntity)->getCharMod(static_cast<Mod>(lua_tointeger(L, 1))));
-
-    return 1;
+    return PChar->getCharMod(mod);
 }
 
-inline int32 CLuaBaseEntity::setFace(lua_State* L)
+inline int32 CLuaBaseEntity::setFace(uint16 face)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
-
     if (m_PBaseEntity->objtype == TYPE_PC)
     {
-        TPZ_DEBUG_BREAK_IF(lua_isnil(L, 1) || !lua_isnumber(L, 1));
-
-        m_PBaseEntity->look.face = (uint16)lua_tointeger(L, 1);
+        m_PBaseEntity->look.face = face;
 
         ((CCharEntity*)m_PBaseEntity)->pushPacket(new CCharAppearancePacket((CCharEntity*)m_PBaseEntity));
         m_PBaseEntity->updatemask |= UPDATE_LOOK;
@@ -12550,15 +12508,11 @@ inline int32 CLuaBaseEntity::setFace(lua_State* L)
     return 0;
 }
 
-inline int32 CLuaBaseEntity::setRace(lua_State* L)
+inline int32 CLuaBaseEntity::setRace(uint16 face)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
-
     if (m_PBaseEntity->objtype == TYPE_PC)
     {
-        TPZ_DEBUG_BREAK_IF(lua_isnil(L, 1) || !lua_isnumber(L, 1));
-
-        m_PBaseEntity->look.race = (uint16)lua_tointeger(L, 1);
+        m_PBaseEntity->look.race = face;
 
         ((CCharEntity*)m_PBaseEntity)->pushPacket(new CCharAppearancePacket((CCharEntity*)m_PBaseEntity));
         m_PBaseEntity->updatemask |= UPDATE_LOOK;
@@ -13173,6 +13127,7 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("getTrustID", CLuaBaseEntity::getTrustID);
     SOL_REGISTER("trustPartyMessage", CLuaBaseEntity::trustPartyMessage);
     SOL_REGISTER("addSimpleGambit", CLuaBaseEntity::addSimpleGambit);
+    SOL_REGISTER("addFullGambit", CLuaBaseEntity::addFullGambit);
     SOL_REGISTER("setTrustTPSkillSettings", CLuaBaseEntity::setTrustTPSkillSettings);
 
     // Mob Entity-Specific
@@ -13197,7 +13152,7 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("instantiateMob", CLuaBaseEntity::instantiateMob);
 
     SOL_REGISTER("hasTrait", CLuaBaseEntity::hasTrait);
-    LUNAR_DECLARE_METHOD(CLuaBaseEntity, getTraitValue),
+    SOL_REGISTER("getTraitValue", CLuaBaseEntity::getTraitValue);
     SOL_REGISTER("hasImmunity", CLuaBaseEntity::hasImmunity);
 
     SOL_REGISTER("setAggressive", CLuaBaseEntity::setAggressive);
@@ -13253,10 +13208,10 @@ void CLuaBaseEntity::Register()
 
     SOL_REGISTER("getPlayerRegionInZone", CLuaBaseEntity::getPlayerRegionInZone);
     SOL_REGISTER("updateToEntireZone", CLuaBaseEntity::updateToEntireZone);
-    LUNAR_DECLARE_METHOD(CLuaBaseEntity, addCharMod),
-        LUNAR_DECLARE_METHOD(CLuaBaseEntity, getCharMod),
-        LUNAR_DECLARE_METHOD(CLuaBaseEntity, setFace),
-        LUNAR_DECLARE_METHOD(CLuaBaseEntity, setRace),
+    SOL_REGISTER("addCharMod", CLuaBaseEntity::addCharMod);
+    SOL_REGISTER("getCharMod", CLuaBaseEntity::getCharMod);
+    SOL_REGISTER("setFace", CLuaBaseEntity::setFace);
+    SOL_REGISTER("setRace", CLuaBaseEntity::setRace);
 }
 
 //==========================================================//

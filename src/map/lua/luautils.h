@@ -131,7 +131,6 @@ namespace luautils
     void  SendEntityVisualPacket(uint32 npcid, const char* command);
     auto  GetNPCByID(uint32 npcid, sol::object const& instanceObj) -> std::optional<CLuaBaseEntity>;
     auto  GetMobByID(uint32 mobid, sol::object const& instanceObj) -> std::optional<CLuaBaseEntity>;
-    int32 GetItemByID(lua_State*);                                               // Returns Item By Id
     void  WeekUpdateConquest(sol::variadic_args va);
     uint8 GetRegionOwner(uint8 type);
     uint8 GetRegionInfluence(uint8 type); // Return influence graphics

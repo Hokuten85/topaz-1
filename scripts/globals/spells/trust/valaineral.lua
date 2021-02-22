@@ -27,14 +27,14 @@ spell_object.onSpellCast = function(caster, target, spell)
     return tpz.trust.spawn(caster, spell)
 end
 
-spell_object.onMobSpawn = function(mob)
+spell_object.onMobSpawn = function(mob) 
     --[[
         Summon: With your courage and valor, Altana's children will live to see a brighter day.
         Summon (Formerly): Let the Royal Family’s blade be seared forever into their memories!
     ]]
     tpz.trust.message(mob, message_page_offset, tpz.trust.message_offset.SPAWN)
     
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.FOOD, ai.r.ITEM)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.FOOD, ai.r.ITEM, 0, 0)
 
     mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0,
                         ai.r.JA, ai.s.SPECIFIC, tpz.ja.PROVOKE)

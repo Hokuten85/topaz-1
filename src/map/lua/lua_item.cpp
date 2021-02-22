@@ -1,4 +1,4 @@
-/*
+﻿/*
 ===========================================================================
 
 Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -341,14 +341,14 @@ void CLuaItem::Register()
     SOL_REGISTER("delMod", CLuaItem::delMod);
     SOL_REGISTER("getAugment", CLuaItem::getAugment);
     SOL_REGISTER("getSkillType", CLuaItem::getSkillType);
-    LUNAR_DECLARE_METHOD(CLuaItem, getSubSkillType),
+    SOL_REGISTER("getSubSkillType", CLuaItem::getSubSkillType);
     SOL_REGISTER("getWeaponskillPoints", CLuaItem::getWeaponskillPoints);
     SOL_REGISTER("isTwoHanded", CLuaItem::isTwoHanded);
     SOL_REGISTER("isHandToHand", CLuaItem::isHandToHand);
     SOL_REGISTER("isShield", CLuaItem::isShield);
     SOL_REGISTER("getSignature", CLuaItem::getSignature);
     SOL_REGISTER("isInstalled", CLuaItem::isInstalled);
-    LUNAR_DECLARE_METHOD(CLuaItem, getSlotType),
+    SOL_REGISTER("getSlotType", CLuaItem::getSlotType);
 }
 
 //======================================================//

@@ -159,7 +159,6 @@ void CTrustController::DoCombatTick(time_point tick)
                 else
                 {
                     this->Cast(moveSpell->targId, moveSpell->spellId);
-                    delete moveSpell;
                     moveSpell = nullptr;
                 }
             }
@@ -453,7 +452,11 @@ bool CTrustController::Cast(uint16 targid, SpellID spellid)
 
     auto PSpell = spell::GetSpell(spellid);
     auto Target = POwner->GetEntity(targid);
-    if (distance(POwner->loc.p, Target->loc.p) > PSpell->getRange()) // check casting distance
+    auto castdistance = PSpell->getValidTarget() == TARGET_SELF && PSpell->getAOE() == SPELLAOE_RADIAL && PSpell->getRange() == 0
+                        ? PSpell->getRadius() / 2
+                        : PSpell->getRange();
+
+    if (distance(POwner->loc.p, Target->loc.p) > castdistance) // check casting distance
     {
         if (static_cast<CTrustEntity*>(POwner)->m_MovementType != TRUST_MOVEMENT_TYPE::MELEE_RANGE) // melee characters don't move to cast
         {

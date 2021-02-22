@@ -4,9 +4,10 @@
 -- Type: Mob Bounty
 -- !pos 113 40 370 125
 -----------------------------------
+local entity = {}
 
-function onTrade(player,npc,trade)
-	local bountyBuyIn = player:getCharVar("BountyBuyIn")
+entity.onTrade = function(player, npc, trade)
+    local bountyBuyIn = player:getCharVar("BountyBuyIn")
 	if (trade:getSlotCount() == 1) then
 		local tradeGil = trade:getGil();
 		if (tradeGil == 10000) then
@@ -34,15 +35,14 @@ function onTrade(player,npc,trade)
 			
 			local bountyMobId, bountyItemId = player:getBountyMob(1)
 			local mob = GetMobByID(bountyMobId)
-			local item = GetItemByID(bountyItemId)
+			local item = GetReadOnlyItem(bountyItemId)
 			player:PrintToPlayer("Your job is to go find %s and kill it.", 0, npc:getName())
 		end
 	end
-
 end
 
-function onTrigger(player,npc)
-	local bountyBuyIn = player:getCharVar("BountyBuyIn")
+entity.onTrigger = function(player, npc)
+    local bountyBuyIn = player:getCharVar("BountyBuyIn")
 	local bountyType = player:getCharVar("BountyType")
 	local bountyMobId = player:getCharVar("BountyMobId")
 	local bountyItemId = player:getCharVar("BountyItemId")
@@ -90,8 +90,12 @@ function onTrigger(player,npc)
 -- player:PrintToPlayer("Sup", 0, npc:getName())
 end
 
-function onEventUpdate(player,csid,option)
+entity.onEventUpdate = function(player, csid, option)
 end
 
-function onEventFinish(player,csid,option)
+entity.onEventFinish = function(player, csid, option)
 end
+
+return entity
+
+

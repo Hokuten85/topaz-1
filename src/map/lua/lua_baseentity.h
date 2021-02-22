@@ -630,7 +630,7 @@ public:
     uint32 getTrustID();
     void   trustPartyMessage(uint32 message_id);
     void   addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry);
-    int32  addFullGambit(lua_State*);
+    int32  addFullGambit(sol::table fullGambit);
     void   setTrustTPSkillSettings(uint16 trigger, uint16 select);
 
     bool isJugPet(); // If the entity has a pet, test if it is a jug pet.
@@ -743,11 +743,11 @@ public:
     int16  getTHlevel();                                                                 // Returns the Monster's current Treasure Hunter Tier
     void   addDropListModification(uint16 id, uint16 newRate, sol::variadic_args va);    // Adds a modification to the drop list of this mob, erased on death
 
-    int32 addCharMod(lua_State*);           // Adds permanent mod to character
-    int32 getCharMod(lua_State*);           // Gets permanent mod for character
+    int32 addCharMod(uint16 modid, int16 modValue); // Adds permanent mod to character
+    int32 getCharMod(uint16 modid);                 // Gets permanent mod for character
 
-    int32 setFace(lua_State*);              // Sets Character face
-    int32 setRace(lua_State*);              // Sets Character race
+    int32 setFace(uint16 face); // Sets Character face
+    int32 setRace(uint16 face); // Sets Character race
     static void Register();
 };
 

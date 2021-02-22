@@ -32,6 +32,7 @@ ability_object.onPetAbility = function(target, pet, skill)
         else --CHR
             effectid = tpz.effect.CHR_BOOST
         end
+    end
 
     target:addStatusEffect(effectid, math.random(12, 14), 0, 300)
     skill:setMsg(tpz.msg.basic.SKILL_GAIN_EFFECT)

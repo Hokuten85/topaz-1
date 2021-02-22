@@ -475,66 +475,95 @@ namespace zoneutils
                 PMob->m_name_prefix = (uint8)Sql_GetIntData(SqlHandle, 50);
                 PMob->m_flags       = (uint32)Sql_GetIntData(SqlHandle, 51);
 
-                    // Cap Level if Necessary (Don't Cap NMs)
-                    if (normalLevelRangeMin > 0 && !(PMob->m_Type & MOBTYPE_NOTORIOUS) && PMob->m_minLevel > normalLevelRangeMin)
-                    {
-                        PMob->m_minLevel = normalLevelRangeMin;
-                    }
+                 // Cap Level if Necessary (Don't Cap NMs)
+                 if (normalLevelRangeMin > 0 && !(PMob->m_Type & MOBTYPE_NOTORIOUS) && PMob->m_minLevel > normalLevelRangeMin)
+                 {
+                     PMob->m_minLevel = normalLevelRangeMin;
+                 }
 
-                    if (normalLevelRangeMax > 0 && !(PMob->m_Type & MOBTYPE_NOTORIOUS) && PMob->m_maxLevel > normalLevelRangeMax)
-                    {
-                        PMob->m_maxLevel = normalLevelRangeMax;
-                    }
+                 if (normalLevelRangeMax > 0 && !(PMob->m_Type & MOBTYPE_NOTORIOUS) && PMob->m_maxLevel > normalLevelRangeMax)
+                 {
+                     PMob->m_maxLevel = normalLevelRangeMax;
+                 }
 
-                    // Special sub animation for Mob (yovra, jailer of love, phuabo)
-                    // yovra 1: en hauteur, 2: en bas, 3: en haut
-                    // phuabo 1: sous l'eau, 2: sort de l'eau, 3: rentre dans l'eau
-                    PMob->animationsub = (uint32)Sql_GetIntData(SqlHandle, 52);
+                 // Special sub animation for Mob (yovra, jailer of love, phuabo)
+                 // yovra 1: en hauteur, 2: en bas, 3: en haut
+                 // phuabo 1: sous l'eau, 2: sort de l'eau, 3: rentre dans l'eau
+                 PMob->animationsub = (uint32)Sql_GetIntData(SqlHandle, 52);
 
-                    if (PMob->animationsub != 0)
-                    {
-                        PMob->setMobMod(MOBMOD_SPAWN_ANIMATIONSUB, PMob->animationsub);
-                    }
+                 if (PMob->animationsub != 0)
+                 {
+                     PMob->setMobMod(MOBMOD_SPAWN_ANIMATIONSUB, PMob->animationsub);
+                 }
 
-                    // Setup HP / MP Stat Percentage Boost
-                    PMob->HPscale = Sql_GetFloatData(SqlHandle, 53);
-                    PMob->MPscale = Sql_GetFloatData(SqlHandle, 54);
+                 // Setup HP / MP Stat Percentage Boost
+                 PMob->HPscale = Sql_GetFloatData(SqlHandle, 53);
+                 PMob->MPscale = Sql_GetFloatData(SqlHandle, 54);
 
-                    // Check if we should be looking up scripts for this mob
-                    PMob->m_HasSpellScript = (uint8)Sql_GetIntData(SqlHandle, 55);
+                 // Check if we should be looking up scripts for this mob
+                 PMob->m_HasSpellScript = (uint8)Sql_GetIntData(SqlHandle, 55);
 
-                    PMob->m_SpellListContainer = mobSpellList::GetMobSpellList(Sql_GetIntData(SqlHandle, 56));
+                 PMob->m_SpellListContainer = mobSpellList::GetMobSpellList(Sql_GetIntData(SqlHandle, 56));
 
-                    PMob->m_Pool = Sql_GetUIntData(SqlHandle, 59);
+                 PMob->m_Pool = Sql_GetUIntData(SqlHandle, 59);
 
-                    PMob->allegiance = static_cast<ALLEGIANCE_TYPE>(Sql_GetUIntData(SqlHandle, 60));
-                    PMob->namevis    = Sql_GetUIntData(SqlHandle, 61);
-                    PMob->m_Aggro    = Sql_GetUIntData(SqlHandle, 62);
+                 PMob->allegiance = static_cast<ALLEGIANCE_TYPE>(Sql_GetUIntData(SqlHandle, 60));
+                 PMob->namevis    = Sql_GetUIntData(SqlHandle, 61);
+                 PMob->m_Aggro    = Sql_GetUIntData(SqlHandle, 62);
 
-                    PMob->m_roamFlags    = (uint16)Sql_GetUIntData(SqlHandle, 63);
-                    PMob->m_MobSkillList = Sql_GetUIntData(SqlHandle, 64);
+                 PMob->m_roamFlags    = (uint16)Sql_GetUIntData(SqlHandle, 63);
+                 PMob->m_MobSkillList = Sql_GetUIntData(SqlHandle, 64);
 
-                    PMob->m_TrueDetection = Sql_GetUIntData(SqlHandle, 65);
-                    PMob->m_Detects       = Sql_GetUIntData(SqlHandle, 66);
+                 PMob->m_TrueDetection = Sql_GetUIntData(SqlHandle, 65);
+                 PMob->m_Detects       = Sql_GetUIntData(SqlHandle, 66);
 
-                    PMob->setMobMod(MOBMOD_CHARMABLE, Sql_GetUIntData(SqlHandle, 67));
+                 PMob->setMobMod(MOBMOD_CHARMABLE, Sql_GetUIntData(SqlHandle, 67));
 
-                    // Overwrite base family charmables depending on mob type. Disallowed mobs which should be charmable
-                    // can be set in mob_spawn_mods or in their onInitialize
-                    if (PMob->m_Type & MOBTYPE_EVENT || PMob->m_Type & MOBTYPE_FISHED || PMob->m_Type & MOBTYPE_BATTLEFIELD ||
-                        PMob->m_Type & MOBTYPE_NOTORIOUS || zoneType == ZONE_TYPE::BATTLEFIELD || zoneType == ZONE_TYPE::DYNAMIS || zoneType == ZONE_TYPE::LIMBUS)
-                    {
-                        PMob->setMobMod(MOBMOD_CHARMABLE, 0);
-                    }
+                 // Overwrite base family charmables depending on mob type. Disallowed mobs which should be charmable
+                 // can be set in mob_spawn_mods or in their onInitialize
+                 if (PMob->m_Type & MOBTYPE_EVENT || PMob->m_Type & MOBTYPE_FISHED || PMob->m_Type & MOBTYPE_BATTLEFIELD ||
+                     PMob->m_Type & MOBTYPE_NOTORIOUS || zoneType == ZONE_TYPE::BATTLEFIELD || zoneType == ZONE_TYPE::DYNAMIS || zoneType == ZONE_TYPE::LIMBUS)
+                 {
+                     PMob->setMobMod(MOBMOD_CHARMABLE, 0);
+                 }
 
-                    // must be here first to define mobmods
-                    mobutils::InitializeMob(PMob, GetZone(ZoneID));
+                 // must be here first to define mobmods
+                 mobutils::InitializeMob(PMob, GetZone(ZoneID));
 
-                    GetZone(ZoneID)->InsertMOB(PMob);
+                 GetZone(ZoneID)->InsertMOB(PMob);
+                 if (GetZone(ZoneID)->GetType() & (ZONE_TYPE::OUTDOORS | ZONE_TYPE::DUNGEON) && (PMob->m_Type & MOBTYPE_NOTORIOUS) && !(PMob->m_Type & (MOBTYPE_BATTLEFIELD | MOBTYPE_EVENT)) && PMob->m_DropID > 0)
+                 {
+                     DropList_t* dropList = itemutils::GetDropList(PMob->m_DropID);
+                     if (dropList != nullptr)
+                     {
+                         std::vector<CItem*>* items = new std::vector<CItem*>();
+                         for (uint8 i = 0; i < dropList->Items.size(); ++i)
+                         {
+                             DropItem_t& dropItem = dropList->Items.at(i);
+                             if (dropItem.ItemID && dropItem.DropRate > 0)
+                             {
+                                 CItem* PItem = itemutils::GetItem(dropItem.ItemID);
+                                 if (PItem->getFlag() & (ITEM_FLAG_EX | ITEM_FLAG_RARE) && (PItem->getID() < 4064 || PItem->getID() > 4073))
+                                 {
+                                     items->push_back(PItem);
+                                 }
+                             }
+                         }
 
-                    // Cache Mob Lua
-                    luautils::OnEntityLoad(PMob);
-                }
+                         if (items->size())
+                         {
+                             if (!bountyDropMap[PMob->m_minLevel])
+                             {
+                                 bountyDropMap[PMob->m_minLevel] = new BountyMobList_t();
+                             }
+
+                             bountyDropMap[PMob->m_minLevel]->push_back(new BountyMob_t(PMob, items));
+                         }
+                     }
+                 }
+
+                 // Cache Mob Lua
+                 luautils::OnEntityLoad(PMob);
             }
         }
     }

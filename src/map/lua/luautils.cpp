@@ -671,35 +671,6 @@ namespace luautils
         return std::optional<CLuaBaseEntity>(PMob);
     }
 
-    int32 GetItemByID(lua_State* L)
-    {
-        if (!lua_isnil(L, 1) && lua_isnumber(L, 1))
-        {
-            uint32 itemid = (uint32)lua_tointeger(L, 1);
-            CItem* PItem = itemutils::GetItem(itemid);
-
-            if (!PItem)
-            {
-                ShowWarning("luautils::GetItemByID Item doesn't exist (%d)\n", itemid);
-                lua_pushnil(L);
-            }
-            else
-            {
-                lua_getglobal(L, CLuaItem::className);
-                lua_pushstring(L, "new");
-                lua_gettable(L, -2);
-                lua_insert(L, -2);
-                lua_pushlightuserdata(L, (void*)PItem);
-                lua_pcall(L, 2, 1, 0);
-            }
-
-            return 1;
-        }
-        lua_pushnil(L);
-        return 1;
-    }
-
-
     /************************************************************************
      *                                                                       *
      * WeekUpdateConquest                                                    *

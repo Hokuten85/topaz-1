@@ -20,7 +20,7 @@ end
 spell_object.onMobSpawn = function(mob)
     tpz.trust.message(mob, message_page_offset, tpz.trust.message_offset.SPAWN)
 
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.FOOD, ai.r.ITEM)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.FOOD, ai.r.ITEM, 0, 0)
 
     mob:addSimpleGambit(ai.t.TARGET, ai.c.MB_AVAILABLE, 0, ai.r.MA, ai.s.MB_ELEMENT, tpz.magic.spellFamily.NONE)
     -- mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_SC_AVAILABLE, 0, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.NONE, 45)
@@ -42,7 +42,7 @@ spell_object.onMobSpawn = function(mob)
                 ['reaction'] = ai.r.MA, ['select'] = ai.s.WEAKNESS, ['argument'] = tpz.magic.spellFamily.NONE,
             },
         },
-        ['retry_delay'] = 5,
+        ['retry_delay'] = 5
     })
 
     local power = mob:getMainLvl() / 5

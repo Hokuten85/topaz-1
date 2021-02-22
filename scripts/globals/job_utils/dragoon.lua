@@ -205,7 +205,17 @@ end
 
 tpz.job_utils.dragoon.useAncientCircle = function(player, target, ability)
     local duration = 180 + player:getMod(tpz.mod.ANCIENT_CIRCLE_DURATION)
-    target:addStatusEffect(tpz.effect.ANCIENT_CIRCLE, 15, 0, duration)
+    if (player:getID() ~= target:getID()) then
+        local subPower = math.max(5,player:getTraitValue(TRAIT_ACCURACY_BONUS));
+        
+        if player:getSubJob() == tpz.job.DRG then
+            subPower = math.floor(subPower / 2);
+        end
+        
+        target:addStatusEffect(tpz.effect.ANCIENT_CIRCLE,15,0,duration,0,subPower);
+    else
+        target:addStatusEffect(tpz.effect.ANCIENT_CIRCLE,15,0,duration);
+    end
 end
 
 tpz.job_utils.dragoon.useJump = function(player, target, ability, action)
@@ -228,7 +238,7 @@ end
 tpz.job_utils.dragoon.useSpiritLink = function(player, target, ability)
     local pet = player:getPet()
     local playerHP = player:getHP()
-    local drainamount = (math.random(25, 35) / 100) * playerHP
+    local drainamount = (math.random(10, 15) / 100) * playerHP
 
     if pet:getHP() == pet:getMaxHP() then
         drainamount = 0 -- Prevents player HP lose if wyvern is at full HP
@@ -255,7 +265,7 @@ tpz.job_utils.dragoon.useSpiritLink = function(player, target, ability)
         player:takeDamage(drainamount)
     end
 
-    local healPet = drainamount * 2
+    local healPet = drainamount * 5
     local petTP = pet:getTP()
     local regenAmount = player:getMainLvl() / 3 -- level/3 tic regen
 

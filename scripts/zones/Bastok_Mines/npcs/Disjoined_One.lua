@@ -9,33 +9,20 @@ require("scripts/globals/disjoined_one_maps");
 -----------------------------------
 -- onTrade Action
 -----------------------------------
+local entity = {}
 
-function onTrade(player,npc,trade)
-	handleOnTrade(player,npc,trade)
-end; 
+entity.onTrade = function(player, npc, trade)
+    handleOnTrade(player,npc,trade)
+end
 
------------------------------------
--- onTrigger Action
------------------------------------
+entity.onTrigger = function(player, npc)
+    handleOnTrigger(player,npc)
+end
 
-function onTrigger(player,npc)
-	handleOnTrigger(player,npc)
-end; 
+entity.onEventUpdate = function(player, csid, option)
+end
 
------------------------------------
--- onEventUpdate
------------------------------------
+entity.onEventFinish = function(player, csid, option)
+end
 
-function onEventUpdate(player,csid,option)
-    -- printf("CSID: %u",csid);
-    -- printf("RESULT: %u",option);
-end;
-
------------------------------------
--- onEventFinish
------------------------------------
-
-function onEventFinish(player,csid,option)
-    -- printf("CSID: %u",csid);
-    -- printf("RESULT: %u",option);
-end;
+return entity
