@@ -2742,6 +2742,9 @@ tpz.mount =
     ADAMANTOISE    = 25,
     DHAMEL         = 26,
     DOLL           = 27,
+    GOLDEN_BOMB    = 28,
+    BUFFALO        = 29,
+    WIVRE          = 30,
 }
 
 -----------------------------------
