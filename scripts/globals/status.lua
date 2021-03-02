@@ -61,6 +61,27 @@ tpz.job =
 }
 tpz.MAX_JOB_TYPE = 23
 
+tpz.melee_jobs =
+{
+    tpz.job.WAR, tpz.job.MNK, tpz.job.THF, tpz.job.PLD, tpz.job.DRK, tpz.job.BST, tpz.job.SAM, tpz.job.NIN, tpz.job.DRG, tpz.job.BLU, tpz.job.PUP, tpz.job.DNC, tpz.job.RUN,
+}
+
+tpz.caster_jobs =
+{
+    tpz.job.WHM, tpz.job.BLM, tpz.job.RDM, tpz.job.BRD, tpz.job.SMN, tpz.job.BLU, tpz.job.SCH, tpz.job.GEO, tpz.job.RUN,
+}
+
+tpz.ranged_jobs =
+{
+    tpz.job.RNG, tpz.job.COR
+}
+
+tpz.tank_jobs = 
+{
+    tpz.job.PLD, tpz.job.RUN
+}
+
+
 -----------------------------------
 -- Race IDs
 -----------------------------------

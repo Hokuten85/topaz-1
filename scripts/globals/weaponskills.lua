@@ -624,7 +624,7 @@ function souleaterBonus(attacker)
             bonus = bonus + health * percent
         end
 
-        attacker:delHP(numhits * 0.10 * attacker:getHP())
+        attacker:delHP(0.05 * attacker:getHP())
     end
 
     return bonus

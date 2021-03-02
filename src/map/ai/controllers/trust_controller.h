@@ -44,10 +44,36 @@ enum class ACTION_TYPE : uint16
 
 struct QueueAction_t
 {
-    ACTION_TYPE action_type;
-    uint16      targId;
-    uint16      actionId;
-    bool        requiresMove;
+    ACTION_TYPE action_type = ACTION_TYPE::NOTHING;
+    uint16      targId = 0;
+    uint16      actionId = 0;
+    bool        requiresMove = false;
+
+    bool parseInput(std::string key, uint16 value)
+    {
+        if (key.compare("action_type") == 0)
+        {
+            action_type = static_cast<ACTION_TYPE>(value);
+        }
+        else if (key.compare("targId") == 0)
+        {
+            targId = static_cast<uint16>(value);
+        }
+        else if (key.compare("actionId") == 0)
+        {
+            actionId = value;
+        }
+        else if (key.compare("requiresMove") == 0)
+        {
+            requiresMove = (bool)value;
+        }
+        else
+        {
+            // TODO: Log error
+            return false;
+        }
+        return true;
+    }
 };
 
 class CTrustController : public CMobController

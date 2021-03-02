@@ -52,10 +52,8 @@ namespace gambits
     PredicateResult_t CGambitsContainer::RunPredicate(Predicate_t& predicate)
     {
         auto isValidMember = [&](CBattleEntity* PPartyTarget) -> bool {
-            return PPartyTarget->isAlive() && POwner->loc.zone == PPartyTarget->loc.zone && distance(POwner->loc.p, PPartyTarget->loc.p) <= 40.0f;
+            return PPartyTarget->isAlive() && POwner->loc.zone == PPartyTarget->loc.zone && distance(POwner->loc.p, PPartyTarget->loc.p) <= 20.0f;
         };
-                return PPartyTarget->isAlive() && POwner->loc.zone == PPartyTarget->loc.zone && distance(POwner->loc.p, PPartyTarget->loc.p) <= 15.0f;
-            };
 
         bool result = false;
         CBattleEntity* target;
@@ -675,6 +673,31 @@ namespace gambits
             sol::error err = result;
             ShowError("gambits_container::onGambitTick: %s\n", err.what());
             return -1;
+        }
+
+        auto* controller = static_cast<CTrustController*>(POwner->PAI->GetController());
+
+        auto gambitActions =  result.get_type(0) == sol::type::table ? result.get<sol::table>(0) : sol::nil;
+        if (gambitActions != sol::nil)
+        {
+            for (const auto& kvp : gambitActions)
+            {
+                QueueAction_t* queueAction = new QueueAction_t();
+                sol::table actionTable = (sol::table)kvp.second;
+
+                for (const auto& keyValuePair : actionTable)
+                {
+                    auto key   = keyValuePair.first.as<std::string>();
+                    auto value = keyValuePair.second.as<uint16>();
+
+                    if (!queueAction->parseInput(key, value))
+                    {
+                        ShowWarning("Invalid Gambit: Bad action");
+                        return 0;
+                    }
+                }
+                controller->actionQueue->push(queueAction);
+            }
         }
 
         return 0;

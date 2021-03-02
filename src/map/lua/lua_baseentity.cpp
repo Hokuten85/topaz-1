@@ -10078,6 +10078,34 @@ uint16 CLuaBaseEntity::getRATT()
 }
 
 /************************************************************************
+ *  Function: getHitRate()
+ *  Purpose : Returns the Ranged Attack value of an equipped Ranged weapon
+ *  Example : player:getRATT()
+ *  Notes   : Calls the RATT member function of CBattleEntity for calculation
+ ************************************************************************/
+
+uint8 CLuaBaseEntity::getHitRate(CLuaBaseEntity* target)
+{
+    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
+
+    return battleutils::GetHitRate(static_cast<CBattleEntity*>(m_PBaseEntity), static_cast<CBattleEntity*>(target->m_PBaseEntity));
+}
+
+/************************************************************************
+ *  Function: getHitRate()
+ *  Purpose : Returns the Ranged Attack value of an equipped Ranged weapon
+ *  Example : player:getRATT()
+ *  Notes   : Calls the RATT member function of CBattleEntity for calculation
+ ************************************************************************/
+
+uint8 CLuaBaseEntity::getRangedHitRate(CLuaBaseEntity* target)
+{
+    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
+
+    return battleutils::GetRangedHitRate(static_cast<CBattleEntity*>(m_PBaseEntity), static_cast<CBattleEntity*>(target->m_PBaseEntity), false);
+}
+
+/************************************************************************
  *  Function: getILvlMacc()
  *  Purpose : Returns the Magic Accuracy value of an equipped Main Weapon
  *  Example : caster:getILvlMacc()
@@ -13054,6 +13082,8 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("getEVA", CLuaBaseEntity::getEVA);
     SOL_REGISTER("getRACC", CLuaBaseEntity::getRACC);
     SOL_REGISTER("getRATT", CLuaBaseEntity::getRATT);
+    SOL_REGISTER("getHiteRate", CLuaBaseEntity::getHitRate);
+    SOL_REGISTER("getRangedHiteRate", CLuaBaseEntity::getRangedHiteRate);
     SOL_REGISTER("getILvlMacc", CLuaBaseEntity::getILvlMacc);
 
     SOL_REGISTER("isSpellAoE", CLuaBaseEntity::isSpellAoE);

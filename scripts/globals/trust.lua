@@ -255,3 +255,17 @@ tpz.trust.dumpMessagePages = function(mob)
         tpz.trust.message(mob, i, tpz.trust.message_offset.SPAWN)
     end
 end
+
+local ternary = function( cond , T , F )
+    if cond then return T else return F end
+end
+
+local has_value = function(tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end

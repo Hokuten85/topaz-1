@@ -589,6 +589,9 @@ public:
     uint16 getEVA();
     int    getRACC();
     uint16 getRATT();
+    uint8  getHitRate(CLuaBaseEntity* target);
+    uint8  getRangedHitRate(CLuaBaseEntity* target);
+
     uint16 getILvlMacc();
     bool   isSpellAoE(uint16 spellId);
 
