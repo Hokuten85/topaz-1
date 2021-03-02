@@ -25,6 +25,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include <memory>
 
 #include "mob_controller.h"
+#include "../ai_container.h"
 
 class CCharEntity;
 class CTrustEntity;
@@ -34,10 +35,19 @@ namespace gambits
     class CGambitsContainer;
 }
 
-struct SpellRequiresMove_t
+enum class ACTION_TYPE : uint16
 {
-    uint16  targId;
-    SpellID spellId;
+    NOTHING = 0,
+    SPELL   = 1,
+    JA      = 2,
+};
+
+struct QueueAction_t
+{
+    ACTION_TYPE action_type;
+    uint16      targId;
+    uint16      actionId;
+    bool        requiresMove;
 };
 
 class CTrustController : public CMobController
@@ -63,8 +73,7 @@ public:
     CBattleEntity* GetTopEnmity();
 
     std::unique_ptr<gambits::CGambitsContainer> m_GambitsContainer;
-
-    SpellRequiresMove_t* moveSpell = nullptr;
+    std::queue<QueueAction_t*>* actionQueue = new std::queue<QueueAction_t*>;
 
 private:
     void DoCombatTick(time_point tick) override;

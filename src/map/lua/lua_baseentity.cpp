@@ -10675,7 +10675,7 @@ void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_
     uint16 retry_delay = (retry != sol::nil) ? retry.as<uint16>() : 0;
 
     Gambit_t g;
-    g.predicates.emplace_back(Predicate_t{ target, condition, condition_arg, isActionTarget });
+    g.predicates.emplace_back(Predicate_t{ target, condition, condition_arg, 0, isActionTarget });
     g.actions.emplace_back(Action_t{ reaction, selector, selector_arg });
     g.retry_delay = retry_delay;
 

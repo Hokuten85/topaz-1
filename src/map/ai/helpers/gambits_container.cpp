@@ -15,7 +15,8 @@
 
 #include "../../weapon_skill.h"
 #include "../controllers/player_controller.h"
-#include <map/recast_container.h>
+#include "../../recast_container.h"
+#include "../../lua/luautils.h"
 
 namespace gambits
 {
@@ -164,30 +165,30 @@ namespace gambits
                 continue;
             }
 
+            CBattleEntity* target = nullptr;
+            // Make sure that the predicates remain true for each action in a gambit
+            bool all_predicates_true = true;
+            for (auto& predicate : gambit.predicates)
+            {
+                auto predicateResult = RunPredicate(predicate);
+                if (!predicateResult.result)
+                {
+                    all_predicates_true = false;
+                }
+                else if (predicateResult.target != nullptr)
+                {
+                    target = predicateResult.target;
+                }
+            }
+            if (!all_predicates_true || !target)
+            {
+                continue;
+            }
+
             bool actionStarted = false;
 
             for (auto& action : gambit.actions)
             {
-                CBattleEntity* target = nullptr;
-                // Make sure that the predicates remain true for each action in a gambit
-                bool all_predicates_true = true;
-                for (auto& predicate : gambit.predicates)
-                {
-                    auto predicateResult = RunPredicate(predicate);
-                    if (!predicateResult.result)
-                    {
-                        all_predicates_true = false;
-                    }
-                    else if (predicateResult.target != nullptr)
-                    {
-                        target = predicateResult.target;
-                    }
-                }
-                if (!all_predicates_true || !target)
-                {
-                    break;
-                }
-
                 if (action.reaction == G_REACTION::RATTACK)
                 {
                     actionStarted = controller->RangedAttack(target->targid);
@@ -333,11 +334,13 @@ namespace gambits
                 }
             }
 
-            if (actionStarted || controller->moveSpell != nullptr)
+            if (actionStarted || !controller->actionQueue->empty())
             {
-                break;
+                return;
             }
         }
+
+        OnGambitTick();
     }
 
     bool CGambitsContainer::CheckTrigger(CBattleEntity* trigger_target, Predicate_t& predicate)
@@ -467,6 +470,11 @@ namespace gambits
                         && !static_cast<CMobEntity*>(trigger_target)->PRecastContainer->Has(RECAST_MAGIC, static_cast<uint16>(spellId.value()))
                         && !trigger_target->StatusEffectContainer->HasStatusEffect({ EFFECT_SILENCE, EFFECT_MUTE, EFFECT_OMERTA });
                 }
+                break;
+            }
+            case G_CONDITION::NOT_STATUS_COUNT:
+            {
+                return trigger_target->StatusEffectContainer->GetEffectsCount(static_cast<EFFECT>(predicate.condition_arg)) < predicate.condition_arg2;
                 break;
             }
             default:
@@ -644,6 +652,27 @@ namespace gambits
             return true;
         }
         return false;
+    }
+
+    int32 CGambitsContainer::OnGambitTick()
+    {
+        TracyZoneScoped;
+
+        sol::function onGambitTick = luautils::getEntityCachedFunction(POwner, "onGambitTick");
+        if (!onGambitTick.valid())
+        {
+            return -1;
+        }
+
+        auto result = onGambitTick(CLuaBaseEntity(POwner));
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ShowError("gambits_container::onGambitTick: %s\n", err.what());
+            return -1;
+        }
+
+        return 0;
     }
 
 } // namespace gambits

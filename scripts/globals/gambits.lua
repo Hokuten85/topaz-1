@@ -46,7 +46,8 @@ ai.condition =
     CASTING_MA         = 17,
     RANDOM             = 18,
     CAN_CAST           = 19,
-    CAN_CAST_HIGHEST   = 20
+    CAN_CAST_HIGHEST   = 20,
+    NOT_STATUS_COUNT   = 21
 }
 ai.c = ai.condition
 

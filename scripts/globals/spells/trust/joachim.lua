@@ -39,11 +39,26 @@ spell_object.onMobSpawn = function(mob)
     mob:addSimpleGambit(ai.t.PARTY, ai.c.STATUS, tpz.effect.CURSE_I, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.CURSNA)
 
     -- TODO: Better logic than this
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.MARCH, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.MARCH)
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.MINUET, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.VALOR_MINUET)
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.MADRIGAL, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.MADRIGAL)
-    
-     mob:addFullGambit({
+    mob:addSimpleGambit(ai.t.MELEE, ai.c.NOT_STATUS, tpz.effect.MARCH, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.MARCH)
+    -- mob:addSimpleGambit(ai.t.MELEE, ai.c.NOT_STATUS, tpz.effect.MINUET, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.VALOR_MINUET)
+    -- mob:addSimpleGambit(ai.t.MELEE, ai.c.NOT_STATUS, tpz.effect.MADRIGAL, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.MADRIGAL)
+
+    mob:addFullGambit({
+        ['predicates'] =
+        {
+            {
+                ['target'] = ai.t.MELEE, ['condition'] = ai.c.NOT_STATUS_COUNT, ['argument'] = tpz.effect.MINUET, ['argument2'] = 2, ['actionTarget'] = 1
+            }
+        },
+        ['actions'] =
+        {
+            {
+                ['reaction'] = ai.r.MA, ['select'] = ai.s.HIGHEST, ['argument'] = tpz.magic.spellFamily.VALOR_MINUET,
+            }
+        }
+    })
+
+    mob:addFullGambit({
         ['predicates'] =
         {
             {
@@ -78,6 +93,10 @@ end
 
 spell_object.onMobDeath = function(mob)
     tpz.trust.message(mob, message_page_offset, tpz.trust.message_offset.DEATH)
+end
+
+spell_object.onGambitTick = function(mob)
+    
 end
 
 return spell_object

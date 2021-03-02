@@ -49,7 +49,8 @@ namespace gambits
         CASTING_MA         = 17,
         RANDOM             = 18,
         CAN_CAST           = 19,
-        CAN_CAST_HIGHEST   = 20
+        CAN_CAST_HIGHEST   = 20,
+        NOT_STATUS_COUNT   = 21
     };
 
     enum class G_REACTION : uint16
@@ -88,6 +89,7 @@ namespace gambits
         G_TARGET    target;
         G_CONDITION condition;
         uint32      condition_arg = 0;
+        uint32      condition_arg2 = 0;       
         bool        isActionTarget = false;
 
         bool parseInput(std::string key, uint32 value)
@@ -103,6 +105,10 @@ namespace gambits
             else if (key.compare("argument") == 0)
             {
                 condition_arg = value;
+            }
+            else if (key.compare("argument2") == 0)
+            {
+                condition_arg2 = value;
             }
             else if (key.compare("actionTarget") == 0)
             {
@@ -204,6 +210,7 @@ namespace gambits
     private:
         bool CheckTrigger(CBattleEntity* trigger_target, Predicate_t& predicate);
         bool TryTrustSkill();
+        int32 OnGambitTick();
 
         CTrustEntity*         POwner;
         time_point            m_lastAction;
