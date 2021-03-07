@@ -13083,7 +13083,7 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("getRACC", CLuaBaseEntity::getRACC);
     SOL_REGISTER("getRATT", CLuaBaseEntity::getRATT);
     SOL_REGISTER("getHiteRate", CLuaBaseEntity::getHitRate);
-    SOL_REGISTER("getRangedHiteRate", CLuaBaseEntity::getRangedHiteRate);
+    SOL_REGISTER("getRangedHitRate", CLuaBaseEntity::getRangedHitRate);
     SOL_REGISTER("getILvlMacc", CLuaBaseEntity::getILvlMacc);
 
     SOL_REGISTER("isSpellAoE", CLuaBaseEntity::isSpellAoE);

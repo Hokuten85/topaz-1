@@ -208,8 +208,11 @@ namespace gambits
         G_SELECT                  tp_select;
 
     private:
-        bool CheckTrigger(CBattleEntity* trigger_target, Predicate_t& predicate);
-        bool TryTrustSkill();
+        bool  CheckTrigger(CBattleEntity* trigger_target, Predicate_t& predicate);
+        bool  TryTrustSkill();
+        std::optional<SpellID> GetSongToCast(CBattleEntity* PTarget, const std::vector<SpellID>& songList);
+        bool                   EnqueueSong(CBattleEntity* PMember, const std::vector<SpellID>& songList, bool pianissimo = false);
+        bool  BrdSupportMelee();
         int32 OnGambitTick();
 
         CTrustEntity*         POwner;

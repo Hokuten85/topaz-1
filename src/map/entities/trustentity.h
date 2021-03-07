@@ -23,6 +23,7 @@
 #define _CTRUSTENTITY_H
 
 #include "mobentity.h"
+#include "../spell.h"
 #include "../items/item_equipment.h"
 #include "../items/item_usable.h"
 
@@ -34,6 +35,15 @@ enum class TRUST_MOVEMENT_TYPE
     MID_RANGE          = 2,
     LONG_RANGE         = 3,
     LAST_MOVEMENT_TYPE = 4,
+};
+
+enum class BRD_SONG_BUCKET : uint8
+{
+    NORMAL   = 0,
+    ACC      = 1,
+    HIGH_ACC = 2,
+    MP       = 3,
+    LOW_MP   = 4,
 };
 
 class CCharEntity;
@@ -76,6 +86,25 @@ public:
     CItemEquipment*     equip[16];
     CItemUsable*        food;
     CUContainer*        UContainer; // container used for universal actions -- used for trading at least despite the dedicated trading container above
+
+    std::map<BRD_SONG_BUCKET, std::vector<SpellID>> melee_songs{
+        { BRD_SONG_BUCKET::NORMAL, std::vector<SpellID>() },
+        { BRD_SONG_BUCKET::ACC, std::vector<SpellID>() },
+        { BRD_SONG_BUCKET::HIGH_ACC, std::vector<SpellID>() },
+    };
+    std::map<BRD_SONG_BUCKET, std::vector<SpellID>> mage_songs = {
+        { BRD_SONG_BUCKET::MP, std::vector<SpellID>() },
+        { BRD_SONG_BUCKET::LOW_MP, std::vector<SpellID>() },
+    };
+    std::map<BRD_SONG_BUCKET, std::vector<SpellID>> ranged_songs = {
+        { BRD_SONG_BUCKET::NORMAL, std::vector<SpellID>() },
+        { BRD_SONG_BUCKET::ACC, std::vector<SpellID>() },
+        { BRD_SONG_BUCKET::HIGH_ACC, std::vector<SpellID>() },
+    };
+    std::map<BRD_SONG_BUCKET, std::vector<SpellID>> tank_songs = {
+        { BRD_SONG_BUCKET::MP, std::vector<SpellID>() },
+        { BRD_SONG_BUCKET::LOW_MP, std::vector<SpellID>() },
+    };
 };
 
 #endif

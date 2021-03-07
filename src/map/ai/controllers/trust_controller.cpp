@@ -120,6 +120,11 @@ void CTrustController::DoCombatTick(time_point tick)
 
     CTrustEntity* PTrust  = static_cast<CTrustEntity*>(POwner);
     CCharEntity*  PMaster = static_cast<CCharEntity*>(POwner->PMaster);
+
+    if (m_InTransit)
+    {
+        POwner->PAI->PathFind->FollowPath();
+    }
     
     if (!actionQueue->empty())
     {
@@ -130,6 +135,18 @@ void CTrustController::DoCombatTick(time_point tick)
         {
             if (action->action_type == ACTION_TYPE::SPELL)
             {
+                if (action->pianissimo && !POwner->StatusEffectContainer->HasStatusEffect(EFFECT_PIANISSIMO))
+                {
+                    if (!static_cast<CMobEntity*>(POwner)->PRecastContainer->HasRecast(RECAST_ABILITY, ABILITY_PIANISSIMO, 0))
+                    {
+                        this->Ability(action->targId, ABILITY_PIANISSIMO);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
                 auto PSpell = spell::GetSpell(static_cast<SpellID>(action->actionId));
                 if (action->requiresMove)
                 {
@@ -140,8 +157,7 @@ void CTrustController::DoCombatTick(time_point tick)
                                     : PSpell->getRange()
                             ) - 2.6f); // PathOutToDistance can put you as close as 2.5f away from where you want to be, so -2.6f makes sure you are in range
 
-                    float currentDistanceToTarget = distance(POwner->loc.p, PTarget->loc.p);
-                    if (currentDistanceToTarget > spelldistance)
+                    if (distance(POwner->loc.p, PTarget->loc.p) > spelldistance)
                     {
                         if (POwner->PAI->PathFind->CanSeePoint(PTarget->loc.p, false))
                         {
@@ -159,7 +175,7 @@ void CTrustController::DoCombatTick(time_point tick)
                 }
                 else
                 {
-                    this->Cast(action->targId, static_cast<SpellID>(action->actionId));
+                    this->Cast(action->targId, static_cast<SpellID>(action->actionId), action->pianissimo);
                     actionQueue->pop();
                 }
             }
@@ -172,11 +188,6 @@ void CTrustController::DoCombatTick(time_point tick)
         else
         {
             actionQueue->pop();
-        }
-
-        if (!m_InTransit)
-        {
-            POwner->PAI->PathFind->FollowPath();
         }
 
         return;
@@ -467,6 +478,11 @@ bool CTrustController::RangedAttack(uint16 targid)
 
 bool CTrustController::Cast(uint16 targid, SpellID spellid)
 {
+    return CTrustController::Cast(targid, spellid, false);
+}
+
+bool CTrustController::Cast(uint16 targid, SpellID spellid, bool pianissimo)
+{
     TracyZoneScoped;
 
     FaceTarget(targid);
@@ -492,7 +508,7 @@ bool CTrustController::Cast(uint16 targid, SpellID spellid)
     {
         if (static_cast<CTrustEntity*>(POwner)->m_MovementType != TRUST_MOVEMENT_TYPE::MELEE_RANGE) // melee characters don't move to cast
         {
-            QueueAction_t* newAction = new QueueAction_t{ ACTION_TYPE::SPELL, targid, static_cast<uint16>(spellid), true };
+            QueueAction_t* newAction = new QueueAction_t{ ACTION_TYPE::SPELL, targid, static_cast<uint16>(spellid), true, pianissimo };
             actionQueue->push(newAction);
         }
         

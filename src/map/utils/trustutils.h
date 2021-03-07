@@ -4,6 +4,8 @@
 #include "../../common/cbasetypes.h"
 #include "../../common/mmo.h"
 #include "../entities/battleentity.h"
+#include "../spell.h"
+#include <vector>
 
 class CBattleEntity;
 class CCharEntity;
@@ -13,6 +15,12 @@ class CItemEquipment;
 struct TrustSpell_ID
 {
     uint32 spellID;
+};
+
+struct SongPriority_t
+{
+    SPELLFAMILY spell_family;
+    uint8       spell_count;
 };
 
 struct Trust_t
@@ -94,6 +102,8 @@ namespace trustutils
     CTrustEntity* LoadTrust(CCharEntity* PMaster, uint32 TrustID);
     void          LoadTrustStatsAndSkills(CTrustEntity* PTrust);
     void          LoadTrustEquipment(CTrustEntity* PTrust, CCharEntity* PMaster);
+    void          SetBrdSongPiority(CTrustEntity* PTrust);
+    void          SetSongList(CTrustEntity* PTrust, const std::vector<SongPriority_t>& songPriorities, std::vector<SpellID>& songList);
 }; // namespace trustutils
 
 #endif

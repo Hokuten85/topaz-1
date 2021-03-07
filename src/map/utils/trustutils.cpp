@@ -284,6 +284,11 @@ namespace trustutils
             mobutils::SetSpellList(PTrust, trustData->spellList);
         }
 
+        if (PTrust->GetMJob() == JOB_BRD)
+        {
+            SetBrdSongPiority(PTrust);
+        }
+
         return PTrust;
     }
 
@@ -595,6 +600,105 @@ namespace trustutils
                             PTrust->EquipItem((CItemEquipment*)PItem, i);
                         }
                     }
+                }
+            }
+        }
+    }
+
+    void SetBrdSongPiority(CTrustEntity* PTrust)
+    {
+        auto songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MARCH, 2 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_VALOR_MINUET, 3 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MADRIGAL, 2 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_KNIGHTS_MINNE, 3 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_ARMYS_PAEON, 3 },
+        };
+        SetSongList(PTrust, songVector, PTrust->melee_songs.at(BRD_SONG_BUCKET::NORMAL));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MARCH, 2 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MADRIGAL, 1 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_VALOR_MINUET, 3 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_KNIGHTS_MINNE, 3 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_ARMYS_PAEON, 3 },
+        };
+        SetSongList(PTrust, songVector, PTrust->melee_songs.at(BRD_SONG_BUCKET::ACC));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MADRIGAL, 2 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MARCH, 2 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_VALOR_MINUET, 3 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_KNIGHTS_MINNE, 3 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_ARMYS_PAEON, 3 },
+        };
+        SetSongList(PTrust, songVector, PTrust->melee_songs.at(BRD_SONG_BUCKET::HIGH_ACC));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MAGES_BALLAD, 2 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MARCH, 2 },
+        };
+        SetSongList(PTrust, songVector, PTrust->mage_songs.at(BRD_SONG_BUCKET::MP));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MAGES_BALLAD, 3 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MARCH, 2 },
+        };
+        SetSongList(PTrust, songVector, PTrust->mage_songs.at(BRD_SONG_BUCKET::LOW_MP));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_VALOR_MINUET, 3 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_PRELUDE, 2 },
+        };
+        SetSongList(PTrust, songVector, PTrust->ranged_songs.at(BRD_SONG_BUCKET::NORMAL));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_PRELUDE, 1 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_VALOR_MINUET, 3 },
+        };
+        SetSongList(PTrust, songVector, PTrust->ranged_songs.at(BRD_SONG_BUCKET::ACC));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_PRELUDE, 2 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_VALOR_MINUET, 3 },
+        };
+        SetSongList(PTrust, songVector, PTrust->ranged_songs.at(BRD_SONG_BUCKET::HIGH_ACC));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MAGES_BALLAD, 1 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MARCH, 2 },
+        };
+        SetSongList(PTrust, songVector, PTrust->tank_songs.at(BRD_SONG_BUCKET::MP));
+
+        songVector = std::vector<SongPriority_t>{
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MAGES_BALLAD, 2 },
+            SongPriority_t{ SPELLFAMILY::SPELLFAMILY_MARCH, 2 },
+        };
+        SetSongList(PTrust, songVector, PTrust->tank_songs.at(BRD_SONG_BUCKET::LOW_MP));
+    }
+
+    void SetSongList(CTrustEntity* PTrust, const std::vector<SongPriority_t>& songPriorities, std::vector<SpellID>& songList)
+    {
+        for (auto& song_priority : songPriorities)
+        {
+            for (int i = 1; i <= song_priority.spell_count; i++)
+            {
+                auto spellid = PTrust->SpellContainer->GetBestAvailableByRank(song_priority.spell_family, i);
+                if (spellid.has_value())
+                {
+                    auto spell = spell::GetSpell(spellid.value());
+                    if (spell != nullptr)
+                    {
+                        songList.push_back(spell->getID());
+                        if (songList.size() > 2)
+                        {
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    break;
                 }
             }
         }

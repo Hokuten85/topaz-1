@@ -157,6 +157,46 @@ std::optional<SpellID> CMobSpellContainer::GetBestAvailable(SPELLFAMILY family)
     return (!matches.empty()) ? std::optional<SpellID>{ matches.back() } : std::nullopt;
 }
 
+std::optional<SpellID> CMobSpellContainer::GetBestAvailableByRank(SPELLFAMILY family, uint8 rank)
+{
+    std::vector<SpellID> matches;
+    auto                 searchInList = [&](std::vector<SpellID>& list) {
+        for (auto id : list)
+        {
+            auto* spell         = spell::GetSpell(id);
+            bool  sameFamily    = (family == SPELLFAMILY_NONE) ? true : spell->getSpellFamily() == family;
+            if (sameFamily)
+            {
+                matches.push_back(id);
+            }
+        };
+    };
+
+    // TODO: After a good refactoring, this sort of hack won't be needed...
+    if (family == SPELLFAMILY_NONE)
+    {
+        searchInList(m_damageList);
+    }
+    else
+    {
+        searchInList(m_gaList);
+        searchInList(m_damageList);
+        searchInList(m_buffList);
+        searchInList(m_debuffList);
+        searchInList(m_healList);
+        searchInList(m_naList);
+    }
+
+    if (rank > (uint8)matches.size() || (uint8)matches.size() - rank < 0)
+    {
+        return std::nullopt;
+    }
+
+    // Assume the highest ID is the best (back of the vector)
+    // TODO: These will need to be organised by family, then merged
+    return (!matches.empty()) ? std::optional<SpellID>{ matches.at((uint8)matches.size() - rank) } : std::nullopt;
+}
+
 bool CMobSpellContainer::HasSpells() const
 {
     return m_hasSpells;

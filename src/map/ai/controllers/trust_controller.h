@@ -48,6 +48,7 @@ struct QueueAction_t
     uint16      targId = 0;
     uint16      actionId = 0;
     bool        requiresMove = false;
+    bool        pianissimo   = false;
 
     bool parseInput(std::string key, uint16 value)
     {
@@ -87,6 +88,7 @@ public:
 
     bool Ability(uint16 targid, uint16 abilityid) override;
     bool Cast(uint16 targid, SpellID spellid) override;
+    bool Cast(uint16 targid, SpellID spellid, bool pianissimo);
     virtual bool UseItem(uint16 targid);
 
     bool RangedAttack(uint16 targid);
@@ -102,6 +104,16 @@ public:
 
     std::unique_ptr<gambits::CGambitsContainer> m_GambitsContainer;
     std::queue<QueueAction_t*>* actionQueue = new std::queue<QueueAction_t*>;
+
+    std::map<SPELLFAMILY, EFFECT> familyToEffectMap{
+        { SPELLFAMILY::SPELLFAMILY_MARCH, EFFECT::EFFECT_MARCH },
+        { SPELLFAMILY::SPELLFAMILY_MADRIGAL, EFFECT::EFFECT_MADRIGAL },
+        { SPELLFAMILY::SPELLFAMILY_VALOR_MINUET, EFFECT::EFFECT_MINUET },
+        { SPELLFAMILY::SPELLFAMILY_KNIGHTS_MINNE, EFFECT::EFFECT_MINNE },
+        { SPELLFAMILY::SPELLFAMILY_ARMYS_PAEON, EFFECT::EFFECT_PAEON },
+        { SPELLFAMILY::SPELLFAMILY_MAGES_BALLAD, EFFECT::EFFECT_BALLAD },
+        { SPELLFAMILY::SPELLFAMILY_PRELUDE, EFFECT::EFFECT_PRELUDE }
+    };
 
 private:
     void DoCombatTick(time_point tick) override;

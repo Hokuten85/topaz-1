@@ -58,7 +58,9 @@ public:
     bool HasStatusEffect(EFFECT StatusID);               // проверяем наличие эффекта
     bool HasStatusEffect(EFFECT StatusID, uint16 SubID); // проверяем наличие эффекта с уникальным subid
     bool HasStatusEffect(std::initializer_list<EFFECT>);
+    bool HasStatusEffect(EFFECT StatusID, uint16 SubID, uint16 Tier);
     bool HasStatusEffectByFlag(uint32 flag);
+    uint8 CountStatusEffectByFlag(uint32 flag, uint16 SubID);
 
     EFFECT         EraseStatusEffect();                    // удаляем первый отрицательный эффект
     EFFECT         HealingWaltz();                         // dancers healing waltz

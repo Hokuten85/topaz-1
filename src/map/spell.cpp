@@ -420,7 +420,6 @@ namespace spell
 {
     std::array<CSpell*, MAX_SPELL_ID> PSpellList;           // spell list
     std::map<uint16, uint16>          PMobSkillToBlueSpell; // maps the skill id (key) to spell id (value).
-    std::map<SPELLFAMILY, std::vector<SpellID>> PSpellMapByFamily;
 
     // Load a list of spells
     void LoadSpellList()

@@ -160,6 +160,14 @@ namespace gambits
             return;
         }
 
+        if (POwner->GetMJob() == JOB_BRD)
+        {
+            if (BrdSupportMelee())
+            {
+                return;
+            }
+        }
+
         // Didn't WS/MS, go for other Gambits
         for (auto& gambit : gambits)
         {
@@ -343,7 +351,7 @@ namespace gambits
             }
         }
 
-        OnGambitTick();
+        //OnGambitTick();
     }
 
     bool CGambitsContainer::CheckTrigger(CBattleEntity* trigger_target, Predicate_t& predicate)
@@ -655,6 +663,144 @@ namespace gambits
             return true;
         }
         return false;
+    }
+
+    std::optional<SpellID> CGambitsContainer::GetSongToCast(CBattleEntity* PTarget, const std::vector<SpellID>& songList)
+    {
+        uint8 songCount  = 0;
+        auto* controller = static_cast<CTrustController*>(POwner->PAI->GetController());
+        for (auto& song : songList)
+        {
+            auto spell  = spell::GetSpell(song);
+            auto effect = controller->familyToEffectMap.at(spell->getSpellFamily());
+
+            if (spell != nullptr && !PTarget->StatusEffectContainer->HasStatusEffect(effect, POwner->id, spell->getBase()) && !static_cast<CMobEntity*>(POwner)->PRecastContainer->Has(RECAST_MAGIC, static_cast<uint16>(spell->getID())))
+            {
+                return std::optional<SpellID>{spell->getID()};
+            }
+        }
+
+        return std::nullopt;
+    }
+
+    bool CGambitsContainer::EnqueueSong(CBattleEntity* PMember, const std::vector<SpellID>& songList, bool pianissimo)
+    {
+        auto* controller = static_cast<CTrustController*>(POwner->PAI->GetController());
+        auto spellID = GetSongToCast(PMember, songList);
+        if (spellID.has_value())
+        {
+            if (pianissimo)
+            {
+                controller->actionQueue->emplace(new QueueAction_t{ ACTION_TYPE::JA, POwner->targid, ABILITY_PIANISSIMO });
+            }
+            controller->actionQueue->emplace(new QueueAction_t{ ACTION_TYPE::SPELL, PMember->targid, (uint16)spellID.value() });
+            return true;
+        }
+    }
+
+    bool CGambitsContainer::BrdSupportMelee()
+    {
+        
+        auto isValidMember = [&](CBattleEntity* PPartyTarget) -> bool {
+            return PPartyTarget->isAlive() && POwner->loc.zone == PPartyTarget->loc.zone && distance(POwner->loc.p, PPartyTarget->loc.p) <= 20.0f;
+        };
+
+        std::vector<CBattleEntity*> meleeChars;
+        uint8                       hasAcc      = 0;
+        uint8                       hasHighAcc  = 0;
+        uint8                       needsAcc    = 0;
+        uint8                       needsHighAcc = 0;
+
+        static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
+            if (isValidMember(PMember))
+            {
+                if (melee_jobs.find(PMember->GetMJob()) != melee_jobs.end())
+                {
+                    meleeChars.push_back(PMember);
+                    auto madCount = PMember->StatusEffectContainer->GetEffectsCount(EFFECT::EFFECT_MADRIGAL);
+                    if (madCount == 2) { hasHighAcc++; }
+                    if (madCount == 1) { hasAcc++; }
+
+                    if (battleutils::GetHitRate(PMember, PMember->GetBattleTarget()) < 85)
+                    {
+                        madCount > 0 ? needsHighAcc++ : needsAcc++;
+                    }
+                }
+            }
+        });
+
+        for (auto& PMember : meleeChars)
+        {
+            if (PMember->StatusEffectContainer->CountStatusEffectByFlag(EFFECTFLAG_SONG, POwner->id) < 3)
+            {
+                if (needsHighAcc > 1 || hasHighAcc > 1)
+                {
+                    if (EnqueueSong(PMember, POwner->melee_songs.at(BRD_SONG_BUCKET::HIGH_ACC))) { return true; }
+                }
+                else if (needsAcc > 1 || hasAcc > 1)
+                {
+                    if (EnqueueSong(PMember, POwner->melee_songs.at(BRD_SONG_BUCKET::ACC))) { return true; }
+                }
+                else
+                {
+                    if (EnqueueSong(PMember, POwner->melee_songs.at(BRD_SONG_BUCKET::NORMAL))) { return true; }
+                }
+            }
+        }
+
+        bool actionScheduled = false;
+        if (!static_cast<CMobEntity*>(POwner)->PRecastContainer->HasRecast(RECAST_ABILITY, ABILITY_PIANISSIMO, 0))
+        {
+            actionScheduled = static_cast<CCharEntity*>(POwner->PMaster)->ForPartyWithTrusts_If([&](CBattleEntity* PMember) {
+                if (isValidMember(PMember))
+                {
+                    if (PMember->GetMJob() == JOB_PLD || PMember->GetMJob() == JOB_RUN)
+                    {
+                        if (PMember->GetMPP() <= 25)
+                        {
+                            if (EnqueueSong(PMember, POwner->tank_songs.at(BRD_SONG_BUCKET::LOW_MP), true)) { return true; }
+                        }
+                        else if (PMember->GetMPP() <= 50)
+                        {
+                            if (EnqueueSong(PMember, POwner->tank_songs.at(BRD_SONG_BUCKET::MP), true)) { return true; }
+                        }
+                    }
+                    else if (caster_jobs.find(PMember->GetMJob()) != caster_jobs.end())
+                    {
+                        if (PMember->GetMPP() <= 25)
+                        {
+                            if (EnqueueSong(PMember, POwner->mage_songs.at(BRD_SONG_BUCKET::LOW_MP), true)) { return true; }
+                        }
+                        else
+                        {
+                            if (EnqueueSong(PMember, POwner->mage_songs.at(BRD_SONG_BUCKET::MP), true)) { return true; }
+                        }
+                    }
+                    else if (PMember->GetMJob() == JOB_RNG || PMember->GetMJob() == JOB_COR)
+                    {
+                        if (battleutils::GetRangedHitRate(PMember, PMember->GetBattleTarget(), false) < 85)
+                        {
+                            if (PMember->StatusEffectContainer->GetEffectsCount(EFFECT::EFFECT_PRELUDE) > 0)
+                            {
+                                if (EnqueueSong(PMember, POwner->ranged_songs.at(BRD_SONG_BUCKET::HIGH_ACC), true)) { return true; }
+                            }
+                            else
+                            {
+                                if (EnqueueSong(PMember, POwner->ranged_songs.at(BRD_SONG_BUCKET::ACC), true)){return true;}
+                            }
+                        }
+                        else
+                        {
+                            if (EnqueueSong(PMember, POwner->ranged_songs.at(BRD_SONG_BUCKET::NORMAL), true)) { return true; }
+                        }
+                    }
+                }
+
+                return false;
+            });
+        }
+
+        return actionScheduled;
     }
 
     int32 CGambitsContainer::OnGambitTick()

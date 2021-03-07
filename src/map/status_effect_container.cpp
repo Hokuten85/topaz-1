@@ -918,6 +918,19 @@ bool CStatusEffectContainer::HasStatusEffectByFlag(uint32 flag)
     return false;
 }
 
+uint8 CStatusEffectContainer::CountStatusEffectByFlag(uint32 flag, uint16 SubID)
+{
+    uint8 songCount = 0;
+    for (CStatusEffect* PStatusEffect : m_StatusEffectSet)
+    {
+        if (PStatusEffect->GetFlag() & flag && PStatusEffect->GetSubID() == SubID && !PStatusEffect->deleted)
+        {
+            songCount++;
+        }
+    }
+    return songCount;
+}
+
 /************************************************************************
         Applies a bard song effect (after checking restrictions)
         Returns true if the effect is applied, false otherwise.
@@ -1193,6 +1206,18 @@ bool CStatusEffectContainer::HasStatusEffect(std::initializer_list<EFFECT> effec
                     return true;
                 }
             }
+        }
+    }
+    return false;
+}
+
+bool CStatusEffectContainer::HasStatusEffect(EFFECT StatusID, uint16 SubID, uint16 Tier)
+{
+    for (CStatusEffect* PStatusEffect : m_StatusEffectSet)
+    {
+        if (PStatusEffect->GetStatusID() == StatusID && PStatusEffect->GetSubID() == SubID && PStatusEffect->GetTier() == Tier && !PStatusEffect->deleted)
+        {
+            return true;
         }
     }
     return false;
