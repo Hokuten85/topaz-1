@@ -190,6 +190,7 @@ CCharEntity::CCharEntity()
 
     PLinkshell1     = nullptr;
     PLinkshell2     = nullptr;
+    PUnityChat      = nullptr;
     PTreasurePool   = nullptr;
     PWideScanTarget = nullptr;
 
