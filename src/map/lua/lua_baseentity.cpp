@@ -1,4 +1,4 @@
-/*
+﻿/*
 ===========================================================================
 
   Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -10848,7 +10848,7 @@ void CLuaBaseEntity::trustPartyMessage(uint32 message_id)
  *  Notes   : Adds a behaviour to the gambit system
  ************************************************************************/
 
-void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry)
+void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry, sol::object const& extraObject)
 {
     TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_TRUST);
 
@@ -10863,11 +10863,31 @@ void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_
 
     // Optional
     uint16 retry_delay = (retry != sol::nil) ? retry.as<uint16>() : 0;
+    sol::optional<sol::table> extra;
+    if (extraObject != sol::nil)
+    {
+        auto extraTable = extraObject.as<sol::table>();
+        extra           = extraTable.get<sol::optional<sol::table>>("extra");
+    }
 
     Gambit_t g;
     g.predicates.emplace_back(Predicate_t{ target, condition, condition_arg, 0, isActionTarget });
     g.actions.emplace_back(Action_t{ reaction, selector, selector_arg });
     g.retry_delay = retry_delay;
+
+    if (extra.has_value() && !extra.value().empty())
+    {
+        for (const auto& kvp : extra.value())
+        {
+            auto key   = kvp.first.as<std::string>();
+            auto value = kvp.second.as<uint32>();
+
+            if (!g.extra.parseInput(key, value))
+            {
+                ShowWarning("Invalid Gambit: Bad Extra input");
+            }
+        }
+    }
 
     auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
     auto* controller = static_cast<CTrustController*>(trust->PAI->GetController());
@@ -10946,6 +10966,25 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
     {
         ShowWarning("Invalid Gambit: No action");
         return 0;
+    }
+
+    auto extra = fullGambit.get<sol::optional<sol::table>>("extra");
+    if (extra.has_value() && !extra.value().empty())
+    {
+        for (const auto& kvp : extra.value())
+        {
+            sol::table subTable = (sol::table)kvp.second;
+            for (const auto& keyValuePair : subTable)
+            {
+                auto key   = keyValuePair.first.as<std::string>();
+                auto value = keyValuePair.second.as<uint32>();
+
+                if (!g.extra.parseInput(key, value))
+                {
+                    ShowWarning("Invalid Gambit: Bad Extra input");
+                }
+            }
+        }
     }
 
     auto retry_delay = fullGambit.get<sol::optional<uint16>>("retry_delay");

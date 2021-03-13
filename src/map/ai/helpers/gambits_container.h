@@ -152,12 +152,32 @@ namespace gambits
         }
     };
 
+    struct Extra_t
+    {
+        uint8 maxFails = 0;
+        uint8 failCount = 0;
+
+        bool  parseInput(std::string key, uint32 value)
+        {
+            if (key.compare("maxFails") == 0)
+            {
+                maxFails = static_cast<uint8>(value);
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+    };
+
     struct Gambit_t
     {
         std::vector<Predicate_t> predicates;
         std::vector<Action_t>    actions;
         uint16                   retry_delay = 0;
         time_point               last_used;
+        Extra_t                  extra;
     };
 
     // TODO
@@ -206,6 +226,7 @@ namespace gambits
         std::vector<TrustSkill_t> tp_skills;
         G_TP_TRIGGER              tp_trigger;
         G_SELECT                  tp_select;
+        std::vector<Gambit_t>     gambits;
 
     private:
         bool  CheckTrigger(CBattleEntity* trigger_target, Predicate_t& predicate);
@@ -217,7 +238,6 @@ namespace gambits
 
         CTrustEntity*         POwner;
         time_point            m_lastAction;
-        std::vector<Gambit_t> gambits;
 
         std::set<JOBTYPE> melee_jobs = {
             JOB_WAR, JOB_MNK, JOB_THF, JOB_PLD, JOB_DRK, JOB_BST, JOB_SAM, JOB_NIN, JOB_DRG, JOB_BLU, JOB_PUP, JOB_DNC, JOB_RUN,

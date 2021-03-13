@@ -639,7 +639,7 @@ public:
     void   clearTrusts();
     uint32 getTrustID();
     void   trustPartyMessage(uint32 message_id);
-    void   addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry);
+    void   addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry, sol::object const& extraObject);
     int32  addFullGambit(sol::table fullGambit);
     void   setTrustTPSkillSettings(uint16 trigger, uint16 select);
 

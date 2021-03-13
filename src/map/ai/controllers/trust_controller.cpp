@@ -116,6 +116,11 @@ void CTrustController::DoCombatTick(time_point tick)
     {
         POwner->PAI->Internal_ChangeTarget(POwner->PMaster->GetBattleTargetID());
         m_LastTopEnmity = nullptr;
+
+        for (auto& gambit : this->m_GambitsContainer->gambits)
+        {
+            gambit.extra.failCount = 0;
+        }
     }
 
     CTrustEntity* PTrust  = static_cast<CTrustEntity*>(POwner);

@@ -23,6 +23,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "trustentity.h"
 #include "../ai/ai_container.h"
 #include "../ai/controllers/trust_controller.h"
+#include "../ai/helpers/gambits_container.h"
 #include "../ai/helpers/pathfind.h"
 #include "../ai/helpers/targetfind.h"
 #include "../ai/states/ability_state.h"
@@ -449,6 +450,33 @@ void CTrustEntity::OnCastFinished(CMagicState& state, action_t& action)
     CBattleEntity::OnCastFinished(state, action);
 
     auto* PSpell = state.GetSpell();
+
+    auto* controller = static_cast<CTrustController*>(this->PAI->GetController());
+    for (auto& gambit : controller->m_GambitsContainer->gambits)
+    {
+        if (gambit.extra.maxFails > 0)
+        {
+            for (auto& g_action : gambit.actions)
+            {
+                if (g_action.reaction == gambits::G_REACTION::MA && (g_action.select_arg == static_cast<uint16>(PSpell->getID()) || g_action.select_arg == static_cast<uint16>(PSpell->getSpellFamily())))
+                {
+                    bool magicSuccess = false;
+                    for (auto& actionList : action.actionLists)
+                    {
+                        for (auto& actionTarget : actionList.actionTargets)
+                        {
+                            if (actionTarget.messageID != MSGBASIC_MAGIC_NO_EFFECT && actionTarget.messageID != MSGBASIC_MAGIC_RESIST)
+                            {
+                                magicSuccess = true;
+                            }
+                        }
+                    }
+
+                    magicSuccess ? gambit.extra.failCount = 0 : gambit.extra.failCount++;
+                }
+            }
+        }
+    }
 
     PRecastContainer->Add(RECAST_MAGIC, static_cast<uint16>(PSpell->getID()), action.recast);
 }

@@ -49,6 +49,7 @@ enum MSGBASIC_ID : uint16
     MSGBASIC_CANNOT_USE_IN_AREA       = 40,  /* cannot use in this area */
     MSGBASIC_UNABLE_TO_CAST_SPELLS    = 49,  /* The <player> is unable to cast spells. */
     MSGBASIC_MAGIC_NO_EFFECT          = 75,  /* <caster>'s <spell> has no effect on <target>. */
+    MSGBASIC_MAGIC_RESIST             = 85,  /* <caster> casts <spell>. <target> resists the spell. */
     MSGBASIC_MAGIC_TELEPORT           = 93,  /* <caster> casts <spell>. <target> vanishes. */
     MSGBASIC_WAIT_LONGER              = 94,  /* You must wait longer to perform that action. */
     MSGBASIC_PLAYER_DEFEATED_BY       = 97,  /* <player> was defeated by the <target>. */

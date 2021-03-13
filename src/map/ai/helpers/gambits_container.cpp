@@ -196,6 +196,11 @@ namespace gambits
                 continue;
             }
 
+            if (gambit.extra.maxFails > 0 && gambit.extra.maxFails <= gambit.extra.failCount)
+            {
+                continue;
+            }
+
             bool actionStarted = false;
 
             for (auto& action : gambit.actions)
