@@ -117,9 +117,12 @@ void CTrustController::DoCombatTick(time_point tick)
         POwner->PAI->Internal_ChangeTarget(POwner->PMaster->GetBattleTargetID());
         m_LastTopEnmity = nullptr;
 
-        for (auto& gambit : this->m_GambitsContainer->gambits)
+        for (const auto* container : this->m_GambitsContainer->all_gambits)
         {
-            gambit.extra.failCount = 0;
+            for (const auto& gambit : *container)
+            {
+                gambit->extra.failCount = 0;
+            }
         }
     }
 

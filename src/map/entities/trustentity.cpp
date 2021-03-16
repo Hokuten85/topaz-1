@@ -450,29 +450,30 @@ void CTrustEntity::OnCastFinished(CMagicState& state, action_t& action)
     CBattleEntity::OnCastFinished(state, action);
 
     auto* PSpell = state.GetSpell();
-
-    auto* controller = static_cast<CTrustController*>(this->PAI->GetController());
-    for (auto& gambit : controller->m_GambitsContainer->gambits)
+    for (const auto* container : static_cast<CTrustController*>(this->PAI->GetController())->m_GambitsContainer->all_gambits)
     {
-        if (gambit.extra.maxFails > 0)
+        for (const auto& gambit : *container)
         {
-            for (auto& g_action : gambit.actions)
+            if (gambit->extra.maxFails > 0)
             {
-                if (g_action.reaction == gambits::G_REACTION::MA && (g_action.select_arg == static_cast<uint16>(PSpell->getID()) || g_action.select_arg == static_cast<uint16>(PSpell->getSpellFamily())))
+                for (auto& g_action : gambit->actions)
                 {
-                    bool magicSuccess = false;
-                    for (auto& actionList : action.actionLists)
+                    if (g_action.reaction == gambits::G_REACTION::MA && (g_action.select_arg == static_cast<uint16>(PSpell->getID()) || g_action.select_arg == static_cast<uint16>(PSpell->getSpellFamily())))
                     {
-                        for (auto& actionTarget : actionList.actionTargets)
+                        bool magicSuccess = false;
+                        for (auto& actionList : action.actionLists)
                         {
-                            if (actionTarget.messageID != MSGBASIC_MAGIC_NO_EFFECT && actionTarget.messageID != MSGBASIC_MAGIC_RESIST)
+                            for (auto& actionTarget : actionList.actionTargets)
                             {
-                                magicSuccess = true;
+                                if (actionTarget.messageID != MSGBASIC_MAGIC_NO_EFFECT && actionTarget.messageID != MSGBASIC_MAGIC_RESIST)
+                                {
+                                    magicSuccess = true;
+                                }
                             }
                         }
-                    }
 
-                    magicSuccess ? gambit.extra.failCount = 0 : gambit.extra.failCount++;
+                        magicSuccess ? gambit->extra.failCount = 0 : gambit->extra.failCount++;
+                    }
                 }
             }
         }

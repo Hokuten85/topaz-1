@@ -10850,6 +10850,16 @@ void CLuaBaseEntity::trustPartyMessage(uint32 message_id)
 
 void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry, sol::object const& extraObject)
 {
+    addSimpleGambitEx(targ, cond, condition_arg, react, select, selector_arg, retry, extraObject, false);
+}
+
+void CLuaBaseEntity::addCustomGambit(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry, sol::object const& extraObject)
+{
+    addSimpleGambitEx(targ, cond, condition_arg, react, select, selector_arg, retry, extraObject, true);
+}
+
+void CLuaBaseEntity::addSimpleGambitEx(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry, sol::object const& extraObject, bool isCustom)
+{
     TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_TRUST);
 
     using namespace gambits;
@@ -10870,10 +10880,10 @@ void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_
         extra           = extraTable.get<sol::optional<sol::table>>("extra");
     }
 
-    Gambit_t g;
-    g.predicates.emplace_back(Predicate_t{ target, condition, condition_arg, 0, isActionTarget });
-    g.actions.emplace_back(Action_t{ reaction, selector, selector_arg });
-    g.retry_delay = retry_delay;
+    Gambit_t* g = new Gambit_t();
+    g->predicates.emplace_back(Predicate_t{ target, condition, condition_arg, 0, isActionTarget });
+    g->actions.emplace_back(Action_t{ reaction, selector, selector_arg });
+    g->retry_delay = retry_delay;
 
     if (extra.has_value() && !extra.value().empty())
     {
@@ -10882,7 +10892,7 @@ void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_
             auto key   = kvp.first.as<std::string>();
             auto value = kvp.second.as<uint32>();
 
-            if (!g.extra.parseInput(key, value))
+            if (!g->extra.parseInput(key, value))
             {
                 ShowWarning("Invalid Gambit: Bad Extra input");
             }
@@ -10892,7 +10902,7 @@ void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_
     auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
     auto* controller = static_cast<CTrustController*>(trust->PAI->GetController());
 
-    controller->m_GambitsContainer->AddGambit(g);
+    isCustom ? controller->m_GambitsContainer->AddCustomGambit(g) : controller->m_GambitsContainer->AddGambit(g);
 }
 
 /************************************************************************
@@ -10908,7 +10918,7 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
 
     using namespace gambits;
 
-    Gambit_t g;
+    Gambit_t* g = new Gambit_t();
 
     bool gambit_error = false;
 
@@ -10931,7 +10941,7 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
                     return 0;
                 }
             }
-            g.predicates.emplace_back(new_predicate);
+            g->predicates.emplace_back(new_predicate);
         }
     }
     else
@@ -10959,7 +10969,7 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
                     return 0;
                 }
             }
-            g.actions.emplace_back(new_action);
+            g->actions.emplace_back(new_action);
         }
     }
     else
@@ -10979,7 +10989,7 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
                 auto key   = keyValuePair.first.as<std::string>();
                 auto value = keyValuePair.second.as<uint32>();
 
-                if (!g.extra.parseInput(key, value))
+                if (!g->extra.parseInput(key, value))
                 {
                     ShowWarning("Invalid Gambit: Bad Extra input");
                 }
@@ -10990,7 +11000,7 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
     auto retry_delay = fullGambit.get<sol::optional<uint16>>("retry_delay");
     if (retry_delay.has_value())
     {
-        g.retry_delay = retry_delay.value();
+        g->retry_delay = retry_delay.value();
     }
 
     auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
@@ -13365,6 +13375,7 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("getTrustID", CLuaBaseEntity::getTrustID);
     SOL_REGISTER("trustPartyMessage", CLuaBaseEntity::trustPartyMessage);
     SOL_REGISTER("addSimpleGambit", CLuaBaseEntity::addSimpleGambit);
+    SOL_REGISTER("addCustomGambit", CLuaBaseEntity::addCustomGambit);
     SOL_REGISTER("addFullGambit", CLuaBaseEntity::addFullGambit);
     SOL_REGISTER("setTrustTPSkillSettings", CLuaBaseEntity::setTrustTPSkillSettings);
 

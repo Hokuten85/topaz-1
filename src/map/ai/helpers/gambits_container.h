@@ -218,7 +218,8 @@ namespace gambits
         }
         ~CGambitsContainer() = default;
 
-        void AddGambit(const Gambit_t& gambit);
+        void AddGambit(Gambit_t* gambit);
+        void AddCustomGambit(Gambit_t* gambit);
         PredicateResult_t RunPredicate(Predicate_t& predicate);
         void Tick(time_point tick);
 
@@ -226,7 +227,9 @@ namespace gambits
         std::vector<TrustSkill_t> tp_skills;
         G_TP_TRIGGER              tp_trigger;
         G_SELECT                  tp_select;
-        std::vector<Gambit_t>     gambits;
+        std::vector<Gambit_t*> gambits;
+        std::vector<Gambit_t*> custom_gambits;
+        std::vector<std::vector<Gambit_t*>*> all_gambits = { &gambits, &custom_gambits };
 
     private:
         bool  CheckTrigger(CBattleEntity* trigger_target, Predicate_t& predicate);
