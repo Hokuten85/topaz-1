@@ -118,7 +118,7 @@ function onTrigger(player, target_type, condition, condition_arg, react, select,
 
     local target = player:getCursorTarget()
     if not target or target:isNPC() then
-        error(player, "No valid target found. place cursor on a non-npc object or specify a player name. ")
+        error(player, "No valid target found. place cursor on a non-npc object. ")
         return
     end
 

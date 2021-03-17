@@ -65,6 +65,14 @@ namespace gambits
         }
     }
 
+    void CGambitsContainer::DeleteCustomGambit(uint16 index)
+    {
+        if (custom_gambits.size() > index)
+        {
+            custom_gambits.erase(custom_gambits.begin() + index);
+        }
+    }
+
     inline bool resistanceComparator(const Weakness_t& firstElem, const Weakness_t& secondElem)
     {
         return firstElem.resistance < secondElem.resistance;
@@ -510,11 +518,6 @@ namespace gambits
                         && !static_cast<CMobEntity*>(trigger_target)->PRecastContainer->Has(RECAST_MAGIC, static_cast<uint16>(spellId.value()))
                         && !trigger_target->StatusEffectContainer->HasStatusEffect({ EFFECT_SILENCE, EFFECT_MUTE, EFFECT_OMERTA });
                 }
-                break;
-            }
-            case G_CONDITION::NOT_STATUS_COUNT:
-            {
-                return trigger_target->StatusEffectContainer->GetEffectsCount(static_cast<EFFECT>(predicate.condition_arg)) < predicate.condition_arg2;
                 break;
             }
             default:

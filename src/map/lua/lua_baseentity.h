@@ -643,6 +643,8 @@ public:
     void   addCustomGambit(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry, sol::object const& extraObject);
     void   addSimpleGambitEx(uint16 targ, uint16 cond, uint32 condition_arg, uint16 react, uint16 select, uint32 selector_arg, sol::object const& retry, sol::object const& extraObject, bool isCustom = false);
     int32  addFullGambit(sol::table fullGambit);
+    void   deleteCustomGambit(uint16 index);
+    sol::table getCustomGambits();
     void   setTrustTPSkillSettings(uint16 trigger, uint16 select);
 
     bool isJugPet(); // If the entity has a pet, test if it is a jug pet.

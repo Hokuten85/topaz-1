@@ -89,7 +89,6 @@ namespace gambits
         G_TARGET    target;
         G_CONDITION condition;
         uint32      condition_arg = 0;
-        uint32      condition_arg2 = 0;       
         bool        isActionTarget = false;
 
         bool parseInput(std::string key, uint32 value)
@@ -105,10 +104,6 @@ namespace gambits
             else if (key.compare("argument") == 0)
             {
                 condition_arg = value;
-            }
-            else if (key.compare("argument2") == 0)
-            {
-                condition_arg2 = value;
             }
             else if (key.compare("actionTarget") == 0)
             {
@@ -220,6 +215,7 @@ namespace gambits
 
         void AddGambit(Gambit_t* gambit);
         void AddCustomGambit(Gambit_t* gambit);
+        void  DeleteCustomGambit(uint16 index);
         PredicateResult_t RunPredicate(Predicate_t& predicate);
         void Tick(time_point tick);
 

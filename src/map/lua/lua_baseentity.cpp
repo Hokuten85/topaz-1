@@ -10881,7 +10881,7 @@ void CLuaBaseEntity::addSimpleGambitEx(uint16 targ, uint16 cond, uint32 conditio
     }
 
     Gambit_t* g = new Gambit_t();
-    g->predicates.emplace_back(Predicate_t{ target, condition, condition_arg, 0, isActionTarget });
+    g->predicates.emplace_back(Predicate_t{ target, condition, condition_arg, isActionTarget });
     g->actions.emplace_back(Action_t{ reaction, selector, selector_arg });
     g->retry_delay = retry_delay;
 
@@ -11009,6 +11009,37 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
     controller->m_GambitsContainer->AddGambit(g);
 
     return 0;
+}
+
+void CLuaBaseEntity::deleteCustomGambit(uint16 index)
+{
+    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_TRUST);
+
+    auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
+    auto* controller = static_cast<CTrustController*>(trust->PAI->GetController());
+
+    controller->m_GambitsContainer->DeleteCustomGambit(index);
+}
+
+sol::table CLuaBaseEntity::getCustomGambits()
+{
+    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
+
+    auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
+    auto* controller = static_cast<CTrustController*>(trust->PAI->GetController());
+
+    auto table = luautils::lua.create_table();
+    for (auto& gambit : controller->m_GambitsContainer->custom_gambits)
+    {
+        auto innerTable = luautils::lua.create_table();
+        auto predicates = gambit->predicates.front();
+        auto action     = gambit->actions.front();
+
+        innerTable.set("target", predicates.target, "condition", predicates.condition, "condition_arg", predicates.condition_arg, "reaction", action.reaction, "select", action.select, "select_arg", action.select_arg);
+        table.add(innerTable);
+    }
+
+    return table;
 }
 
 /************************************************************************
@@ -13377,6 +13408,8 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("addSimpleGambit", CLuaBaseEntity::addSimpleGambit);
     SOL_REGISTER("addCustomGambit", CLuaBaseEntity::addCustomGambit);
     SOL_REGISTER("addFullGambit", CLuaBaseEntity::addFullGambit);
+    SOL_REGISTER("deleteCustomGambit", CLuaBaseEntity::deleteCustomGambit);
+    SOL_REGISTER("getCustomGambits", CLuaBaseEntity::getCustomGambits);
     SOL_REGISTER("setTrustTPSkillSettings", CLuaBaseEntity::setTrustTPSkillSettings);
 
     // Mob Entity-Specific
