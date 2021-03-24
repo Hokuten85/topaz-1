@@ -577,25 +577,66 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
 {
     if (PItem->getJobs() & (1 << (this->GetMJob() - 1)))
     {
+        auto& equipMods = this->equipmentMods;
+        auto  iterator  = equipMods.find(slotId);
+
         auto oldItem = this->equip[slotId];
         if (oldItem != nullptr)
         {
-            this->delEquipModifiers(&oldItem->modList, oldItem->getReqLvl(), slotId);
-            delete oldItem;
+            if (iterator != equipMods.end())
+            {
+                this->delEquipModifiers(&iterator->second, oldItem->getReqLvl(), slotId);
+            }
         }
 
+        std::vector<CModifier> consolidatedMods;
+        for (auto& modifier : PItem->modList)
+        {
+            auto mergeIt = std::find_if(consolidatedMods.begin(), consolidatedMods.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
+            if (mergeIt == consolidatedMods.end())
+            {
+                consolidatedMods.push_back(modifier);
+            }
+            else
+            {
+                auto& mod = *mergeIt;
+                mod.setModAmount(mod.getModAmount() + modifier.getModAmount());
+            }
+        }
+
+        if (iterator == equipMods.end())
+        {
+            equipMods.emplace(slotId, consolidatedMods);
+        }
+        else
+        {
+            for (auto& modifier : consolidatedMods)
+            {
+                auto& modMap = iterator->second;
+                auto  it2    = std::find_if(modMap.begin(), modMap.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
+
+                if (it2 == modMap.end())
+                {
+                    modMap.push_back(modifier);
+                }
+                else
+                {
+                    auto& mod = *it2;
+                    if (mod.getModAmount() < modifier.getModAmount())
+                    {
+                        mod.setModAmount(modifier.getModAmount());
+                    }
+                }
+            }
+        }
+        
         this->equip[slotId] = PItem;
-        this->addEquipModifiers(&PItem->modList, PItem->getReqLvl(), slotId);
+        this->addEquipModifiers(&equipMods.at(slotId), PItem->getReqLvl(), slotId);
 
         if (slotId >= 0 && slotId <= 3)
         {
             if (PItem->isType(ITEM_WEAPON))
             {
-                auto oldWeapon = this->m_Weapons[(SLOTTYPE)slotId];
-                if (oldWeapon != nullptr)
-                {
-                    delete oldWeapon;
-                }
                 this->m_Weapons[(SLOTTYPE)slotId] = PItem;
             }
         }
@@ -612,12 +653,14 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
         {
             auto PItem = PChar->TradeContainer->getItem(tradeSlotID);
             auto tradeQuantity = PChar->TradeContainer->getQuantity(tradeSlotID);
+
             auto newPItem = itemutils::GetItem(PItem->getID());
             newPItem->setQuantity(tradeQuantity);
             memcpy(newPItem->m_extra, PItem->m_extra, sizeof(PItem->m_extra));
 
-            if ((PItem->isType(ITEM_EQUIPMENT) || PItem->isType(ITEM_WEAPON)) && !PItem->isSubType(ITEM_CHARGED))
+            if ((newPItem->isType(ITEM_EQUIPMENT) || newPItem->isType(ITEM_WEAPON)) && !newPItem->isSubType(ITEM_CHARGED))
             {
+
                 for (uint8 j = 0; j < 4; ++j)
                 {
                     // found a match, apply the augment
@@ -629,18 +672,19 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
             }
 
             int8 slotId = -1;
-            if (PItem->isType(ITEM_EQUIPMENT))
+            if (newPItem->isType(ITEM_EQUIPMENT))
             {
-                if (!(((CItemEquipment*)PItem)->getJobs() & (1 << (this->GetMJob() - 1))))
-                {
-                    std::string itemName = (const char*)PItem->getName();
-                    std::transform(itemName.begin(), itemName.end(), itemName.begin(), [](char ch) { return ch == '_' ? ' ' : ch; });
+                auto PEquip = static_cast<CItemEquipment*>(newPItem);
+                std::string itemName = (const char*)PEquip->getName();
+                std::transform(itemName.begin(), itemName.end(), itemName.begin(), [](char ch) { return ch == '_' ? ' ' : ch; });
 
+                if (!(PEquip->getJobs() & (1 << (this->GetMJob() - 1))) || this->GetMLevel() < PEquip->getReqLvl())
+                {
                     ((CCharEntity*)this->PMaster)->pushPacket(new CChatMessagePacket((CCharEntity*)this->PMaster, CHAT_MESSAGE_TYPE::MESSAGE_PARTY, fmt::sprintf("%s, I cannot use this %s.", this->PMaster->GetName(), itemName), this->packetName));
                     continue;
                 }
 
-                auto equipSlotId = ((CItemEquipment*)newPItem)->getEquipSlotId();
+                auto equipSlotId = PEquip->getEquipSlotId();
                 if (equipSlotId & (1 << SLOT_MAIN))
                 {
                     if (!(equipSlotId & (1 << SLOT_SUB)) || tradeSlotID % 2 == 0)
@@ -720,12 +764,27 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
 
                 if (slotId != -1)
                 {
-                    EquipItem((CItemEquipment*)newPItem, slotId);
+                    if (PEquip->getFlag() & ITEM_FLAG_RARE)
+                    {
+                        auto iterator = PChar->m_TrustEquipment.find(this->m_TrustID);
+                        if (iterator != PChar->m_TrustEquipment.end())
+                        {
+                            auto& trustEquipList = iterator->second;
+                            auto  it2            = std::find_if(trustEquipList.begin(), trustEquipList.end(), [&PEquip, &slotId](const CCharEntity::TrustEquip_t* TEquip) { return PEquip->getID() == TEquip->PItem->getID() && slotId != TEquip->EquipSlot; });
+                            if (it2 != trustEquipList.end())
+                            {
+                                ((CCharEntity*)this->PMaster)->pushPacket(new CChatMessagePacket((CCharEntity*)this->PMaster, CHAT_MESSAGE_TYPE::MESSAGE_PARTY, fmt::sprintf("%s, I'm already using %s in a different slot.", this->PMaster->GetName(), itemName), this->packetName));
+                                continue;
+                            }
+                        }
+                    }
+
+                    EquipItem(PEquip, slotId);
                 }
             }
             else if (PItem->isType(ITEM_USABLE))
             {
-                this->food = (CItemUsable*)newPItem;
+                this->food = static_cast<CItemUsable*>(newPItem);
                 slotId     = 16;
             }
 
@@ -740,7 +799,6 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
                                     " extra)"
                                     " VALUES(%u,%u,%u,%u,%u,'%s')"
                                     " ON DUPLICATE KEY UPDATE"
-                                    " itemid = VALUES(itemid),"
                                     " quantity = VALUES(quantity),"
                                     " extra = VALUES(extra)";
 
@@ -756,14 +814,23 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
                 auto iterator = PChar->m_TrustEquipment.find(this->m_TrustID);
                 if (iterator != PChar->m_TrustEquipment.end())
                 {
-                    auto trustEquipmentList        = iterator->second;
-                    trustEquipmentList->at(slotId) = newPItem;
+                    auto& trustEquipList = iterator->second;
+                    auto  it2            = std::find_if(trustEquipList.begin(), trustEquipList.end(), [&newPItem, &slotId](const CCharEntity::TrustEquip_t* TEquip) { return newPItem->getID() == TEquip->PItem->getID() && slotId == TEquip->EquipSlot; });
+                    if (it2 == trustEquipList.end())
+                    {
+                        trustEquipList.push_back(new CCharEntity::TrustEquip_t{ (uint8)slotId, newPItem });
+                    }
+                    else
+                    {
+                        auto trustEquip = *it2;
+                        delete trustEquip->PItem;
+                        trustEquip->PItem = newPItem;
+                    }
                 }
                 else
                 {
-                    CCharEntity::TrustEquipList_t* trustEquipmentList(new CCharEntity::TrustEquipList_t());
-                    trustEquipmentList->at(slotId) = PItem;
-                    PChar->m_TrustEquipment.insert(std::pair<uint16, CCharEntity::TrustEquipList_t*>(this->m_TrustID, trustEquipmentList));
+                    CCharEntity::TrustEquipList_t trustEquipmentList = { new CCharEntity::TrustEquip_t{ (uint8)slotId, newPItem } };
+                    PChar->m_TrustEquipment.insert(std::pair<uint16, CCharEntity::TrustEquipList_t>(this->m_TrustID, trustEquipmentList));
                 }
             }
         }

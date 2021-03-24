@@ -729,7 +729,13 @@ INSERT INTO mob_spell_lists
 SELECT 'TRUST_Koru-Moru', 364, sl.spellid, CAST(CONV(SUBSTR(HEX(jobs),9,2),16,10) AS INT), 255
 from spell_list sl
 where SUBSTR(HEX(sl.jobs),9,2) <> '00'
-AND sl.family IN (42,43,44,45,46,47);
+AND sl.family IN (42,43,44,45,46,47); -- elemental nukes
+
+INSERT INTO mob_spell_lists
+SELECT 'TRUST_Koru-Moru', 364, sl.spellid, CAST(CONV(SUBSTR(HEX(jobs),9,2),16,10) AS INT), 255
+from spell_list sl
+where SUBSTR(HEX(sl.jobs),9,2) <> '00'
+AND sl.family IN (21,22,23,24,25,26, 28, 69); -- enspells, regen, spikes
 
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 266, 43, 255); -- absorb-str
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 267, 41, 255); -- absorb-dex

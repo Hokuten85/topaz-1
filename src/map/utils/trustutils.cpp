@@ -504,10 +504,10 @@ namespace trustutils
         PTrust->addModifier(Mod::DEF, mobutils::GetBase(PTrust, PTrust->defRank));
         PTrust->addModifier(Mod::EVA, mobutils::GetEvasion(PTrust));
         PTrust->addModifier(Mod::ATT, mobutils::GetBase(PTrust, PTrust->attRank));
-        PTrust->addModifier(Mod::ACC, mobutils::GetBase(PTrust, PTrust->accRank));
+        //PTrust->addModifier(Mod::ACC, mobutils::GetBase(PTrust, PTrust->accRank));
 
         PTrust->addModifier(Mod::RATT, mobutils::GetBase(PTrust, PTrust->attRank));
-        PTrust->addModifier(Mod::RACC, mobutils::GetBase(PTrust, PTrust->accRank));
+        //PTrust->addModifier(Mod::RACC, mobutils::GetBase(PTrust, PTrust->accRank));
 
         // Natural magic evasion
         PTrust->addModifier(Mod::MEVA, mobutils::GetMagicEvasion(PTrust));
@@ -586,21 +586,80 @@ namespace trustutils
             auto iterator = PMaster->m_TrustEquipment.find(PTrust->m_TrustID);
             if (iterator != PMaster->m_TrustEquipment.end())
             {
-                for (int8 i = 0; i < iterator->second->size(); ++i)
+                for (auto& equip : iterator->second)
                 {
-                    auto PItem = iterator->second->at(i);
+                    auto PItem = equip->PItem;
                     if (PItem != nullptr)
                     {
-                        if (i > 15)
+                        if (equip->EquipSlot > 15)
                         {
-                            PTrust->food = (CItemUsable*)PItem;
+                            PTrust->food = static_cast<CItemUsable*>(PItem);
                         }
-                        else
+                        else if (PTrust->GetMLevel() >= static_cast<CItemEquipment*>(PItem)->getReqLvl() && static_cast<CItemEquipment*>(PItem)->getJobs() & (1 << (PTrust->GetMJob() - 1)))
                         {
-                            PTrust->EquipItem((CItemEquipment*)PItem, i);
+                            uint8           slotId          = equip->EquipSlot;
+                            CItemEquipment* PEquip          = static_cast<CItemEquipment*>(PItem);
+                            PTrust->equip[slotId]           = PEquip;
+                            if (slotId >= 0 && slotId <= 3)
+                            {
+                                if (PItem->isType(ITEM_WEAPON))
+                                {
+                                    PTrust->m_Weapons[(SLOTTYPE)slotId] = PEquip;
+                                }
+                            }
+
+                            std::vector<CModifier> consolidatedMods;
+                            for (auto& modifier : PEquip->modList)
+                            {
+                                auto mergeIt = std::find_if(consolidatedMods.begin(), consolidatedMods.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
+                                if (mergeIt == consolidatedMods.end())
+                                {
+                                    consolidatedMods.push_back(modifier);
+                                }
+                                else
+                                {
+                                    auto& mod = *mergeIt;
+                                    mod.setModAmount(mod.getModAmount() + modifier.getModAmount());
+                                }
+                            }
+
+                            auto& equipMods = PTrust->equipmentMods;
+                            auto  iterator  = equipMods.find(slotId);
+                            if (iterator == equipMods.end())
+                            {
+                                equipMods.emplace(slotId, consolidatedMods);
+                            }
+                            else
+                            {
+                                for (auto& modifier : consolidatedMods)
+                                {
+                                    auto& modMap = iterator->second;
+                                    auto  it2    = std::find_if(modMap.begin(), modMap.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
+
+                                    if (it2 == modMap.end())
+                                    {
+                                        modMap.push_back(modifier);
+                                    }
+                                    else
+                                    {
+                                        auto& mod = *it2;
+                                        if (mod.getModAmount() < modifier.getModAmount())
+                                        {
+                                            mod.setModAmount(modifier.getModAmount());
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+
+                for (auto& equipMods : PTrust->equipmentMods)
+                {
+                    PTrust->addEquipModifiers(&equipMods.second, PTrust->GetMLevel(), equipMods.first);
+                }
+
+                PTrust->UpdateHealth();
             }
         }
     }

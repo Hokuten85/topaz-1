@@ -899,7 +899,7 @@ namespace charutils
                 CItem* PItem = itemutils::GetItem(Sql_GetIntData(SqlHandle, 1));
                 if (PItem != nullptr)
                 {
-                    auto equipSlotId = Sql_GetUIntData(SqlHandle, 2);
+                    uint8 equipSlotId = Sql_GetUIntData(SqlHandle, 2);
                     PItem->setQuantity(Sql_GetUIntData(SqlHandle, 3));
 
                     size_t length = 0;
@@ -910,13 +910,13 @@ namespace charutils
                     auto iterator = PChar->m_TrustEquipment.find(trustID);
                     if (iterator == PChar->m_TrustEquipment.end())
                     {
-                        CCharEntity::TrustEquipList_t* trustEquipmentList(new CCharEntity::TrustEquipList_t());
-                        trustEquipmentList->at(equipSlotId) = PItem;
-                        PChar->m_TrustEquipment.insert(std::pair<uint16, CCharEntity::TrustEquipList_t*>(trustID, trustEquipmentList));
+                        CCharEntity::TrustEquipList_t trustEquipmentList;
+                        trustEquipmentList.push_back(new CCharEntity::TrustEquip_t{ equipSlotId, PItem });
+                        PChar->m_TrustEquipment.insert(std::pair<uint16, CCharEntity::TrustEquipList_t>(trustID, trustEquipmentList));
                     }
                     else
                     {
-                        iterator->second->at(equipSlotId) = PItem;
+                        iterator->second.push_back(new CCharEntity::TrustEquip_t{ equipSlotId, PItem });
                     }
                 }
             }
@@ -924,9 +924,9 @@ namespace charutils
 
         for (auto& equipList : PChar->m_TrustEquipment)
         {
-            for (int8 i = 0; i < equipList.second->size(); ++i)
+            for (auto* equip : equipList.second)
             {
-                auto PItem = equipList.second->at(i);
+                auto PItem = equip->PItem;
                 if (PItem != nullptr && ((PItem->isType(ITEM_EQUIPMENT) || PItem->isType(ITEM_WEAPON)) && !PItem->isSubType(ITEM_CHARGED)))
                 {
                     for (uint8 j = 0; j < 4; ++j)

@@ -228,8 +228,15 @@ public:
     CAutomatonEntity*     PAutomaton;            // Automaton statistics
 
     std::vector<CTrustEntity*> PTrusts; // Active trusts
-    typedef std::array<CItem*, 17>      TrustEquipList_t;
-    std::map<uint16, TrustEquipList_t*> m_TrustEquipment;
+
+    struct TrustEquip_t
+    {
+        uint8  EquipSlot;
+        CItem* PItem;
+    };
+
+    typedef std::vector<TrustEquip_t*> TrustEquipList_t;
+    std::map<uint16, TrustEquipList_t> m_TrustEquipment;
     std::map<uint16, std::unique_ptr<gambits::CGambitsContainer>> m_TrustGambits;
 
     //std::unique_ptr<gambits::CGambitsContainer> m_GambitsContainer;

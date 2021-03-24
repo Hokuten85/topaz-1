@@ -6,5 +6,5 @@ CREATE TABLE `trust_equipment` (
   `itemid` SMALLINT(5) unsigned NOT NULL DEFAULT '0',
   `quantity` INT(10) unsigned NOT NULL DEFAULT '0',
   `extra` blob(24) DEFAULT NULL,
-  PRIMARY KEY (`charid`,`trustid`,`equipslotid`)
+  PRIMARY KEY (`charid`,`trustid`,`equipslotid`, `itemid`)
 )

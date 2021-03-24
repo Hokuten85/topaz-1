@@ -81,11 +81,12 @@ public:
     virtual void OnItemFinish(CItemState&, action_t&);
     int8 getShieldSize();
 
-    uint32              m_TrustID{};
-    TRUST_MOVEMENT_TYPE m_MovementType;
-    CItemEquipment*     equip[16];
-    CItemUsable*        food;
-    CUContainer*        UContainer; // container used for universal actions -- used for trading at least despite the dedicated trading container above
+    uint32                   m_TrustID{};
+    TRUST_MOVEMENT_TYPE      m_MovementType;
+    CItemEquipment*          equip[16];
+    CItemUsable*             food;
+    std::map<uint8, std::vector<CModifier>> equipmentMods;
+    CUContainer*             UContainer; // container used for universal actions -- used for trading at least despite the dedicated trading container above
 
     std::map<BRD_SONG_BUCKET, std::vector<SpellID>> melee_songs{
         { BRD_SONG_BUCKET::NORMAL, std::vector<SpellID>() },
