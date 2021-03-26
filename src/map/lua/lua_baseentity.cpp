@@ -6329,6 +6329,13 @@ int32 CLuaBaseEntity::getMerit(uint16 merit)
 
         return PChar->PMeritPoints->GetMeritValue(static_cast<MERIT_TYPE>(merit), PChar);
     }
+    else if (m_PBaseEntity->objtype == TYPE_TRUST)
+    {
+        auto* PTrust = static_cast<CTrustEntity*>(m_PBaseEntity);
+        auto* PChar  = static_cast<CCharEntity*>(PTrust->PMaster);
+
+        return PChar->PMeritPoints->GetMeritValue(static_cast<MERIT_TYPE>(merit), PChar);
+    }
 
     return 0;
 }
