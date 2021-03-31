@@ -5585,15 +5585,27 @@ namespace charutils
 
     int32 GetCharVar(CCharEntity* PChar, const char* var)
     {
-        const char* fmtQuery = "SELECT value FROM char_vars WHERE charid = %u AND varname = '%s' LIMIT 1;";
-
-        int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id, var);
-
-        if (ret != SQL_ERROR && Sql_NumRows(SqlHandle) != 0 && Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+        auto it = PChar->charVars.find(var);
+        if (it == PChar->charVars.end())
         {
-            return Sql_GetIntData(SqlHandle, 0);
+            const char* fmtQuery = "SELECT value FROM char_vars WHERE charid = %u AND varname = '%s' LIMIT 1;";
+
+            int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id, var);
+
+            if (ret != SQL_ERROR && Sql_NumRows(SqlHandle) != 0 && Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+            {
+                auto value = Sql_GetIntData(SqlHandle, 0);
+                PChar->charVars[var] = value;
+                return value;
+            }
+
+            PChar->charVars[var] = 0;
+            return 0;
         }
-        return 0;
+        else
+        {
+            return it->second;
+        }
     }
 
     void SetCharVar(CCharEntity* PChar, const char* var, int32 value)
@@ -5601,11 +5613,13 @@ namespace charutils
         if (value == 0)
         {
             Sql_Query(SqlHandle, "DELETE FROM char_vars WHERE charid = %u AND varname = '%s' LIMIT 1;", PChar->id, var);
+            PChar->charVars.erase(var);
         }
         else
         {
             const char* fmtQuery = "INSERT INTO char_vars SET charid = %u, varname = '%s', value = %i ON DUPLICATE KEY UPDATE value = %i;";
             Sql_Query(SqlHandle, fmtQuery, PChar->id, var, value, value);
+            PChar->charVars[var] = value;
         }
     }
 

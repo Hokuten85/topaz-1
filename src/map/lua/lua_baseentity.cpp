@@ -12797,6 +12797,28 @@ inline int32 CLuaBaseEntity::setRace(uint16 face)
 
     return 0;
 }
+
+inline auto CLuaBaseEntity::getBountyMob(uint8 bountyType) -> std::tuple<uint32, uint32>
+{
+    CCharEntity* PChar      = ((CCharEntity*)m_PBaseEntity);
+
+    int    mobId  = 0;
+    int    itemId = 0;
+
+    BountyMob_t* bountyMob = zoneutils::GetBountyMob(PChar->GetMLevel(), bountyType);
+    if (bountyMob != nullptr)
+    {
+        mobId = bountyMob->Mob->id;
+        CItem* dropItem = bountyMob->Items->at(tpzrand::GetRandomNumber(bountyMob->Items->size()));
+        if (dropItem != nullptr)
+        {
+            itemId = dropItem->getID();
+        }
+    }
+
+    return { mobId , itemId };
+}
+
 //==========================================================//
 
 void CLuaBaseEntity::Register()
@@ -13501,6 +13523,7 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("getCharMod", CLuaBaseEntity::getCharMod);
     SOL_REGISTER("setFace", CLuaBaseEntity::setFace);
     SOL_REGISTER("setRace", CLuaBaseEntity::setRace);
+    SOL_REGISTER("getBountyMob", CLuaBaseEntity::getBountyMob);
 }
 
 //==========================================================//

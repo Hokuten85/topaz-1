@@ -472,6 +472,8 @@ public:
     virtual void           OnRaise() override;
     virtual void           OnItemFinish(CItemState&, action_t&);
 
+    std::map<std::string, int32> charVars;
+
     CCharEntity();  // constructor
     ~CCharEntity(); // destructor
 

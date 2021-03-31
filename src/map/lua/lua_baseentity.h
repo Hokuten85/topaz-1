@@ -762,6 +762,7 @@ public:
 
     int32 setFace(uint16 face); // Sets Character face
     int32 setRace(uint16 face); // Sets Character race
+    auto getBountyMob(uint8 bountyType) -> std::tuple<uint32, uint32>;
     static void Register();
 };
 

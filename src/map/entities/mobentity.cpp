@@ -797,14 +797,26 @@ void CMobEntity::DistributeRewards()
                 charutils::DistributeGil(PChar, this); // TODO: REALISATION MUST BE IN TREASUREPOOL
             }
 
+            const auto p1             = std::chrono::system_clock::now();
+            auto       timeSinceEpoch = std::chrono::duration_cast<std::chrono::seconds>(p1.time_since_epoch()).count();
+
             // RoE Mob kill event for all party members
-            PChar->ForAlliance([this, PChar](CBattleEntity* PMember) {
+            PChar->ForAlliance([this, PChar, timeSinceEpoch](CBattleEntity* PMember) {
                 if (PMember->getZone() == PChar->getZone())
                 {
                     RoeDatagramList datagrams;
                     datagrams.push_back(RoeDatagram("mob", (CMobEntity*)this));
                     datagrams.push_back(RoeDatagram("atkType", static_cast<uint8>(this->BattleHistory.lastHitTaken_atkType)));
                     roeutils::event(ROE_MOBKILL, (CCharEntity*)PMember, datagrams);
+
+                    auto PDerp       = static_cast<CCharEntity*>(PMember);
+                    auto bountyMobId = charutils::GetCharVar(PDerp, "BountyMobId");
+                    auto bountyMobExpireTime = charutils::GetCharVar(PDerp, "BountyMobExpireTime");
+                    
+                    if (this->id == bountyMobId && timeSinceEpoch <= bountyMobExpireTime)
+                    {
+                        charutils::SetCharVar(PDerp, "BountySuccess", 1);
+                    }
                 }
             });
 

@@ -1126,20 +1126,21 @@ namespace zoneutils
 BountyMob_t* GetBountyMob(uint8 charLevel, uint8 bountyType)
 {
     uint8 minLevel = 1;
-    uint8 maxLevel = 99;
+    uint8 maxLevel = charLevel;
 
-    switch (bountyType)
+    if (charLevel >= 70)
     {
-    case 2:
-        minLevel = charLevel;
-        maxLevel = charLevel + 10;
-        break;
-    case 3:
-        minLevel = charLevel + 10;
-        maxLevel = charLevel + 20;
-        break;
-    default:
-        maxLevel = charLevel;
+        switch (bountyType)
+        {
+            case 2:
+                minLevel = charLevel;
+                maxLevel = charLevel + 10;
+                break;
+            case 3:
+                minLevel = charLevel + 10;
+                maxLevel = charLevel + 20;
+                break;
+        }
     }
 
     uint16 nmPoolSize = 0;
