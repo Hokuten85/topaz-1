@@ -528,10 +528,11 @@ namespace zoneutils
                  }
 
                  // must be here first to define mobmods
-                 mobutils::InitializeMob(PMob, GetZone(ZoneID));
+                 auto zone = GetZone(ZoneID);
+                 mobutils::InitializeMob(PMob, zone);
 
-                 GetZone(ZoneID)->InsertMOB(PMob);
-                 if (GetZone(ZoneID)->GetType() & (ZONE_TYPE::OUTDOORS | ZONE_TYPE::DUNGEON) && (PMob->m_Type & MOBTYPE_NOTORIOUS) && !(PMob->m_Type & (MOBTYPE_BATTLEFIELD | MOBTYPE_EVENT)) && PMob->m_DropID > 0)
+                 zone->InsertMOB(PMob);
+                 if ((zone->GetType() == ZONE_TYPE::OUTDOORS || zone->GetType() == ZONE_TYPE::DUNGEON) && (PMob->m_Type & MOBTYPE_NOTORIOUS) && !(PMob->m_Type & (MOBTYPE_BATTLEFIELD | MOBTYPE_EVENT)) && PMob->m_DropID > 0)
                  {
                      DropList_t* dropList = itemutils::GetDropList(PMob->m_DropID);
                      if (dropList != nullptr)

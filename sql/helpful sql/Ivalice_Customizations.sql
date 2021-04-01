@@ -61,8 +61,8 @@ UPDATE npc_list SET pos_rot = 60, pos_x = 52, pos_y = -7, pos_z = -45, namevis =
 UPDATE npc_list SET pos_rot = 60, pos_x = 50, pos_y = -7, pos_z = -45, namevis = 0, status = 0 WHERE npcid = 17756446;
 UPDATE npc_list SET pos_rot = 60, pos_x = 48, pos_y = -7, pos_z = -45, namevis = 0, status = 0 WHERE npcid = 17756447;
 
-UPDATE npc_list SET pos_rot = 125, pos_x = 113, pos_y = 40, pos_z = 370, namevis = 0, status = 0 WHERE npcid = 17195740;
-UPDATE npc_list SET pos_rot = 194, pos_x = 449, pos_y = 24, pos_z = 4, namevis = 0, status = 0 WHERE npcid = 17257135;
+UPDATE npc_list SET pos_rot = 125, pos_x = 113, pos_y = 40, pos_z = 370, namevis = 0, status = 0 WHERE npcid = 17257135;
+UPDATE npc_list SET pos_rot = 194, pos_x = 449, pos_y = 24, pos_z = 4, namevis = 0, status = 0 WHERE npcid = 17195740;
 UPDATE npc_list nl
 INNER JOIN (SELECT look FROM npc_list WHERE npcid = 17257135) nl2
 	ON 1 = 1

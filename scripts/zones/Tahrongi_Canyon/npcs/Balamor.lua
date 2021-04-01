@@ -47,7 +47,7 @@ entity.onTrade = function(player, npc, trade)
 		local tradeGil = trade:getGil()
         if tradeGil > 0 and bountyMobId ~= 0 then
             local mob = GetMobByID(bountyMobId)
-            player:PrintToPlayer(string.format("You've already got a job. Can't give ya another until you take care of %s.", formatName(mob:getName()), 0, npcName))
+            player:PrintToPlayer(string.format("You've already got a job. Can't give ya another until you take care of %s.", formatName(mob:getName())), 0, npcName)
             return
         end
         
@@ -103,7 +103,7 @@ entity.onTrade = function(player, npc, trade)
             
             player:PrintToPlayer(string.format("I have a client from %s who's having issues with a nasty Notorious Monster that keeps interrupting their supply route.", client), 0, npcName)
 			player:PrintToPlayer(string.format("Your job is to go find %s, kill it, and return here for your reward.", prettyMobName), 0, npcName)
-            player:PrintToPlayer(string.format("If %s happens to drop a %s, I'll take that too. Client says they'll pay extra.", prettyMobName, formatName(item:GetName())), 0, npcName)
+            player:PrintToPlayer(string.format("If %s happens to drop a %s, I'll take that too. Client says they'll pay extra.", prettyMobName, formatName(item:getName())), 0, npcName)
             player:PrintToPlayer("This isn't no leisurely job neither. We have one week or the contract expires and I keep your collateral. Get movin'.", 0, npcName)
 
             player:setCharVar("BountyMobExpireTime", os.time() + 604800)
@@ -117,7 +117,7 @@ entity.onTrade = function(player, npc, trade)
             
 			local mob = GetMobByID(bountyMobId)
 			local item = GetReadOnlyItem(bountyItemId)
-            local prettyMobName = formatName(mob:GetName())
+            local prettyMobName = formatName(mob:getName())
             
             player:PrintToPlayer(string.format("You know the drill, your job is to go find %s, kill it, and return here for your reward.", prettyMobName), 0, npcName)
             player:PrintToPlayer(string.format("If %s happens to drop a %s, I'll take that too. Client will pay extra.", prettyMobName, formatName(item:getName())), 0, npcName)
@@ -134,7 +134,7 @@ entity.onTrade = function(player, npc, trade)
             
 			local mob = GetMobByID(bountyMobId)
 			local item = GetReadOnlyItem(bountyItemId)
-            local prettyMobName = formatName(mob:GetName())
+            local prettyMobName = formatName(mob:getName())
             
             player:PrintToPlayer("This is the most dangerous job I have on the books. You sure you want this? I already have your money, no turning back now.", 0, npcName)
             player:PrintToPlayer(string.format("%s.", prettyMobName), 0, npcName)
