@@ -30,14 +30,14 @@ entity.onTrade = function(player, npc, trade)
 
     if (bountySuccess == 0 and bountyMobId ~= 0 and bountyMobExpireTime > 0 and bountyMobExpireTime <= os.clock()) then
         player:PrintToPlayer("stares at you angrily...", 8, npcName)
-        player:PrintToPlayer("Client's pissed.", 0, npcName)
-        npc:timer(1000,player:PrintToPlayer("is visibly becoming irate...", 8, npcName))
-        npc:timer(1000,player:PrintToPlayer("Job failed.", 1, npcName))
-        npc:timer(1500,player:PrintToPlayer("yelling echos through the canyon.", 8, npcName))
-        npc:timer(1500,player:PrintToPlayer("What do you think this is?! WHAT KIND OF PEOPLE DO YOU THINK WE WORK FOR?!!!", 26, npcName))
-        npc:timer(2000,player:PrintToPlayer("regains his composure and continues in a hushed whisper...", 8, npcName))
-        npc:timer(2000,player:PrintToPlayer("You do not fail these people if you value your life.", 1, npcName))
-        npc:timer(2000,player:PrintToPlayer(string.format("Not acceptable %s, your collateral is forfeit. You must do better next time.", playerName), 0, npcName))
+        npc:timer(3000, function() player:PrintToPlayer("Client's pissed.", 0, npcName) end)
+        npc:timer(5000, function() player:PrintToPlayer("is visibly becoming irate...", 8, npcName) end)
+        npc:timer(7000, function() player:PrintToPlayer("Job failed.", 1, npcName) end)
+        npc:timer(7500, function() player:PrintToPlayer("begins to yell, echoing through the canyon.", 8, npcName) end)
+        npc:timer(7500, function() player:PrintToPlayer("What do you think this is?! WHAT KIND OF PEOPLE DO YOU THINK WE WORK FOR?!!!", 26, npcName) end)
+        npc:timer(9000, function() player:PrintToPlayer("regains his composure and continues in a hushed whisper...", 8, npcName) end)
+        npc:timer(10000, function() player:PrintToPlayer("You do not fail these people if you value your life.", 0, npcName) end)
+        npc:timer(13000, function() player:PrintToPlayer(string.format("Not acceptable %s, your collateral is forfeit. You must do better next time.", playerName), 0, npcName) end)
         
         clearBountyVars(player)
         return
@@ -81,14 +81,14 @@ entity.onTrade = function(player, npc, trade)
 			if bountyBuyIn < 1 then
 				player:setCharVar("BountyBuyIn", 1)
 				player:PrintToPlayer("Glad to have you! Truth is my whole crew died on the last job. Quite the unfortunate bloodbath...", 0, npcName)
-				npc:timer(500,player:PrintToPlayer("stares off into the distance...", 8, npcName))
-				npc:timer(2000,player:PrintToPlayer("Anyway...that's not important. We work with mostly...", 0, npcName))
-				npc:timer(2200,player:PrintToPlayer("coughs.", 8, npcName))
-				npc:timer(2300,player:PrintToPlayer("black market", 0, npcName))
-				npc:timer(2500,player:PrintToPlayer("coughs.", 8, npcName))
-				npc:timer(2700,player:PrintToPlayer("...goods transfer, so discretion is of the utmost importance.", 0, npcName))
+				npc:timer(3000, function() player:PrintToPlayer("stares off into the distance...", 8, npcName) end)
+				npc:timer(5000, function() player:PrintToPlayer("Anyway...that's not important. We work with mostly...", 0, npcName) end)
+				npc:timer(6000, function() player:PrintToPlayer("coughs.", 8, npcName) end)
+				npc:timer(7000, function() player:PrintToPlayer("black market", 0, npcName) end)
+				npc:timer(8000, function() player:PrintToPlayer("coughs.", 8, npcName) end)
+				npc:timer(9000, function() player:PrintToPlayer("...goods transfer, so discretion is of the utmost importance.", 0, npcName) end)
                 
-                delay = 2800
+                delay = 10000
 			end
             
 			local cities = {"San d'Oria", "Windurst", "Bastok", "Jeuno", "Selbina", "Mhaura", "Kazham", "Norg", "Aht Urgan", "Tavnazia"}
@@ -104,10 +104,10 @@ entity.onTrade = function(player, npc, trade)
 			local item = GetReadOnlyItem(bountyItemId)
             local prettyMobName = formatName(mob:getName())
             
-            npc:timer(delay,player:PrintToPlayer(string.format("I have a client from %s who's having issues with a nasty Notorious Monster that keeps interrupting their supply route.", client), 0, npcName))
-			npc:timer(delay+500,player:PrintToPlayer(string.format("Your job is to go find %s, kill it, and return here for your reward.", prettyMobName), 0, npcName))
-            npc:timer(delay+1000,player:PrintToPlayer(string.format("If %s happens to drop a %s, I'll take that too. Client says they'll pay extra.", prettyMobName, formatName(item:getName())), 0, npcName))
-            npc:timer(delay+1500,player:PrintToPlayer("This isn't no leisurely job neither. We have one week or the contract expires and I keep your collateral. Get movin'.", 0, npcName))
+            npc:timer(delay, function() player:PrintToPlayer(string.format("I have a client from %s who's having issues with a nasty Notorious Monster that keeps interrupting their supply route.", client), 0, npcName) end)
+			npc:timer(delay+1000, function() player:PrintToPlayer(string.format("Your job is to go find %s, kill it, and return here for your reward.", prettyMobName), 0, npcName) end)
+            npc:timer(delay+2000, function() player:PrintToPlayer(string.format("If %s happens to drop a %s, I'll take that too. Client says they'll pay extra.", prettyMobName, formatName(item:getName())), 0, npcName) end)
+            npc:timer(delay+3000, function() player:PrintToPlayer("This isn't no leisurely job neither. We have one week or the contract expires and I keep your collateral. Get movin'.", 0, npcName) end)
 
             player:setCharVar("BountyMobExpireTime", os.time() + 604800)
             player:tradeComplete()
@@ -123,8 +123,8 @@ entity.onTrade = function(player, npc, trade)
             local prettyMobName = formatName(mob:getName())
             
             player:PrintToPlayer(string.format("You know the drill, your job is to go find %s, kill it, and return here for your reward.", prettyMobName), 0, npcName)
-            npc:timer(1000,player:PrintToPlayer(string.format("If %s happens to drop a %s, I'll take that too. Client will pay extra.", prettyMobName, formatName(item:getName())), 0, npcName))
-            npc:timer(1500,player:PrintToPlayer("One week.", 0, npcName))
+            npc:timer(1000, function() player:PrintToPlayer(string.format("If %s happens to drop a %s, I'll take that too. Client will pay extra.", prettyMobName, formatName(item:getName())), 0, npcName) end)
+            npc:timer(1500, function() player:PrintToPlayer("One week.", 0, npcName) end)
             
             player:setCharVar("BountyMobExpireTime", os.time() + 604800)
             player:tradeComplete()
@@ -140,11 +140,11 @@ entity.onTrade = function(player, npc, trade)
             local prettyMobName = formatName(mob:getName())
             
             player:PrintToPlayer("This is the most dangerous job I have on the books. You sure you want this? I already have your money, no turning back now.", 0, npcName)
-            npc:timer(1000,player:PrintToPlayer(string.format("%s.", prettyMobName), 0, npcName))
-            npc:timer(1500,player:PrintToPlayer(string.format("Just hearing that name scares the piss out of me. %s, I'm trusting you. There's a lot of Gil riding on this.", player:getName()), 0, npcName))
-            npc:timer(1700,player:PrintToPlayer("I've worked out a secondary deal with one of my other clients.", 0, npcName))
-            npc:timer(1700,player:PrintToPlayer(string.format("They want %s's %s. Will pay handsomely for it too. Bring that to me if you survive.", prettyMobName, formatName(item:getName())), 0, npcName))
-            npc:timer(2000,player:PrintToPlayer("You have one week, starting now.", 0, npcName))
+            npc:timer(2000, function() player:PrintToPlayer(string.format("%s.", prettyMobName), 0, npcName) end)
+            npc:timer(4000, function() player:PrintToPlayer(string.format("Just hearing that name scares the piss out of me. %s, I'm trusting you. There's a lot of Gil riding on this.", player:getName()), 0, npcName) end)
+            npc:timer(5000, function() player:PrintToPlayer("I've worked out a secondary deal with one of my other clients.", 0, npcName) end)
+            npc:timer(6000, function() player:PrintToPlayer(string.format("They want %s's %s. Will pay handsomely for it too. Bring that to me if you survive.", prettyMobName, formatName(item:getName())), 0, npcName) end)
+            npc:timer(7000, function() player:PrintToPlayer("You have one week, starting now.", 0, npcName) end)
             
             player:setCharVar("BountyMobExpireTime", os.time() + 604800)
             player:tradeComplete()
@@ -161,14 +161,14 @@ entity.onTrigger = function(player, npc)
     
     if (bountySuccess == 0 and bountyMobId ~= 0 and bountyMobExpireTime > 0 and bountyMobExpireTime <= os.clock()) then
         player:PrintToPlayer("stares at you angrily...", 8, npcName)
-        player:PrintToPlayer("Client's pissed.", 0, npcName)
-        npc:timer(1000,player:PrintToPlayer("is visibly becoming irate...", 8, npcName))
-        npc:timer(1000,player:PrintToPlayer("Job failed.", 1, npcName))
-        npc:timer(1500,player:PrintToPlayer("yelling echos through the canyon, with fear and panic stricken across his face.", 8, npcName))
-        npc:timer(1500,player:PrintToPlayer("What do you think this is?! WHAT KIND OF PEOPLE DO YOU THINK WE WORK FOR?!!!", 26, npcName))
-        npc:timer(2000,player:PrintToPlayer("regains his composure and continues in a hushed whisper...", 8, npcName))
-        npc:timer(2000,player:PrintToPlayer("If you value your life, you cannot fail these people.", 0, npcName))
-        npc:timer(2000,player:PrintToPlayer(string.format("Not acceptable %s, your collateral is forfeit. You must do better next time.", playerName), 0, npcName))
+        npc:timer(3000, function() player:PrintToPlayer("Client's pissed.", 0, npcName) end)
+        npc:timer(5000, function() player:PrintToPlayer("is visibly becoming irate...", 8, npcName) end)
+        npc:timer(7000, function() player:PrintToPlayer("Job failed.", 1, npcName) end)
+        npc:timer(7500, function() player:PrintToPlayer("begins to yell, echoing through the canyon.", 8, npcName) end)
+        npc:timer(7500, function() player:PrintToPlayer("What do you think this is?! WHAT KIND OF PEOPLE DO YOU THINK WE WORK FOR?!!!", 26, npcName) end)
+        npc:timer(9000, function() player:PrintToPlayer("regains his composure and continues in a hushed whisper...", 8, npcName) end)
+        npc:timer(10000, function() player:PrintToPlayer("You do not fail these people if you value your life.", 0, npcName) end)
+        npc:timer(13000, function() player:PrintToPlayer(string.format("Not acceptable %s, your collateral is forfeit. You must do better next time.", playerName), 0, npcName) end)
         
         clearBountyVars(player)
         return
@@ -215,19 +215,19 @@ entity.onTrigger = function(player, npc)
 	elseif bountyBuyIn >= 1 then
         if bountyBuyIn == 1 and player:getMainLvl() >= 70 then
             player:PrintToPlayer(string.format("%s, I do believe it is time. I rarely give out such dangerous jobs, ", playerName), 0, npcName)
-            npc:timer(500,player:PrintToPlayer("but it appears that your strength has grown to rival the best this world has to offer.", 13, npcName))
-            npc:timer(1000,player:PrintToPlayer("I'm putting my repuation on the line for this, and I require that you have some additional skin in the game before I say anything more.", 0, npcName))
-            npc:timer(1100,player:PrintToPlayer("100000 Gil gets your foot in the door into this more dangerous line of work, but if you really want to prove yourself...", 0, npcName))
-            npc:timer(1200,player:PrintToPlayer("If you really believe you have the mettle to challenge the most fierce fiends in our world. 500000 Gil.", 0, npcName))
+            npc:timer(500, function() player:PrintToPlayer("but it appears that your strength has grown to rival the best this world has to offer.", 13, npcName) end)
+            npc:timer(1000, function() player:PrintToPlayer("I'm putting my repuation on the line for this, and I require that you have some additional skin in the game before I say anything more.", 0, npcName) end)
+            npc:timer(1100, function() player:PrintToPlayer("100000 Gil gets your foot in the door into this more dangerous line of work, but if you really want to prove yourself...", 0, npcName) end)
+            npc:timer(1200, function() player:PrintToPlayer("If you really believe you have the mettle to challenge the most fierce fiends in our world. 500000 Gil.", 0, npcName) end)
             player:setCharVar("BountyBuyIn", 2)
 		else
             player:PrintToPlayer(string.format("Welcome back %s. Looking for work? I got a job if you've got the 10000 Gil collateral.", playerName), 0, npcName)
 		end
 	else
 		player:PrintToPlayer("Hey, you look like you've survived a few beatings, want in on my little operation?", 0, npcName)
-		npc:timer(500,player:PrintToPlayer("I provide discreet caravan security services for select clientele across Vana'diel. Just so happens that I'm looking for some new muscle for my crew.", 0, npcName))
-		npc:timer(1000,player:PrintToPlayer("Due to the hush hush nature of the job, I require each member of my crew to put down 10000 Gil as collateral.", 0, npcName))
-		npc:timer(1200,player:PrintToPlayer("Don't worry, you'll make it back and then some when the job is over. What do you say? Toss me 10000 Gil and we are in business.", 0, npcName))
+		npc:timer(500, function() player:PrintToPlayer("I provide discreet caravan security services for select clientele across Vana'diel. Just so happens that I'm looking for some new muscle for my crew.", 0, npcName) end)
+		npc:timer(1000, function() player:PrintToPlayer("Due to the hush hush nature of the job, I require each member of my crew to put down 10000 Gil as collateral.", 0, npcName) end)
+		npc:timer(1200, function() player:PrintToPlayer("Don't worry, you'll make it back and then some when the job is over. What do you say? Toss me 10000 Gil and we are in business.", 0, npcName) end)
 	end
 end
 

@@ -18,6 +18,10 @@ end
 item_object.onItemUse = function(target)
     target:addStatusEffect(tpz.effect.INT_BOOST, 5, 0, 600)
     target:addStatusEffect(tpz.effect.MEDICINE, 0, 0, 3600)
+    
+    if target:getCharMod(tpz.mod.INT) < 20 then
+        target:addCharMod(tpz.mod.INT,1)
+    end
 end
 
 return item_object

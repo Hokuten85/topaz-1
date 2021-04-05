@@ -16,8 +16,17 @@ item_object.onItemCheck = function(target)
 end
 
 item_object.onItemUse = function(target)
+    target:addStatusEffect(tpz.effect.MAX_HP_BOOST, 5, 0, 900)
+    target:addStatusEffect(tpz.effect.MAX_MP_BOOST, 5, 0, 900)
     target:addStatusEffect(tpz.effect.MEDICINE, 0, 0, 3600)
-    target:warp()
+    
+    if target:getCharMod(tpz.mod.HP) < 60 then
+        target:addCharMod(tpz.mod.HP,3)
+    end
+    if target:getCharMod(tpz.mod.MP) < 40 then
+        target:addCharMod(tpz.mod.MP,2)
+    end
+    
 end
 
 return item_object

@@ -149,6 +149,8 @@ set MId = 16
 WHERE MId IN (14,15)
 AND name like '%subligar%';
 
+UPDATE item_usable SET animation = 25 WHERE itemid = 4265;
+
 UPDATE item_puppet
 SET element = 1144206147
 WHERE itemid IN (8227,8196); -- storm walker

@@ -12759,6 +12759,16 @@ inline int32 CLuaBaseEntity::addCharMod(uint16 modid, int16 modValue)
     auto  mod   = static_cast<Mod>(modid);
 
     charutils::AddCharMod(PChar, mod, modValue);
+    charutils::BuildingCharSkillsTable(PChar);
+    charutils::CalculateStats(PChar);
+    PChar->UpdateHealth();
+    PChar->addHP(PChar->GetMaxHP());
+    PChar->addMP(PChar->GetMaxMP());
+
+    PChar->pushPacket(new CCharUpdatePacket(PChar));
+    PChar->pushPacket(new CCharStatsPacket(PChar));
+    PChar->pushPacket(new CCharSkillsPacket(PChar));
+
     return 0;
 }
 
