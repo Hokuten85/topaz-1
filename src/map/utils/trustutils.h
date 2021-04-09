@@ -104,6 +104,10 @@ namespace trustutils
     void          LoadTrustEquipment(CTrustEntity* PTrust, CCharEntity* PMaster);
     void          SetBrdSongPiority(CTrustEntity* PTrust);
     void          SetSongList(CTrustEntity* PTrust, const std::vector<SongPriority_t>& songPriorities, std::vector<SpellID>& songList);
+
+    void  BuildingTrustAbilityTable(CTrustEntity* PTrust);
+    int32 hasAbility(CTrustEntity* PTrust, uint16 AbilityID); // проверяем наличие ключевого предмета
+    int32 addAbility(CTrustEntity* PTrust, uint16 AbilityID); // добавляем ключевой предмет
 }; // namespace trustutils
 
 #endif

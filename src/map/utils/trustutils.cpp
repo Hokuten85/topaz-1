@@ -32,6 +32,7 @@
 #include "../status_effect_container.h"
 #include "../weapon_skill.h"
 #include "../zone_instance.h"
+#include "../ability.h"
 
 std::vector<TrustSpell_ID*> g_PTrustIDList;
 std::vector<Trust_t*> g_PTrustList;
@@ -242,6 +243,7 @@ namespace trustutils
         PTrust->SetSLevel(PMaster->GetSLevel());
 
         LoadTrustStatsAndSkills(PTrust);
+        BuildingTrustAbilityTable(PTrust);
 
         switch (trustData->cmbSkill)
         {
@@ -599,13 +601,76 @@ namespace trustutils
                         {
                             uint8           slotId          = equip->EquipSlot;
                             CItemEquipment* PEquip          = static_cast<CItemEquipment*>(PItem);
-                            PTrust->equip[slotId]           = PEquip;
+                            
                             if (slotId >= 0 && slotId <= 3)
                             {
-                                if (PItem->isType(ITEM_WEAPON))
+                                if (PEquip->isType(ITEM_WEAPON) || PEquip->IsShield())
                                 {
-                                    PTrust->m_Weapons[(SLOTTYPE)slotId] = PEquip;
+                                    if (PTrust->m_Weapons[(SLOTTYPE)slotId] != nullptr)
+                                    {
+                                        if (!PEquip->IsShield())
+                                        {
+                                            auto weapon        = static_cast<CItemWeapon*>(PEquip);
+                                            auto currentWeapon = static_cast<CItemWeapon*>(PTrust->m_Weapons[(SLOTTYPE)slotId]);
+                                            if ((float)weapon->getDamage() / weapon->getDelay() > (float)currentWeapon->getDamage() / weapon->getDelay())
+                                            {
+                                                PTrust->m_Weapons[(SLOTTYPE)slotId] = PEquip;
+                                                PTrust->equip[slotId]               = PEquip;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            auto currentShield = PTrust->m_Weapons[(SLOTTYPE)slotId];
+                                            if (PEquip->getShieldAbsorption() > currentShield->getShieldAbsorption())
+                                            {
+                                                PTrust->m_Weapons[(SLOTTYPE)slotId] = PEquip;
+                                            }
+
+                                            auto blockRate = [](CItemEquipment* PEquip) {
+                                                if (PEquip->IsShield())
+                                                {
+                                                    switch (PEquip->getShieldSize())
+                                                    {
+                                                        case 1: // buckler
+                                                            return 55;
+                                                            break;
+                                                        case 2: // round
+                                                        case 5: // aegis
+                                                            return 50;
+                                                            break;
+                                                        case 3: // kite
+                                                            return 45;
+                                                            break;
+                                                        case 4: // tower
+                                                            return 30;
+                                                            break;
+                                                        case 6: // ochain
+                                                            return 110;
+                                                            break;
+                                                        default:
+                                                            return 0;
+                                                    }
+                                                }
+
+                                                return 0;
+                                            };
+
+                                            if (blockRate(PEquip) > blockRate(currentShield))
+                                            {
+                                                PTrust->equip[slotId] = PEquip;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        PTrust->m_Weapons[(SLOTTYPE)slotId] = PEquip;
+                                        PTrust->equip[slotId]               = PEquip;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                PTrust->equip[slotId] = PEquip;
                             }
 
                             std::vector<CModifier> consolidatedMods;
@@ -761,5 +826,75 @@ namespace trustutils
                 }
             }
         }
+    }
+
+    void BuildingTrustAbilityTable(CTrustEntity* PTrust)
+    {
+        std::vector<CAbility*> AbilitiesList;
+
+        memset(&PTrust->m_Abilities, 0, sizeof(PTrust->m_Abilities));
+
+        AbilitiesList = ability::GetAbilities(PTrust->GetMJob());
+
+        for (auto PAbility : AbilitiesList)
+        {
+            if (PAbility == nullptr)
+            {
+                continue;
+            }
+
+            if (PTrust->GetMLevel() >= PAbility->getLevel())
+            {
+                if (PAbility->getID() < ABILITY_HEALING_RUBY && PAbility->getID() != ABILITY_PET_COMMANDS)
+                {
+                    addAbility(PTrust, PAbility->getID());
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // To stop a character with no SJob to receive the traits with job = 0 in the DB.
+        if (PTrust->GetSJob() == JOB_NON)
+        {
+            return;
+        }
+
+        AbilitiesList = ability::GetAbilities(PTrust->GetSJob());
+
+        for (auto PAbility : AbilitiesList)
+        {
+            if (PTrust->GetSLevel() >= PAbility->getLevel())
+            {
+                if (PAbility == nullptr)
+                {
+                    continue;
+                }
+
+                if (PAbility->getLevel() != 0 && PAbility->getID() < ABILITY_HEALING_RUBY)
+                {
+                    if (PAbility->getID() != ABILITY_PET_COMMANDS  && !(PAbility->getAddType() & ADDTYPE_MAIN_ONLY))
+                    {
+                        addAbility(PTrust, PAbility->getID());
+                    }
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    int32 hasAbility(CTrustEntity* PTrust, uint16 AbilityID)
+    {
+        return hasBit(AbilityID, PTrust->m_Abilities, sizeof(PTrust->m_Abilities));
+    }
+
+    int32 addAbility(CTrustEntity* PTrust, uint16 AbilityID)
+    {
+        return addBit(AbilityID, PTrust->m_Abilities, sizeof(PTrust->m_Abilities));
     }
 }; // namespace trustutils

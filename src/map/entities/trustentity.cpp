@@ -629,16 +629,78 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
                 }
             }
         }
-        
-        this->equip[slotId] = PItem;
+
         this->addEquipModifiers(&equipMods.at(slotId), PItem->getReqLvl(), slotId);
 
         if (slotId >= 0 && slotId <= 3)
         {
-            if (PItem->isType(ITEM_WEAPON))
+            if (PItem->isType(ITEM_WEAPON) || PItem->IsShield())
             {
-                this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+                if (this->m_Weapons[(SLOTTYPE)slotId] != nullptr)
+                {
+                    if (!PItem->IsShield())
+                    {
+                        auto weapon        = static_cast<CItemWeapon*>(PItem);
+                        auto currentWeapon = static_cast<CItemWeapon*>(this->m_Weapons[(SLOTTYPE)slotId]);
+                        if ((float)weapon->getDamage() / weapon->getDelay() > (float)currentWeapon->getDamage() / weapon->getDelay())
+                        {
+                            this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+                            this->equip[slotId]               = PItem;
+                        }
+                    }
+                    else
+                    {
+                        auto currentShield = this->m_Weapons[(SLOTTYPE)slotId];
+                        if (PItem->getShieldAbsorption() > currentShield->getShieldAbsorption())
+                        {
+                            this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+                        }
+
+                        auto blockRate = [](CItemEquipment* PEquip) {
+                            if (PEquip->IsShield())
+                            {
+                                switch (PEquip->getShieldSize())
+                                {
+                                    case 1: // buckler
+                                        return 55;
+                                        break;
+                                    case 2: // round
+                                    case 5: // aegis
+                                        return 50;
+                                        break;
+                                    case 3: // kite
+                                        return 45;
+                                        break;
+                                    case 4: // tower
+                                        return 30;
+                                        break;
+                                    case 6: // ochain
+                                        return 110;
+                                        break;
+                                    default:
+                                        return 0;
+                                }
+                            }
+
+                            return 0;
+                        };
+
+                        if (blockRate(PItem) > blockRate(currentShield))
+                        {
+                            this->equip[slotId] = PItem;
+                        }
+                    }
+                }
+                else
+                {
+                    this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+                    this->equip[slotId]               = PItem;
+                }
             }
+        }
+        else
+        {
+            this->equip[slotId] = PItem;
         }
 
         this->UpdateHealth();
