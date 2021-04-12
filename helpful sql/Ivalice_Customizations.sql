@@ -73,7 +73,7 @@ WHERE nl.npcid = 17195740;
 UPDATE skill_ranks SET thf = 5, dnc = 5 WHERE skillid = 1; -- h2h
 UPDATE skill_ranks SET war = 3, rdm = 1, rng = 3 WHERE skillid = 2; -- dagger
 UPDATE skill_ranks SET war = 3, rdm = 1, thf = 5 WHERE skillid = 3; -- sword
-UPDATE skill_ranks SET rng = 3 WHERE skillid = 5; -- axe
+UPDATE skill_ranks SET war = 1, rng = 3 WHERE skillid = 5; -- axe
 UPDATE skill_ranks SET war = 3 WHERE skillid = 8; -- polearm
 UPDATE skill_ranks SET war = 3 WHERE skillid = 11; -- club
 UPDATE skill_ranks SET war = 3 WHERE skillid = 12; -- staff
