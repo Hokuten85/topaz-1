@@ -1051,6 +1051,13 @@ return {
     [1059] = {id=1059,en="Raskovniche Render",ja="ラスコフニチェレンダー"},
     [1060] = {id=1060,en="Procne Punisher",ja="プロクネパニシャー"},
     [1061] = {id=1061,en="Henwen Harrier",ja="ヘンウェンハリア"},
+    [1062] = {id=1062,en="Xevioso Zapper",ja="ゼヴィオソザッパー"},
+    [1063] = {id=1063,en="Ngai Nabber",ja="ンガイナッバー"},
+    [1064] = {id=1064,en="Kalunga Collapser",ja="カルーンガコラップサー"},
+    [1065] = {id=1065,en="Mboze Mauler",ja="ムボゼモーラー"},
+    [1066] = {id=1066,en="Ongo Obliterator",ja="オンゴオブリテレーター"},
+    [1067] = {id=1067,en="Arepati Assaulter",ja="アレバティアソルター"},
+    [1068] = {id=1068,en="Bumba Befouler",ja="バンバビファウラー"},
     [1116] = {id=1116,en="Raptor Wrangler",ja="爆速ラプトルライダー"},
     [1117] = {id=1117,en="Gardener for the Ages",ja="疾走ガーデンライダー"},
     [1118] = {id=1118,en="Lagoon Explorer",ja="伝説ラグーンライダー"},
@@ -1067,6 +1074,8 @@ return {
     [1129] = {id=1129,en="Destiny Destroyer...Destroyer",ja="ディスティニーデストロイヤー団デストロイヤー"},
     [1130] = {id=1130,en="Fully-Baked Hero",ja="完熟ヒーロー"},
     [1131] = {id=1131,en="Ghdwk Vshdnhu",ja="ケテロテククムウラケミニ"},
+    [1132] = {id=1132,en="Love is Alive",ja="ラブ・ア・ライブ"},
+    [1133] = {id=1133,en="The Awakener",ja="目覚めを見届けし者"},
 }, {"id", "en", "ja"}
 
 --[[
