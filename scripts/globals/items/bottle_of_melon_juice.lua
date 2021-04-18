@@ -14,7 +14,7 @@ end
 
 item_object.onItemUse = function(target)
     if (not target:hasStatusEffect(tpz.effect.REFRESH)) then
-        target:addStatusEffect(tpz.effect.REFRESH, 2, 3, 135)
+        target:addStatusEffect(tpz.effect.REFRESH, 2, 3, 300)
     else
         target:messageBasic(tpz.msg.basic.NO_EFFECT)
     end

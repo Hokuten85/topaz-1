@@ -33,6 +33,8 @@ spell_object.onMobSpawn = function(mob)
         [tpz.magic.spell.SHANTOTTO] = tpz.trust.message_offset.TEAMWORK_1,
         [tpz.magic.spell.STAR_SIBYL] = tpz.trust.message_offset.TEAMWORK_2,
     })
+    
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.REFRESH, ai.r.ITEM, 0, 0)
 
     mob:addSimpleGambit(ai.t.PARTY, ai.c.HPP_LT, 25, ai.r.MA, ai.s.HIGHEST, tpz.magic.spellFamily.CURE)
 

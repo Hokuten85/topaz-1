@@ -29,8 +29,8 @@ end
 
 function onTrigger(player)
     local target = player:getCursorTarget()
-    if not target or target:isNPC() then
-        error(player, "No valid target found. place cursor on a non-npc object. ")
+    if not target or target:getObjType() ~= tpz.objType.TRUST then
+        error(player, "No valid target found. place cursor on a trust object. ")
         return
     end
 

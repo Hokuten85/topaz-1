@@ -26,7 +26,9 @@ spell_object.onMobSpawn = function(mob)
         [tpz.magic.spell.SHANTOTTO_II] = tpz.trust.message_offset.TEAMWORK_1,
         [tpz.magic.spell.AJIDO_MARUJIDO] = tpz.trust.message_offset.TEAMWORK_2,
     })
-
+    
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.REFRESH, ai.r.ITEM, 0, 0)
+    
     mob:addSimpleGambit(ai.t.SELF, ai.c.MPP_LT, 5,
                         ai.r.JA, ai.s.SPECIFIC, tpz.ja.CONVERT)
 
