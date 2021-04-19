@@ -17,10 +17,10 @@ end
 
 ability_object.onUseAbility = function(player, target, ability)
     local baseDuration = 300
-    local durationMultiplier = 1.0 + utils.clamp(player:getMod(tpz.mod.JIG_DURATION), 0, 50) / 100
+    local durationMultiplier = 1.0 + utils.clamp(player:getMod(xi.mod.JIG_DURATION), 0, 50) / 100
     local finalDuration = math.floor(baseDuration * durationMultiplier)
 
-    player:addStatusEffect(tpz.effect.QUICKENING, 25, 0, finalDuration)
+    player:addStatusEffect(xi.effect.QUICKENING, 25, 0, finalDuration)
 end
 
 return ability_object

@@ -12,22 +12,22 @@ local entity = {}
 
 local keyitems = {
     [0] = {
-        id = tpz.ki.FROG_FISHING,
+        id = xi.ki.FROG_FISHING,
         rank = 3,
         cost = 1
     },
     [1] = {
-        id = tpz.ki.SERPENT_RUMORS,
+        id = xi.ki.SERPENT_RUMORS,
         rank = 8,
         cost = 1
     },
     [2] = {
-        id = tpz.ki.MOOCHING,
+        id = xi.ki.MOOCHING,
         rank = 9,
         cost = 1
     },
     [3] = {
-        id = tpz.ki.ANGLERS_ALMANAC,
+        id = xi.ki.ANGLERS_ALMANAC,
         rank = 9,
         cost = 1
     }

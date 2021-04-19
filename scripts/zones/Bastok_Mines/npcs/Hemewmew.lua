@@ -12,37 +12,37 @@ local entity = {}
 
 local keyitems = {
     [0] = {
-        id = tpz.ki.ANIMA_SYNTHESIS,
+        id = xi.ki.ANIMA_SYNTHESIS,
         rank = 3,
         cost = 1
     },
     [1] = {
-        id = tpz.ki.ALCHEMIC_PURIFICATION,
+        id = xi.ki.ALCHEMIC_PURIFICATION,
         rank = 3,
         cost = 1
     },
     [2] = {
-        id = tpz.ki.ALCHEMIC_ENSORCELLMENT,
+        id = xi.ki.ALCHEMIC_ENSORCELLMENT,
         rank = 3,
         cost = 1
     },
     [3] = {
-        id = tpz.ki.TRITURATION,
+        id = xi.ki.TRITURATION,
         rank = 3,
         cost = 1
     },
     [4] = {
-        id = tpz.ki.CONCOCTION,
+        id = xi.ki.CONCOCTION,
         rank = 3,
         cost = 1
     },
     [5] = {
-        id = tpz.ki.IATROCHEMISTRY,
+        id = xi.ki.IATROCHEMISTRY,
         rank = 3,
         cost = 1
     },
     [6] = {
-        id = tpz.ki.WAY_OF_THE_ALCHEMIST,
+        id = xi.ki.WAY_OF_THE_ALCHEMIST,
         rank = 9,
         cost = 1
     }

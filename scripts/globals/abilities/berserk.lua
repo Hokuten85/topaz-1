@@ -15,10 +15,10 @@ ability_object.onAbilityCheck = function(player, target, ability)
 end
 
 ability_object.onUseAbility = function(player, target, ability)
-    player:delStatusEffect(tpz.effect.DEFENDER);
-    player:addStatusEffect(tpz.effect.BERSERK, 25 + player:getMod(tpz.mod.BERSERK_EFFECT), 0, 180 + player:getMod(tpz.mod.BERSERK_DURATION))
+    player:delStatusEffect(xi.effect.DEFENDER);
+    player:addStatusEffect(xi.effect.BERSERK, 25 + player:getMod(xi.mod.BERSERK_EFFECT), 0, 180 + player:getMod(xi.mod.BERSERK_DURATION))
 
-    return tpz.effect.BERSERK
+    return xi.effect.BERSERK
 end
 
 return ability_object

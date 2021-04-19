@@ -35,7 +35,7 @@ entity.onTrade = function(player, npc, trade)
                 player:addCharMod(tradeGil,1)
                 currentModLvl = currentModLvl +1
                 player:setCharVar("BountyPoints", bountyPoints - 10)
-                player:PrintToPlayer(string.format("I have raised your %s skill, your bonus is now +%s", getIndex(tpz.mod, tradeGil), currentModLvl), 0, npcName)
+                player:PrintToPlayer(string.format("I have raised your %s skill, your bonus is now +%s", getIndex(xi.mod, tradeGil), currentModLvl), 0, npcName)
             else
                 player:PrintToPlayer("I cannot raise your skill any further.", 0, npcName)
             end
@@ -67,13 +67,13 @@ entity.onTrigger = function(player, npc)
         npc:timer(delay, function() player:PrintToPlayer("Trade me the required Gil and I'll enhance your skill.", 0, npcName) end)
         npc:timer(delay+1000, function()
             for i = 80, 91 do
-                local statIndex = getIndex(tpz.mod, i)
+                local statIndex = getIndex(xi.mod, i)
                 if statIndex ~= false then
                     player:PrintToPlayer(string.format("    %s: %s", formatName(statIndex), i), 13, npcName)
                 end
             end
             for  i = 101, 122 do
-                local statIndex = getIndex(tpz.mod, i)
+                local statIndex = getIndex(xi.mod, i)
                 if statIndex ~= false then
                     player:PrintToPlayer(string.format("    %s: %s", formatName(statIndex), i), 13, npcName)
                 end

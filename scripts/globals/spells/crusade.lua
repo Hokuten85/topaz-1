@@ -19,11 +19,11 @@ function onSpellCast(caster,target,spell)
 	local power = 30;
     local duration = 300;
 
-    local typeEffect = tpz.effect.ENMITY_BOOST;
+    local typeEffect = xi.effect.ENMITY_BOOST;
     if target:addStatusEffect(typeEffect, power, 0, duration) then
-        spell:setMsg(tpz.msg.basic.MAGIC_GAIN_EFFECT);
+        spell:setMsg(xi.msg.basic.MAGIC_GAIN_EFFECT);
     else
-        spell:setMsg(tpz.msg.basic.MAGIC_NO_EFFECT); -- no effect
+        spell:setMsg(xi.msg.basic.MAGIC_NO_EFFECT); -- no effect
     end
 
     return typeEffect;

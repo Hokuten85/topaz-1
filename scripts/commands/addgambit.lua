@@ -117,7 +117,7 @@ function onTrigger(player, target_type, condition, condition_arg, react, select,
     end
 
     local target = player:getCursorTarget()
-    if not target or target:getObjType() ~= tpz.objType.TRUST then
+    if not target or target:getObjType() ~= xi.objType.TRUST then
         error(player, "No valid target found. place cursor on a trust object. ")
         return
     end

@@ -13,51 +13,51 @@ local spell_object = {}
 local message_page_offset = 86
 
 spell_object.onMagicCastingCheck = function(caster, target, spell)
-    return tpz.trust.canCast(caster, spell, 906)
+    return xi.trust.canCast(caster, spell, 906)
 end
 
 spell_object.onSpellCast = function(caster, target, spell)
-    return tpz.trust.spawn(caster, spell)
+    return xi.trust.spawn(caster, spell)
 end
 
 spell_object.onMobSpawn = function(mob)
-    tpz.trust.message(mob, message_page_offset, tpz.trust.message_offset.SPAWN)
+    xi.trust.message(mob, message_page_offset, xi.trust.message_offset.SPAWN)
     
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.FOOD, ai.r.ITEM, 0, 0)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.FOOD, ai.r.ITEM, 0, 0)
 
     -- Stun all the things!
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_WS, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_MS, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_JA, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.CASTING_MA, 0, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.STUN)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_WS, 0, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.STUN)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_MS, 0, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.STUN)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_JA, 0, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.STUN)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.CASTING_MA, 0, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.STUN)
     
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_WS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WEAPON_BASH)
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_MS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WEAPON_BASH)
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_JA, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WEAPON_BASH)
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.CASTING_MA, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WEAPON_BASH)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_WS, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.WEAPON_BASH)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_MS, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.WEAPON_BASH)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.READYING_JA, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.WEAPON_BASH)
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.CASTING_MA, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.WEAPON_BASH)
 
     -- Non-stun things
-    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.SOULEATER)
-    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.LAST_RESORT)
-    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.ARCANE_CIRCLE)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.SOULEATER)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.LAST_RESORT)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.ARCANE_CIRCLE)
                         
-    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.BERSERK)
-    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, tpz.ja.WARCRY)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.BERSERK)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.WARCRY)
     
-    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.STR_BOOST, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.ABSORB_STR)
-    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.DEX_BOOST, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.ABSORB_DEX)
-    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, tpz.effect.ACCURACY_BOOST, ai.r.MA, ai.s.SPECIFIC, tpz.magic.spell.ABSORB_ACC)
+    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.STR_BOOST, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.ABSORB_STR)
+    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.DEX_BOOST, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.ABSORB_DEX)
+    -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.ACCURACY_BOOST, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.ABSORB_ACC)
 
     mob:setTrustTPSkillSettings(ai.tp.CLOSER, ai.s.RANDOM)
-    mob:addMod(tpz.mod.ACC, 200)
+    mob:addMod(xi.mod.ACC, 200)
 end
 
 spell_object.onMobDespawn = function(mob)
-    tpz.trust.message(mob, message_page_offset, tpz.trust.message_offset.DESPAWN)
+    xi.trust.message(mob, message_page_offset, xi.trust.message_offset.DESPAWN)
 end
 
 spell_object.onMobDeath = function(mob)
-    tpz.trust.message(mob, message_page_offset, tpz.trust.message_offset.DEATH)
+    xi.trust.message(mob, message_page_offset, xi.trust.message_offset.DEATH)
 end
 
 return spell_object

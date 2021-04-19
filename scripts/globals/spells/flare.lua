@@ -14,7 +14,7 @@ end
 spell_object.onSpellCast = function(caster, target, spell)
     local spellParams = {}
 
-    if (caster:isPC() or caster:getObjType() == tpz.objType.TRUST) then
+    if (caster:isPC() or caster:getObjType() == xi.objType.TRUST) then
         spellParams = calculateElementalNukeSpellParams(caster, ANCIENT_MAGIC, NOT_AOE);
     else
         spellParams.hasMultipleTargetReduction = false
@@ -33,7 +33,7 @@ spell_object.onSpellCast = function(caster, target, spell)
     end
 
     -- no point in making a separate function for this if the only thing they won't have in common is the name
-    handleNinjutsuDebuff(caster, target, spell, 30, 10, tpz.mod.WATERRES)
+    handleNinjutsuDebuff(caster, target, spell, 30, 10, xi.mod.WATERRES)
 
     return doElementalNuke(caster, spell, target, spellParams)
 end

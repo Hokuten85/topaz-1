@@ -15,7 +15,7 @@ ability_object.onAbilityCheck = function(player, target, ability)
 end
 
 ability_object.onUseAbility = function(player, target, ability)
-    local duration = 180 + player:getMod(tpz.mod.HOLY_CIRCLE_DURATION)
+    local duration = 180 + player:getMod(xi.mod.HOLY_CIRCLE_DURATION)
     if (player:getID() ~= target:getID()) then
         local subPower = 5;
     
@@ -23,13 +23,13 @@ ability_object.onUseAbility = function(player, target, ability)
             subPower = subPower + math.floor((player:getMainLvl() - 50) / 5);
         end
         
-        if player:getSubJob() == tpz.job.PLD then
+        if player:getSubJob() == xi.job.PLD then
             subPower = math.floor(subPower / 2);
         end
     
-        target:addStatusEffect(tpz.effect.HOLY_CIRCLE, 15, 0, duration, 0, subPower)
+        target:addStatusEffect(xi.effect.HOLY_CIRCLE, 15, 0, duration, 0, subPower)
     else
-        target:addStatusEffect(tpz.effect.HOLY_CIRCLE, 15, 0, duration)
+        target:addStatusEffect(xi.effect.HOLY_CIRCLE, 15, 0, duration)
     end
 end
 

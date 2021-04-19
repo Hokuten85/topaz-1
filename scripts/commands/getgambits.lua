@@ -29,7 +29,7 @@ end
 
 function onTrigger(player)
     local target = player:getCursorTarget()
-    if not target or target:getObjType() ~= tpz.objType.TRUST then
+    if not target or target:getObjType() ~= xi.objType.TRUST then
         error(player, "No valid target found. place cursor on a trust object. ")
         return
     end
@@ -50,7 +50,7 @@ function onTrigger(player)
             local condition_arg
             if tbl["condition_arg"] ~= nil then
                 if condition == "STATUS" or condition == "NOT_STATUS" then
-                    condition_arg = getIndex(tpz.effect, tbl["condition_arg"])
+                    condition_arg = getIndex(xi.effect, tbl["condition_arg"])
                 end
                 
                 if not condition_arg then
@@ -72,13 +72,13 @@ function onTrigger(player)
             if tbl["select_arg"] ~= nil then
                 if reaction == "MA" then
                     if select == "SPECIFIC" then
-                        select_arg = getIndex(tpz.magic.spell, tbl["select_arg"])
+                        select_arg = getIndex(xi.magic.spell, tbl["select_arg"])
                     else
-                        select_arg = getIndex(tpz.magic.spellFamily, tbl["select_arg"])
+                        select_arg = getIndex(xi.magic.spellFamily, tbl["select_arg"])
                     end
                 elseif reaction == "JA" then
                     if select == "SPECIFIC" then
-                        select_arg = getIndex(tpz.ja, tbl["select_arg"])
+                        select_arg = getIndex(xi.ja, tbl["select_arg"])
                     end
                 end
                 

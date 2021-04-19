@@ -13,5 +13,5 @@ function onTrigger(player,npc)
     stock = {
          0x1055,10000
     } 
-	tpz.shop.general(player, stock)
+	xi.shop.general(player, stock)
 end;
