@@ -1,9 +1,3 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
---
--- Host: localhost    Database: tpzdb
--- ------------------------------------------------------
--- Server version   5.5.5-10.0.20-MariaDB
-
 --
 -- Table structure for table `merits`
 --
@@ -18,7 +12,7 @@ CREATE TABLE `merits` (
   `upgradeid` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `catagoryid` tinyint(2) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`meritid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `merits`
@@ -312,5 +306,3 @@ INSERT INTO `merits` VALUES (3392,'mending_halation',5,5,1048576,7,52);
 INSERT INTO `merits` VALUES (3394,'radial_arcana',5,3,1048576,7,52);
 INSERT INTO `merits` VALUES (3396,'curative_recantation',5,5,1048576,7,52);
 INSERT INTO `merits` VALUES (3398,'primeval_zeal',5,10,1048576,7,52);
-
--- Dump completed on 2017-01-31 10:58:26

@@ -7,7 +7,7 @@
 require('scripts/globals/settings')
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 
 xi.zoneType =
 {

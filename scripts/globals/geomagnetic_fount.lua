@@ -5,7 +5,7 @@ require("scripts/globals/keyitems")
 require("scripts/globals/missions")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.geomagneticFount = xi.geomagneticFount or {}
 
 xi.geomagneticFount.checkFount = function(player, npc)

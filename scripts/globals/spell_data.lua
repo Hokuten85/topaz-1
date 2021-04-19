@@ -1,6 +1,6 @@
 require('scripts/globals/status')
 
-tpz = tpz or {}
+xi = xi or {}
 xi.magic = xi.magic or {}
 
 -----------------------------------

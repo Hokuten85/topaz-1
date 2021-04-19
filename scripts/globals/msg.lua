@@ -1,7 +1,7 @@
 -----------------------------------
 -- This file holds all global (not zone specific) text references
 -----------------------------------
-tpz = tpz or {}
+xi = xi or {}
 xi.msg = xi.msg or {}
 
 -----------------------------------

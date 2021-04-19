@@ -5,7 +5,7 @@ require("scripts/zones/Promyvion-Vahzl/IDs")
 require("scripts/globals/status")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.promyvion = xi.promyvion or {}
 
 -----------------------------------

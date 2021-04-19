@@ -6,7 +6,7 @@
 require("scripts/globals/keyitems")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.armorStorage = xi.armorStorage or {}
 
 -- {SetId, SetGroup, SetMask, SetCount, Head, Body, Hands, Legs, Feet, StorageCost, KeyItem}

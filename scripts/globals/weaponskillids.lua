@@ -3,7 +3,7 @@
 --
 -- Contains readable values for Weaponskill IDs
 -----------------------------------
-tpz = tpz or {}
+xi = xi or {}
 
 -----------------------------------
 -- Weaponskill IDs

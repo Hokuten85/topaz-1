@@ -4,7 +4,7 @@ require("scripts/globals/common")
 require("scripts/globals/status")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.rhapsodies = xi.rhapsodies or {}
 
 xi.rhapsodies.character = {

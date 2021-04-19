@@ -1,7 +1,7 @@
 -----------------------------------
 -- Instance
 -----------------------------------
-tpz = tpz or {}
+xi = xi or {}
 xi.instance = {}
 
 local function setInstanceLastTimeUpdateMessage(instance, players, remainingTimeLimit)

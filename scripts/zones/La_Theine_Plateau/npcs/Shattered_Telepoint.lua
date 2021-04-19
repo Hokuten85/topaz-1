@@ -48,7 +48,7 @@ entity.onTrigger = function(player, npc)
         end
     elseif
         copMission > xi.mission.id.cop.THE_MOTHERCRYSTALS or
-        player:hasCompletedMission(xi.mission.log_id.COP,xi.mission.id.cop.THE_LAST_VERSE) or
+        player:hasCompletedMission(xi.mission.log_id.COP, xi.mission.id.cop.THE_LAST_VERSE) or
         (
             copMission == xi.mission.id.cop.BELOW_THE_ARKS and
             player:getCharVar("PromathiaStatus") > 1

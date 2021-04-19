@@ -1,9 +1,3 @@
--- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (i686)
---
--- Host: localhost    Database: tpzdb
--- ------------------------------------------------------
--- Server version   5.5.29-0ubuntu0.12.04.2
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -29,7 +23,7 @@ CREATE TABLE `mob_pets` (
   `mobname` varchar(24) DEFAULT NULL,
   `petname` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`mob_mobid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1731,5 +1725,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2020-12-21 11:39:00

@@ -5,7 +5,7 @@ require("scripts/globals/pets")
 require("scripts/globals/status")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.geo = xi.geo or {}
 
 -- TODO: After elements are aligned in the codebase, this should become:

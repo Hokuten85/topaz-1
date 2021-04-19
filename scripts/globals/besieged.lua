@@ -9,7 +9,7 @@ require("scripts/globals/status")
 require("scripts/globals/teleports")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.besieged = xi.besieged or {}
 
 xi.besieged.onTrigger = function(player, npc, eventBase)

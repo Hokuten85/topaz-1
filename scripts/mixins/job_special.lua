@@ -88,7 +88,7 @@ require("scripts/globals/status")
 require("scripts/globals/utils")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.mix = xi.mix or {}
 xi.mix.jobSpecial = xi.mix.jobSpecial or {}
 

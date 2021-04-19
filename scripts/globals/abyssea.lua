@@ -9,7 +9,7 @@ require("scripts/globals/keyitems")
 require("scripts/globals/magic")
 require("scripts/globals/zone")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.abyssea = xi.abyssea or {}
 
 -----------------------------------

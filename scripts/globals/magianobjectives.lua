@@ -2,12 +2,14 @@
 -- Magian Trial Objectives
 -----------------------------------
 require("scripts/globals/common")
+require("scripts/globals/status")
+require("scripts/globals/weaponskillids")
 -----------------------------------
 
 -- This is a table of anon function for Magian Trial objectives/conditions.
 -- Keyed by trial ID, if they return true, the trials progress is incremented and saved.
 
-tpz = tpz or {}
+xi = xi or {}
 xi.magian = xi.magian or {}
 local checks = {}
 

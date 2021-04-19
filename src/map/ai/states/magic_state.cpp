@@ -25,6 +25,7 @@
 #include "../../enmity_container.h"
 #include "../../entities/battleentity.h"
 #include "../../entities/mobentity.h"
+#include "../../job_points.h"
 #include "../../lua/luautils.h"
 #include "../../packets/action.h"
 #include "../../packets/message_basic.h"
@@ -252,12 +253,20 @@ void CMagicState::SpendCost()
     {
         int16 cost = battleutils::CalculateSpellCost(m_PEntity, GetSpell());
 
+        // RDM Job Point: Quick Magic Effect
+        if (IsInstantCast() && m_PEntity->objtype == TYPE_PC)
+        {
+            CCharEntity* PChar = static_cast<CCharEntity*>(m_PEntity);
+
+            cost = (int16)(cost * (1.f - (float)((PChar->PJobPoints->GetJobPointValue(JP_QUICK_MAGIC_EFFECT) * 2) / 100)));
+        }
+
         // conserve mp
         int16 rate = m_PEntity->getMod(Mod::CONSERVE_MP);
 
-        if (tpzrand::GetRandomNumber(100) < rate)
+        if (xirand::GetRandomNumber(100) < rate)
         {
-            cost = (int16)(cost * (tpzrand::GetRandomNumber(8.f, 16.f) / 16.0f));
+            cost = (int16)(cost * (xirand::GetRandomNumber(8.f, 16.f) / 16.0f));
         }
 
         m_PEntity->addMP(-cost);

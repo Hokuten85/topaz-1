@@ -10,7 +10,7 @@ require("scripts/globals/utils")
 require("scripts/globals/zone")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.chocoboDig = xi.chocoboDig or {}
 
 local digReq =

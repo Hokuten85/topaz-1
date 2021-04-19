@@ -315,7 +315,7 @@ int32 main(int32 argc, char** argv)
 
 /************************************************************************
  *                                                                       *
- *  topaz_search default config                                       *
+ *  topaz_search default config                                          *
  *                                                                       *
  ************************************************************************/
 
@@ -324,7 +324,7 @@ void search_config_default()
     search_config.mysql_host      = "127.0.0.1";
     search_config.mysql_login     = "root";
     search_config.mysql_password  = "root";
-    search_config.mysql_database  = "tpzdb";
+    search_config.mysql_database  = "xidb";
     search_config.mysql_port      = 3306;
     search_config.expire_auctions = true;
     search_config.expire_days     = 3;
@@ -333,7 +333,7 @@ void search_config_default()
 
 /************************************************************************
  *                                                                       *
- *  topaz_search config                                               *
+ *  topaz_search config                                                  *
  *                                                                       *
  ************************************************************************/
 
@@ -415,11 +415,11 @@ void search_config_read(const int8* file)
 
 void search_config_read_from_env()
 {
-    search_config.mysql_login    = std::getenv("TPZ_DB_USER") ? std::getenv("TPZ_DB_USER") : search_config.mysql_login;
-    search_config.mysql_password = std::getenv("TPZ_DB_USER_PASSWD") ? std::getenv("TPZ_DB_USER_PASSWD") : search_config.mysql_password;
-    search_config.mysql_host     = std::getenv("TPZ_DB_HOST") ? std::getenv("TPZ_DB_HOST") : search_config.mysql_host;
-    search_config.mysql_port     = std::getenv("TPZ_DB_PORT") ? std::stoi(std::getenv("TPZ_DB_PORT")) : search_config.mysql_port;
-    search_config.mysql_database = std::getenv("TPZ_DB_NAME") ? std::getenv("TPZ_DB_NAME") : search_config.mysql_database;
+    search_config.mysql_login    = std::getenv("XI_DB_USER") ? std::getenv("XI_DB_USER") : search_config.mysql_login;
+    search_config.mysql_password = std::getenv("XI_DB_USER_PASSWD") ? std::getenv("XI_DB_USER_PASSWD") : search_config.mysql_password;
+    search_config.mysql_host     = std::getenv("XI_DB_HOST") ? std::getenv("XI_DB_HOST") : search_config.mysql_host;
+    search_config.mysql_port     = std::getenv("XI_DB_PORT") ? std::stoi(std::getenv("XI_DB_PORT")) : search_config.mysql_port;
+    search_config.mysql_database = std::getenv("XI_DB_NAME") ? std::getenv("XI_DB_NAME") : search_config.mysql_database;
 }
 
 /************************************************************************
@@ -485,7 +485,7 @@ void login_config_read(const int8* file)
 
 void login_config_read_from_env()
 {
-    login_config.search_server_port = std::getenv("TPZ_SEARCH_PORT") ? std::getenv("TPZ_SEARCH_PORT") : login_config.search_server_port;
+    login_config.search_server_port = std::getenv("XI_SEARCH_PORT") ? std::getenv("XI_SEARCH_PORT") : login_config.search_server_port;
 }
 
 void TCPComm(SOCKET socket)

@@ -35,6 +35,7 @@
 #include "../attack.h"
 #include "../attackround.h"
 #include "../items/item_weapon.h"
+#include "../job_points.h"
 #include "../lua/luautils.h"
 #include "../notoriety_container.h"
 #include "../packets/action.h"
@@ -221,23 +222,7 @@ int32 CBattleEntity::GetMaxMP() const
 
 uint8 CBattleEntity::GetSpeed()
 {
-    int8 bonus = 0;
-    // NPC's don't get a bonus. Just players, mobs, pets..
-
-    // Mobs get their speed boost while agro'd/engaged
-    if (objtype == TYPE_MOB && animation == ANIMATION_ATTACK)
-    {
-        bonus = map_config.mob_speed_mod;
-        // ShowDebug("mob speed bonus: '%i' \n", bonus);
-    }
-    // Pets share the owners map_config.
-    else if (objtype == TYPE_PC || objtype == TYPE_PET)
-    {
-        bonus = map_config.speed_mod;
-    }
-
-    int16 startingSpeed = isMounted() ? 40 + map_config.mount_speed_mod : speed + bonus;
-
+    int16 startingSpeed = isMounted() ? 40 + map_config.mount_speed_mod : speed;
     // Mod::MOVE (169)
     // Mod::MOUNT_MOVE (972)
     Mod mod = isMounted() ? Mod::MOUNT_MOVE : Mod::MOVE;
@@ -566,8 +551,8 @@ int32 CBattleEntity::addMP(int32 mp)
 int32 CBattleEntity::takeDamage(int32 amount, CBattleEntity* attacker /* = nullptr*/, ATTACK_TYPE attackType /* = ATTACK_NONE*/,
                                 DAMAGE_TYPE damageType /* = DAMAGE_NONE*/)
 {
-    PLastAttacker = attacker;
-    this->BattleHistory.lastHitTaken_atkType = attackType;
+    PLastAttacker                             = attacker;
+    this->BattleHistory.lastHitTaken_atkType  = attackType;
     std::optional<CLuaBaseEntity> optAttacker = attacker ? std::optional<CLuaBaseEntity>(CLuaBaseEntity(attacker)) : std::nullopt;
     PAI->EventHandler.triggerListener("TAKE_DAMAGE", CLuaBaseEntity(this), amount, optAttacker, (uint16)attackType, (uint16)damageType);
 
@@ -767,7 +752,7 @@ uint16 CBattleEntity::ACC(uint8 attackNumber, uint8 offsetAccuracy)
     else
     {
         int16 ACC = m_modStat[Mod::ACC];
-        ACC = ACC + std::min<int16>((ACC * m_modStat[Mod::FOOD_ACCP] / 100), m_modStat[Mod::FOOD_ACC_CAP]) + DEX() / 2; // food mods here for Snatch Morsel
+        ACC       = ACC + std::min<int16>((ACC * m_modStat[Mod::FOOD_ACCP] / 100), m_modStat[Mod::FOOD_ACC_CAP]) + DEX() / 2; // food mods here for Snatch Morsel
         return std::max<int16>(0, ACC);
     }
 }
@@ -826,14 +811,14 @@ uint8 CBattleEntity::GetSLevel() const
 
 void CBattleEntity::SetMJob(uint8 mjob)
 {
-    TPZ_DEBUG_BREAK_IF(mjob == 0 || mjob >= MAX_JOBTYPE); // выход за пределы доступных профессий
+    XI_DEBUG_BREAK_IF(mjob == 0 || mjob >= MAX_JOBTYPE); // выход за пределы доступных профессий
 
     m_mjob = (JOBTYPE)mjob;
 }
 
 void CBattleEntity::SetSJob(uint8 sjob)
 {
-    TPZ_DEBUG_BREAK_IF(sjob >= MAX_JOBTYPE); // выход за пределы доступных профессий
+    XI_DEBUG_BREAK_IF(sjob >= MAX_JOBTYPE); // выход за пределы доступных профессий
 
     m_sjob = (JOBTYPE)sjob;
 }
@@ -1515,7 +1500,7 @@ void CBattleEntity::OnCastFinished(CMagicState& state, action_t& action)
 
         if (this == PTarget || // Casting on self or ally
             (this->PParty && PTarget->PParty &&
-            ((this->PParty == PTarget->PParty) || (this->PParty->m_PAlliance && this->PParty->m_PAlliance == PTarget->PParty->m_PAlliance))))
+             ((this->PParty == PTarget->PParty) || (this->PParty->m_PAlliance && this->PParty->m_PAlliance == PTarget->PParty->m_PAlliance))))
         {
             if (PSpell->isHeal())
             {
@@ -1531,7 +1516,6 @@ void CBattleEntity::OnCastFinished(CMagicState& state, action_t& action)
             {
                 roeutils::event(ROE_BUFFALLY, static_cast<CCharEntity*>(this), RoeDatagramList{});
             }
-
         }
     }
     if ((!(PSpell->isHeal()) || PSpell->tookEffect()) && PActionTarget->isAlive())
@@ -1664,7 +1648,7 @@ bool CBattleEntity::OnAttack(CAttackState& state, action_t& action)
             actionTarget.reaction   = REACTION::EVADE;
             actionTarget.speceffect = SPECEFFECT::NONE;
         }
-        else if ((tpzrand::GetRandomNumber(100) < attack.GetHitRate() || attackRound.GetSATAOccured()) &&
+        else if ((xirand::GetRandomNumber(100) < attack.GetHitRate() || attackRound.GetSATAOccured()) &&
                  !PTarget->StatusEffectContainer->HasStatusEffect(EFFECT_ALL_MISS))
         {
             // attack hit, try to be absorbed by shadow unless it is a SATA attack round
@@ -1713,8 +1697,22 @@ bool CBattleEntity::OnAttack(CAttackState& state, action_t& action)
                             naturalh2hDMG = (int16)((PTarget->GetSkill(SKILL_HAND_TO_HAND) * 0.11f) + 3);
                         }
 
-                        float DamageRatio = battleutils::GetDamageRatio(PTarget, this, attack.IsCritical(), 0.f);
-                        auto  damage = (int32)((PTarget->GetMainWeaponDmg() + naturalh2hDMG + battleutils::GetFSTR(PTarget, this, SLOT_MAIN)) * DamageRatio);
+                        // Calculate attack bonus for Counterstance Effect Job Points
+                        // Needs verification, as there appears to be conflicting information regarding an attack bonus based on DEX
+                        // vs a base damage increase.
+                        float csJpAtkBonus = 0;
+                        if (PTarget->objtype == TYPE_PC && PTarget->GetMJob() == JOB_MNK && PTarget->StatusEffectContainer->HasStatusEffect(EFFECT_COUNTERSTANCE))
+                        {
+                            auto*  PChar        = static_cast<CCharEntity*>(PTarget);
+                            uint8  csJpModifier = PChar->PJobPoints->GetJobPointValue(JP_COUNTERSTANCE_EFFECT) * 2;
+                            uint16 targetDex    = PTarget->DEX();
+
+                            csJpAtkBonus = 1 + ((static_cast<float>(targetDex) / 100) * csJpModifier);
+                        }
+
+                        float DamageRatio = battleutils::GetDamageRatio(PTarget, this, attack.IsCritical(), csJpAtkBonus);
+                        auto  damage      = (int32)((PTarget->GetMainWeaponDmg() + naturalh2hDMG + battleutils::GetFSTR(PTarget, this, SLOT_MAIN)) * DamageRatio);
+
                         actionTarget.spikesParam =
                             battleutils::TakePhysicalDamage(PTarget, this, attack.GetAttackType(), damage, false, SLOT_MAIN, 1, nullptr, true, false, true);
                         actionTarget.spikesMessage = 33;
@@ -1735,7 +1733,7 @@ bool CBattleEntity::OnAttack(CAttackState& state, action_t& action)
             else
             {
                 // Set this attack's critical flag.
-                attack.SetCritical(tpzrand::GetRandomNumber(100) < battleutils::GetCritHitRate(this, PTarget, !attack.IsFirstSwing()));
+                attack.SetCritical(xirand::GetRandomNumber(100) < battleutils::GetCritHitRate(this, PTarget, !attack.IsFirstSwing()));
 
                 // Critical hit.
                 if (attack.IsCritical())
@@ -1863,8 +1861,8 @@ bool CBattleEntity::OnAttack(CAttackState& state, action_t& action)
             zanshinChance        = std::clamp<uint16>(zanshinChance, 0, 100);
             // zanshin may only proc on a missed/guarded/countered swing or as SAM main with hasso up (at 25% of the base zanshin rate)
             if (((actionTarget.reaction == REACTION::EVADE || actionTarget.reaction == REACTION::GUARD || actionTarget.spikesEffect == SUBEFFECT_COUNTER) &&
-                 tpzrand::GetRandomNumber(100) < zanshinChance) ||
-                (GetMJob() == JOB_SAM && this->StatusEffectContainer->HasStatusEffect(EFFECT_HASSO) && tpzrand::GetRandomNumber(100) < (zanshinChance / 4)))
+                 xirand::GetRandomNumber(100) < zanshinChance) ||
+                (GetMJob() == JOB_SAM && this->StatusEffectContainer->HasStatusEffect(EFFECT_HASSO) && xirand::GetRandomNumber(100) < (zanshinChance / 4)))
             {
                 attack.SetAttackType(PHYSICAL_ATTACK_TYPE::ZANSHIN);
                 attack.SetAsFirstSwing(false);

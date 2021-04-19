@@ -2,7 +2,7 @@ require("scripts/globals/settings")
 require("scripts/globals/teleports")
 require("scripts/globals/survival_guide_map")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.survivalGuide = xi.survivalGuide or {}
 
 -- Determines if the survival guide teleport cost is like if you had a Rhapsody in White key item. Does not affect UI! (Default: 0)

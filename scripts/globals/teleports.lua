@@ -4,7 +4,7 @@
 require("scripts/globals/settings")
 require("scripts/globals/zone")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.teleport = xi.teleport or {}
 
 -----------------------------------

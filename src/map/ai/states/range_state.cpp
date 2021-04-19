@@ -44,6 +44,11 @@ CRangeState::CRangeState(CBattleEntity* PEntity, uint16 targid)
     {
         throw CStateInitException(std::move(m_errorMsg));
     }
+    if (distance(m_PEntity->loc.p, PTarget->loc.p) > 25)
+    {
+        m_errorMsg = std::make_unique<CMessageBasicPacket>(m_PEntity, PTarget, 0, 0, MSGBASIC_TOO_FAR_AWAY);
+        throw CStateInitException(std::move(m_errorMsg));
+    }
 
     auto delay = m_PEntity->GetRangedWeaponDelay(false);
     delay      = battleutils::GetSnapshotReduction(m_PEntity, delay);
@@ -54,10 +59,10 @@ CRangeState::CRangeState(CBattleEntity* PEntity, uint16 targid)
         if (charutils::hasTrait(PChar, TRAIT_RAPID_SHOT))
         {
             auto chance{ PChar->getMod(Mod::RAPID_SHOT) + PChar->PMeritPoints->GetMeritValue(MERIT_RAPID_SHOT_RATE, PChar) };
-            if (tpzrand::GetRandomNumber(100) < chance)
+            if (xirand::GetRandomNumber(100) < chance)
             {
                 // reduce delay by 10%-50%
-                delay       = (int16)(delay * (10 - tpzrand::GetRandomNumber(1, 6)) / 10.f);
+                delay       = (int16)(delay * (10 - xirand::GetRandomNumber(1, 6)) / 10.f);
                 m_rapidShot = true;
             }
         }
@@ -187,11 +192,6 @@ bool CRangeState::CanUseRangedAttack(CBattleEntity* PTarget)
     if (!facing(m_PEntity->loc.p, PTarget->loc.p, 64))
     {
         m_errorMsg = std::make_unique<CMessageBasicPacket>(m_PEntity, PTarget, 0, 0, MSGBASIC_CANNOT_SEE);
-        return false;
-    }
-    if (distance(m_PEntity->loc.p, PTarget->loc.p) > 25)
-    {
-        m_errorMsg = std::make_unique<CMessageBasicPacket>(m_PEntity, PTarget, 0, 0, MSGBASIC_TOO_FAR_AWAY);
         return false;
     }
     if (!m_PEntity->PAI->TargetFind->canSee(&PTarget->loc.p))

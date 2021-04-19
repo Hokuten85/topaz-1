@@ -24,7 +24,7 @@ curio =
     -- keyitems not implemented yet
 }
 
-tpz = tpz or {}
+xi = xi or {}
 
 xi.shop =
 {

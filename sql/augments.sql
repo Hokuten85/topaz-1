@@ -1,9 +1,3 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
---
--- Host: localhost    Database: tpzdb
--- ------------------------------------------------------
--- Server version	5.5.5-10.0.20-MariaDB
-
 --
 -- Table structure for table `augments`
 --
@@ -17,7 +11,7 @@ CREATE TABLE `augments` (
   `isPet` tinyint(1) NOT NULL DEFAULT '0',
   `petType` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`augmentId`,`multiplier`,`modId`,`isPet`,`petType`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `augments`
@@ -2350,5 +2344,3 @@ INSERT INTO `augments` VALUES (2046, 0, 0, 0, 0, 0);
 -- End unused block
 
 INSERT INTO `augments` VALUES (2047, 0, 0, 0, 0, 0); -- ??? (it literally just says "???") - used by WotG scenario reward
-
--- Dump completed on 2017-03-02  0:17:46

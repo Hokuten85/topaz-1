@@ -5,7 +5,7 @@
  require("scripts/globals/zone")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.sparkshop = xi.sparkshop or {}
 
 local optionToItem = {

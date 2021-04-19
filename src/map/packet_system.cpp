@@ -27,6 +27,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "../common/taskmgr.h"
 #include "../common/timer.h"
 #include "../common/utils.h"
+#include "../common/version.h"
 
 #include <cstring>
 #include <utility>
@@ -91,6 +92,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "packets/char_appearance.h"
 #include "packets/char_check.h"
 #include "packets/char_emotion.h"
+#include "packets/char_emotion_jump.h"
 #include "packets/char_equip.h"
 #include "packets/char_health.h"
 #include "packets/char_job_extra.h"
@@ -121,12 +123,15 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "packets/inventory_item.h"
 #include "packets/inventory_modify.h"
 #include "packets/inventory_size.h"
+#include "packets/jobpoint_details.h"
+#include "packets/jobpoint_update.h"
 #include "packets/linkshell_equip.h"
 #include "packets/linkshell_message.h"
 #include "packets/lock_on.h"
 #include "packets/macroequipset.h"
 #include "packets/map_marker.h"
 #include "packets/menu_config.h"
+#include "packets/menu_jobpoints.h"
 #include "packets/menu_merit.h"
 #include "packets/menu_raisetractor.h"
 #include "packets/menu_unity.h"
@@ -338,6 +343,13 @@ void SmallPacket0x00C(map_session_data_t* const PSession, CCharEntity* const PCh
     PChar->pushPacket(new CInventorySizePacket(PChar));
     PChar->pushPacket(new CMenuConfigPacket(PChar));
     PChar->pushPacket(new CCharJobsPacket(PChar));
+
+    if (charutils::hasKeyItem(PChar, 2544))
+    {
+        // Only send Job Points Packet if the player has unlocked them
+        PChar->pushPacket(new CJobPointDetailsPacket(PChar));
+    }
+
 
     // TODO: While in mog house; treasure pool is not created.
     if (PChar->PTreasurePool != nullptr)
@@ -972,7 +984,7 @@ void SmallPacket0x01B(map_session_data_t* const PSession, CCharEntity* const PCh
     TracyZoneScoped;
     // 0 - world pass, 2 - gold world pass; +1 - purchase
 
-    PChar->pushPacket(new CWorldPassPacket(data.ref<uint8>(0x04) & 1 ? (uint32)tpzrand::GetRandomNumber(9999999999) : 0));
+    PChar->pushPacket(new CWorldPassPacket(data.ref<uint8>(0x04) & 1 ? (uint32)xirand::GetRandomNumber(9999999999) : 0));
 }
 
 /************************************************************************
@@ -1693,7 +1705,7 @@ void SmallPacket0x041(map_session_data_t* const PSession, CCharEntity* const PCh
     {
         if (!PChar->PTreasurePool->HasLottedItem(PChar, SlotID))
         {
-            PChar->PTreasurePool->LotItem(PChar, SlotID, tpzrand::GetRandomNumber(1, 1000)); // 1 ~ 998+1
+            PChar->PTreasurePool->LotItem(PChar, SlotID, xirand::GetRandomNumber(1, 1000)); // 1 ~ 998+1
         }
     }
 }
@@ -1759,11 +1771,6 @@ void SmallPacket0x04B(map_session_data_t* const PSession, CCharEntity* const PCh
         if ((bool)Sql_GetUIntData(SqlHandle, 0))
         {
             PChar->pushPacket(new CChatMessagePacket(PChar, CHAT_MESSAGE_TYPE::MESSAGE_SYSTEM_1, "Server does not support this client version."));
-        }
-        else
-        {
-            PChar->pushPacket(new CChatMessagePacket(PChar, CHAT_MESSAGE_TYPE::MESSAGE_SYSTEM_1,
-                                                     "Report bugs on Topaz bugtracker if server admin confirms the bug occurs on stock Topaz."));
         }
     }
 }
@@ -2468,7 +2475,6 @@ void SmallPacket0x04E(map_session_data_t* const PSession, CCharEntity* const PCh
                     PChar->pushPacket(new CAuctionHousePacket(action, 197, 0, 0));
                     return;
                 }
-                PItem->setCharPrice(price); // not sure setCharPrice is right
                 PChar->pushPacket(new CAuctionHousePacket(action, PItem, quantity, price));
             }
         }
@@ -3031,7 +3037,7 @@ void SmallPacket0x05D(map_session_data_t* const PSession, CCharEntity* const PCh
     }
 
     // Invalid Emote ID.
-    if (EmoteID < Emote::POINT || EmoteID > Emote::JOB)
+    if (EmoteID < Emote::POINT || EmoteID > Emote::AIM)
     {
         return;
     }
@@ -3247,6 +3253,14 @@ void SmallPacket0x061(map_session_data_t* const PSession, CCharEntity* const PCh
     PChar->pushPacket(new CCharSkillsPacket(PChar));
     PChar->pushPacket(new CCharRecastPacket(PChar));
     PChar->pushPacket(new CMenuMeritPacket(PChar));
+
+    if (charutils::hasKeyItem(PChar, 2544))
+    {
+        // Only send Job Points Packet if the player has unlocked them
+        PChar->pushPacket(new CMenuJobPointsPacket(PChar));
+        PChar->pushPacket(new CJobPointDetailsPacket(PChar));
+    }
+
     PChar->pushPacket(new CCharJobExtraPacket(PChar, true));
     PChar->pushPacket(new CCharJobExtraPacket(PChar, false));
     PChar->pushPacket(new CStatusEffectPacket(PChar));
@@ -4207,7 +4221,7 @@ void SmallPacket0x0AA(map_session_data_t* const PSession, CCharEntity* const PCh
 void SmallPacket0x0A2(map_session_data_t* const PSession, CCharEntity* const PChar, CBasicPacket data)
 {
     TracyZoneScoped;
-    uint16 diceroll = tpzrand::GetRandomNumber(1000);
+    uint16 diceroll = xirand::GetRandomNumber(1000);
 
     PChar->loc.zone->PushPacket(PChar, CHAR_INRANGE_SELF, new CMessageStandardPacket(PChar, diceroll, MsgStd::DiceRoll));
 }
@@ -4657,6 +4671,42 @@ void SmallPacket0x0BE(map_session_data_t* const PSession, CCharEntity* const PCh
             }
         }
         break;
+    }
+}
+
+/************************************************************************
+*                                                                        *
+*  Increase Job Point                                                    *
+*                                                                        *
+************************************************************************/
+
+void SmallPacket0x0BF(map_session_data_t* const PSession, CCharEntity* const PChar, CBasicPacket data)
+{
+    if (PChar->m_moghouseID)
+    {
+        JOBPOINT_TYPE jpType = static_cast<JOBPOINT_TYPE>(data.ref<uint16>(0x04));
+
+        if (PChar->PJobPoints->IsJobPointExist(jpType))
+        {
+            PChar->PJobPoints->RaiseJobPoint(jpType);
+            PChar->pushPacket(new CMenuJobPointsPacket(PChar));
+            PChar->pushPacket(new CJobPointUpdatePacket(PChar, jpType));
+        }
+    }
+}
+
+/************************************************************************
+ *                                                                       *
+ *  Job Points Details                                                   *
+ *                                                                       *
+ ************************************************************************/
+
+void SmallPacket0x0C0(map_session_data_t* const PSession, CCharEntity* const PChar, CBasicPacket data)
+{
+    if (charutils::hasKeyItem(PChar, 2544))
+    {
+        // Only send Job Points Packet if the player has unlocked them
+        PChar->pushPacket(new CJobPointDetailsPacket(PChar));
     }
 }
 
@@ -5771,7 +5821,7 @@ void SmallPacket0x0FC(map_session_data_t* const PSession, CCharEntity* const PCh
         PPotItem->cleanPot();
         PPotItem->setPlant(CItemFlowerpot::getPlantFromSeed(itemID));
         PPotItem->setPlantTimestamp(CVanaTime::getInstance()->getVanaTime());
-        PPotItem->setStrength(tpzrand::GetRandomNumber(32));
+        PPotItem->setStrength(xirand::GetRandomNumber(32));
         gardenutils::GrowToNextStage(PPotItem);
     }
     else if (itemID >= 4096 && itemID <= 4111)
@@ -6060,6 +6110,7 @@ void SmallPacket0x100(map_session_data_t* const PSession, CCharEntity* const PCh
         charutils::SetStyleLock(PChar, false);
         luautils::CheckForGearSet(PChar); // check for gear set on gear change
 
+        jobpointutils::RefreshGiftMods(PChar);
         charutils::BuildingCharSkillsTable(PChar);
         charutils::CalculateStats(PChar);
         charutils::BuildingCharTraitsTable(PChar);
@@ -6265,8 +6316,8 @@ void SmallPacket0x104(map_session_data_t* const PSession, CCharEntity* const PCh
 void SmallPacket0x105(map_session_data_t* const PSession, CCharEntity* const PChar, CBasicPacket data)
 {
     TracyZoneScoped;
-    TPZ_DEBUG_BREAK_IF(PChar->BazaarID.id != 0);
-    TPZ_DEBUG_BREAK_IF(PChar->BazaarID.targid != 0);
+    XI_DEBUG_BREAK_IF(PChar->BazaarID.id != 0);
+    XI_DEBUG_BREAK_IF(PChar->BazaarID.targid != 0);
 
     uint32 charid = data.ref<uint32>(0x04);
 
@@ -6752,6 +6803,68 @@ void SmallPacket0x118(map_session_data_t* const PSession, CCharEntity* const PCh
 }
 
 /************************************************************************
+*                                                                        *
+*  Set Job Master Display                                                *
+*                                                                        *
+************************************************************************/
+void SmallPacket0x11B(map_session_data_t* const PSession, CCharEntity* const PChar, CBasicPacket data)
+{
+    // Rate limit Job Master Display
+    auto lastJobMasterDisplayChange  = PChar->GetLocalVar("LastJobMasterDisplayTime");
+    auto timeNowSeconds = std::chrono::time_point_cast<std::chrono::seconds>(server_clock::now());
+    if (lastJobMasterDisplayChange == 0 || (timeNowSeconds.time_since_epoch().count() - lastJobMasterDisplayChange) > 2)
+    {
+        PChar->SetLocalVar("LastJobMasterDisplayTime", (uint32)timeNowSeconds.time_since_epoch().count());
+    }
+    else
+    {
+        ShowWarning(CL_YELLOW "SmallPacket0x11B: Rate limiting Job Master Display Change packet for %s\n" CL_RESET, PChar->GetName());
+        return;
+    }
+
+    PChar->m_jobMasterDisplay = data.ref<uint8>(0x04) > 0;
+
+    charutils::SaveJobMasterDisplay(PChar);
+    PChar->pushPacket(new CCharUpdatePacket(PChar));
+}
+
+/************************************************************************
+ *                                                                       *
+ *  Jump (/jump)                                                         *
+ *                                                                       *
+ ************************************************************************/
+
+void SmallPacket0x11D(map_session_data_t* const PSession, CCharEntity* const PChar, CBasicPacket data)
+{
+    TracyZoneScoped;
+    if (jailutils::InPrison(PChar))
+    {
+        PChar->pushPacket(new CMessageBasicPacket(PChar, PChar, 0, 0, 316));
+        return;
+    }
+
+    // Rate limit emotes
+    auto lastEmoteTime  = PChar->GetLocalVar("LastEmoteTime");
+    auto timeNowSeconds = std::chrono::time_point_cast<std::chrono::seconds>(server_clock::now());
+    if (lastEmoteTime == 0 || (timeNowSeconds.time_since_epoch().count() - lastEmoteTime) > 2)
+    {
+        PChar->SetLocalVar("LastEmoteTime", (uint32)timeNowSeconds.time_since_epoch().count());
+    }
+    else
+    {
+        ShowWarning(CL_YELLOW "SmallPacket0x11D: Rate limiting jump packet for %s\n" CL_RESET, PChar->GetName());
+        return;
+    }
+
+    const auto targetID    = data.ref<uint32>(0x04);
+    const auto targetIndex = data.ref<uint16>(0x08);
+    const auto extra       = data.ref<uint16>(0x0A);
+
+    PChar->loc.zone->PushPacket(PChar, CHAR_INRANGE_SELF, new CCharEmotionJumpPacket(PChar, targetIndex, extra));
+
+}
+
+/************************************************************************
  *                                                                       *
  *  Packet Array Initialization                                          *
  *                                                                       *
@@ -6829,7 +6942,9 @@ void PacketParserInitialize()
     PacketSize[0x0AD] = 0x00; PacketParser[0x0AD] = &SmallPacket0x0AD;
     PacketSize[0x0B5] = 0x00; PacketParser[0x0B5] = &SmallPacket0x0B5;
     PacketSize[0x0B6] = 0x00; PacketParser[0x0B6] = &SmallPacket0x0B6;
-    PacketSize[0x0BE] = 0x00; PacketParser[0x0BE] = &SmallPacket0x0BE;    //  merit packet
+    PacketSize[0x0BE] = 0x00; PacketParser[0x0BE] = &SmallPacket0x0BE;    // merit packet
+    PacketSize[0x0BF] = 0x00; PacketParser[0x0BF] = &SmallPacket0x0BF;
+    PacketSize[0x0C0] = 0x00; PacketParser[0x0C0] = &SmallPacket0x0C0;
     PacketSize[0x0C3] = 0x00; PacketParser[0x0C3] = &SmallPacket0x0C3;
     PacketSize[0x0C4] = 0x0E; PacketParser[0x0C4] = &SmallPacket0x0C4;
     PacketSize[0x0CB] = 0x04; PacketParser[0x0CB] = &SmallPacket0x0CB;
@@ -6878,6 +6993,8 @@ void PacketParserInitialize()
     PacketSize[0x116] = 0x00; PacketParser[0x116] = &SmallPacket0x116;
     PacketSize[0x117] = 0x00; PacketParser[0x117] = &SmallPacket0x117;
     PacketSize[0x118] = 0x00; PacketParser[0x118] = &SmallPacket0x118;
+    PacketSize[0x11B] = 0x00; PacketParser[0x11B] = &SmallPacket0x11B;
+    PacketSize[0x11D] = 0x00; PacketParser[0x11D] = &SmallPacket0x11D;
     // clang-format on
 }
 

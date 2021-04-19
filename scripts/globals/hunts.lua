@@ -8,7 +8,7 @@ require("scripts/globals/zone")
 require("scripts/globals/msg")
 require("scripts/globals/regimes")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.hunts = xi.hunts or {}
 
 local hunts =

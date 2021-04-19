@@ -61,8 +61,10 @@
 #include "../items/item_furnishing.h"
 #include "../items/item_usable.h"
 #include "../items/item_weapon.h"
+#include "../job_points.h"
 #include "../latent_effect_container.h"
 #include "../mobskill.h"
+#include "../modifier.h"
 #include "../packets/char_job_extra.h"
 #include "../packets/status_effects.h"
 #include "../spell.h"
@@ -117,6 +119,7 @@ CCharEntity::CCharEntity()
     memset(&equipLoc, 0, sizeof(equipLoc));
     memset(&RealSkills, 0, sizeof(RealSkills));
     memset(&expChain, 0, sizeof(expChain));
+    memset(&capacityChain, 0, sizeof(capacityChain));
     memset(&nameflags, 0, sizeof(nameflags));
     memset(&menuConfigFlags, 0, sizeof(menuConfigFlags));
 
@@ -153,8 +156,8 @@ CCharEntity::CCharEntity()
     m_missionLog[6].current = 101; // MISSION_COP
     for (auto& i : m_missionLog)
     {
-        i.logExUpper = 0;
-        i.logExLower = 0;
+        i.statusUpper = 0;
+        i.statusLower = 0;
     }
 
     m_copCurrent = 0;
@@ -234,6 +237,7 @@ CCharEntity::~CCharEntity()
     delete UContainer;
     delete CraftContainer;
     delete PMeritPoints;
+    delete PJobPoints;
 }
 
 uint8 CCharEntity::GetGender()
@@ -373,7 +377,7 @@ CItemContainer* CCharEntity::getStorage(uint8 LocationID)
             return m_Wardrobe4.get();
     }
 
-    TPZ_DEBUG_BREAK_IF(LocationID >= MAX_CONTAINER_ID); // неразрешенный ID хранилища
+    XI_DEBUG_BREAK_IF(LocationID >= MAX_CONTAINER_ID); // неразрешенный ID хранилища
     return nullptr;
 }
 
@@ -734,24 +738,6 @@ bool CCharEntity::OnAttack(CAttackState& state, action_t& action)
 
     auto* PTarget = static_cast<CBattleEntity*>(state.GetTarget());
 
-    if (PTarget->isDead())
-    {
-        if (this->m_hasAutoTarget && PTarget->objtype == TYPE_MOB) // Auto-Target
-        {
-            for (auto&& PPotentialTarget : this->SpawnMOBList)
-            {
-                if (PPotentialTarget.second->animation == ANIMATION_ATTACK && facing(this->loc.p, PPotentialTarget.second->loc.p, 64) &&
-                    distance(this->loc.p, PPotentialTarget.second->loc.p) <= 10)
-                {
-                    std::unique_ptr<CBasicPacket> errMsg;
-                    if (IsValidTarget(PPotentialTarget.second->targid, TARGET_ENEMY, errMsg))
-                    {
-                        controller->ChangeTarget(PPotentialTarget.second->targid);
-                    }
-                }
-            }
-        }
-    }
     return ret;
 }
 
@@ -894,14 +880,15 @@ void CCharEntity::OnWeaponSkillFinished(CWeaponSkillState& state, action_t& acti
             {
                 if (PWeaponSkill->getID() >= 192 && PWeaponSkill->getID() <= 218)
                 {
-                    uint16 recycleChance = getMod(Mod::RECYCLE) + PMeritPoints->GetMeritValue(MERIT_RECYCLE, this);
+                    uint16 recycleChance = getMod(Mod::RECYCLE) + PMeritPoints->GetMeritValue(MERIT_RECYCLE, this) + this->PJobPoints->GetJobPointValue(JP_AMMO_CONSUMPTION);
 
                     if (StatusEffectContainer->HasStatusEffect(EFFECT_UNLIMITED_SHOT))
                     {
                         StatusEffectContainer->DelStatusEffect(EFFECT_UNLIMITED_SHOT);
                         recycleChance = 100;
                     }
-                    if (tpzrand::GetRandomNumber(100) > recycleChance)
+
+                    if (xirand::GetRandomNumber(100) > recycleChance)
                     {
                         battleutils::RemoveAmmo(this);
                     }
@@ -1115,9 +1102,9 @@ void CCharEntity::OnAbility(CAbilityState& state, action_t& action)
                     if ((PAbility->getAddType() & ADDTYPE_ASTRAL_FLOW) == 0)
                     {
                         int16 bloodBoonRate = getMod(Mod::BLOOD_BOON);
-                        if (tpzrand::GetRandomNumber(100) < bloodBoonRate)
+                        if (xirand::GetRandomNumber(100) < bloodBoonRate)
                         {
-                            mpCost *= tpzrand::GetRandomNumber(8.f, 16.f) / 16.f;
+                            mpCost *= xirand::GetRandomNumber(8.f, 16.f) / 16.f;
                         }
                     }
 
@@ -1333,6 +1320,14 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
         isSange = true;
         hitCount += getMod(Mod::UTSUSEMI);
     }
+    else if (this->StatusEffectContainer->HasStatusEffect(EFFECT_DOUBLE_SHOT) && xirand::GetRandomNumber(100) < (40 + this->getMod(Mod::DOUBLE_SHOT_RATE)))
+    {
+        hitCount = 2;
+    }
+    else if (this->StatusEffectContainer->HasStatusEffect(EFFECT_TRIPLE_SHOT) && xirand::GetRandomNumber(100) < (40 + this->getMod(Mod::TRIPLE_SHOT_RATE)))
+    {
+        hitCount = 3;
+    }
 
     // loop for barrage hits, if a miss occurs, the loop will end
     for (uint8 i = 1; i <= hitCount; ++i)
@@ -1344,7 +1339,7 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
             actionTarget.speceffect = SPECEFFECT::NONE;
             hitCount                = i; // end barrage, shot missed
         }
-        else if (tpzrand::GetRandomNumber(100) < battleutils::GetRangedHitRate(this, PTarget, isBarrage)) // hit!
+        else if (xirand::GetRandomNumber(100) < battleutils::GetRangedHitRate(this, PTarget, isBarrage)) // hit!
         {
             // absorbed by shadow
             if (battleutils::IsAbsorbByShadow(PTarget))
@@ -1353,7 +1348,7 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
             }
             else
             {
-                bool  isCritical = tpzrand::GetRandomNumber(100) < battleutils::GetCritHitRate(this, PTarget, true);
+                bool  isCritical = xirand::GetRandomNumber(100) < battleutils::GetCritHitRate(this, PTarget, true);
                 float pdif       = battleutils::GetRangedDamageRatio(this, PTarget, isCritical);
 
                 if (isCritical)
@@ -1411,6 +1406,8 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
             recycleChance += PMeritPoints->GetMeritValue(MERIT_RECYCLE, this);
         }
 
+        recycleChance += this->PJobPoints->GetJobPointValue(JP_AMMO_CONSUMPTION);
+
         // Only remove unlimited shot on hit
         if (hitOccured && this->StatusEffectContainer->HasStatusEffect(EFFECT_UNLIMITED_SHOT))
         {
@@ -1418,7 +1415,7 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
             recycleChance = 100;
         }
 
-        if (PAmmo != nullptr && tpzrand::GetRandomNumber(100) > recycleChance)
+        if (PAmmo != nullptr && xirand::GetRandomNumber(100) > recycleChance)
         {
             ++ammoConsumed;
             TrackArrowUsageForScavenge(PAmmo);
@@ -1491,7 +1488,7 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
         uint16 power = StatusEffectContainer->GetStatusEffect(EFFECT_SANGE)->GetPower();
 
         // remove shadows
-        while (realHits-- && tpzrand::GetRandomNumber(100) <= power && battleutils::IsAbsorbByShadow(this))
+        while (realHits-- && xirand::GetRandomNumber(100) <= power && battleutils::IsAbsorbByShadow(this))
         {
             ;
         }
@@ -1502,25 +1499,11 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
     battleutils::RemoveAmmo(this, ammoConsumed);
     // only remove detectables
     StatusEffectContainer->DelStatusEffectsByFlag(EFFECTFLAG_DETECTABLE);
-
-    // Try to double shot
-    //#TODO: figure out the packet structure of double/triple shot
-    // if (this->StatusEffectContainer->HasStatusEffect(EFFECT_DOUBLE_SHOT, 0) && !this->secondDoubleShotTaken &&	!isBarrage && !isSange)
-    //{
-    //    uint16 doubleShotChance = getMod(Mod::DOUBLE_SHOT_RATE);
-    //    if (tpzrand::GetRandomNumber(100) < doubleShotChance)
-    //    {
-    //        this->secondDoubleShotTaken = true;
-    //        m_ActionType = ACTION_RANGED_FINISH;
-    //        this->m_rangedDelay = 0;
-    //        return;
-    //    }
-    //}
 }
 
 bool CCharEntity::IsMobOwner(CBattleEntity* PBattleTarget)
 {
-    TPZ_DEBUG_BREAK_IF(PBattleTarget == nullptr);
+    XI_DEBUG_BREAK_IF(PBattleTarget == nullptr);
 
     if (PBattleTarget->m_OwnerID.id == 0 || PBattleTarget->m_OwnerID.id == this->id || PBattleTarget->objtype == TYPE_PC)
     {
@@ -1603,6 +1586,12 @@ void CCharEntity::OnRaise()
         {
             actionTarget.animation = 496;
             hpReturned             = (uint16)(GetMaxHP() * 0.5);
+            ratioReturned          = ((GetMLevel() <= 50) ? 0.50f : 0.90f) * (1 - map_config.exp_retain);
+        }
+        else if (m_hasRaise == 4)
+        {
+            actionTarget.animation = 496; // TODO: Verify this Reraise animation
+            hpReturned             = (uint16)GetMaxHP();
             ratioReturned          = ((GetMLevel() <= 50) ? 0.50f : 0.90f) * (1 - map_config.exp_retain);
         }
         addHP(((hpReturned < 1) ? 1 : hpReturned));

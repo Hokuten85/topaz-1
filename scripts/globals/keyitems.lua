@@ -3,7 +3,7 @@
 --  KEYITEMS IDS
 --
 -----------------------------------
-tpz = tpz or {}
+xi = xi or {}
 
 xi.keyItem =
 {

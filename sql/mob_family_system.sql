@@ -1,9 +1,3 @@
--- MySQL dump 10.13  Distrib 5.6.29-76.2, for debian-linux-gnu (x86_64)
---
--- Host: localhost    Database: tpzdb
--- ------------------------------------------------------
--- Server version   5.6.29-76.2-log
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -58,7 +52,7 @@ CREATE TABLE `mob_family_system` (
   `detects` smallint(5) NOT NULL DEFAULT '0',
   `charmable` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`familyid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=128;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=128;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -547,5 +541,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2016-04-08 19:41:32

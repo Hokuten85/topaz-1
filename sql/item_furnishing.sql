@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 3.3.8
--- http://www.phpmyadmin.net
---
--- Serveur: localhost
--- Généré le : Mar 03 Janvier 2012 à 19:42
--- Version du serveur: 6.0.0
--- Version de PHP: 5.2.9-2
-
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 
@@ -14,12 +5,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
---
--- Base de données: `tpzdb`
---
-
--- --------------------------------------------------------
 
 --
 -- Structure de la table `item_furnishing`
@@ -34,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `item_furnishing` (
   `element` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `aura` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`itemid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=25 PACK_KEYS=1 CHECKSUM=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=25 PACK_KEYS=1 CHECKSUM=1;
 
 --
 -- Contenu de la table `item_furnishing`

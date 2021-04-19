@@ -6,7 +6,7 @@ require("scripts/globals/missions")
 require("scripts/globals/zone")
 require("scripts/globals/utils")
 -----------------------------------
-tpz = tpz or {}
+xi = xi or {}
 xi.goblinfootprint = xi.goblinfootprint or {}
 
 local gobCS = -- add the goblin cs to this table

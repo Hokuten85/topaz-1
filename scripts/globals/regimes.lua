@@ -18,7 +18,7 @@ require("scripts/globals/msg")
 require("scripts/globals/roe")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.regime = xi.regime or {}
 
 xi.regime.type =

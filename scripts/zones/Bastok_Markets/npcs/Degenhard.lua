@@ -15,7 +15,7 @@ entity.onTrade = function(player, npc, trade)
     if player:getQuestStatus(xi.quest.log_id.JEUNO, xi.quest.id.jeuno.BEYOND_INFINITY) >= QUEST_ACCEPTED and
         npcUtil.tradeHasExactly(trade, {3541, 3542, 3543}) then
         player:startEvent(15)
-    elseif player:getQuestStatus(xi.quest.log_id.BASTOK,xi.quest.id.bastok.THE_BARE_BONES) == QUEST_ACCEPTED and
+    elseif player:getQuestStatus(xi.quest.log_id.BASTOK, xi.quest.id.bastok.THE_BARE_BONES) == QUEST_ACCEPTED and
         npcUtil.tradeHas(trade, 880) then
         player:startEvent(258)
     end

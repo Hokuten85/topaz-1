@@ -3,7 +3,7 @@ require("scripts/globals/settings")
 require("scripts/globals/utils")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.mystery = xi.mystery or {}
 
 local adoulinOptionOff = 0x80

@@ -7,7 +7,7 @@ require("scripts/globals/settings")
 require("scripts/globals/npc_util")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.tutorial = xi.tutorial or {}
 
 xi.tutorial.onTrigger = function(player, npc, npc_event_offset, nation_offset)

@@ -1,4 +1,4 @@
-tpz = tpz or {}
+xi = xi or {}
 
 xi.ally =
 {

@@ -2,7 +2,7 @@ require("scripts/globals/settings")
 require("scripts/globals/teleports")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.homepoint = xi.homepoint or {}
 
 local HPs =

@@ -1,9 +1,3 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
---
--- Host: localhost    Database: tpzdb
--- ------------------------------------------------------
--- Server version   5.5.5-10.1.22-MariaDB
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -29,7 +23,7 @@ CREATE TABLE `guild_shops` (
   `daily_increase` smallint(5) unsigned NOT NULL DEFAULT '0',
   `initial_quantity` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guildid`,`itemid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1385,5 +1379,3 @@ INSERT INTO `guild_shops` VALUES (60431,5235,1284,1350,255,48,100);
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2017-06-29 15:16:13

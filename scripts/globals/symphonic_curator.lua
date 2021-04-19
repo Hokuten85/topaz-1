@@ -35,7 +35,7 @@ require("scripts/globals/utils")
     [900]='Distant Worlds'
 ]]
 
-tpz = tpz or {}
+xi = xi or {}
 xi.symphonic_curator = xi.symphonic_curator or {}
 
 xi.symphonic_curator.onTrigger = function(player, npc)

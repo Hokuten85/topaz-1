@@ -3,7 +3,7 @@
 -- NPC PATH WALKING
 --
 -----------------------------------
-tpz = tpz or {}
+xi = xi or {}
 
 xi.path =
 {

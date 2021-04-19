@@ -1,9 +1,3 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
---
--- Host: localhost    Database: tpzdb
--- ------------------------------------------------------
--- Server version   5.5.5-10.0.20-MariaDB
-
 --
 -- Table structure for table `bcnm_battlefield`
 --
@@ -14,7 +8,7 @@ CREATE TABLE `bcnm_battlefield` (
   `battlefieldNumber` tinyint(3) DEFAULT NULL,
   `monsterId` int(10) NOT NULL,
   `conditions` tinyint(2) NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=56;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=56;
 
 --
 -- Dumping data for table `bcnm_battlefield`
@@ -1784,5 +1778,3 @@ INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929085,3);-- Temenos Aern
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929086,3);-- Temenos Aern
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929087,3);-- Temenos Aern
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929088,2);-- Temenos Ghrah
-
--- Dump completed on 2017-01-31 10:38:38

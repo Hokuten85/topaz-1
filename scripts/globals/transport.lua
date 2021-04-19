@@ -4,7 +4,7 @@
 require("scripts/globals/zone")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.transport = xi.transport or {}
 
 xi.transport.message =

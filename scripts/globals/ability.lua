@@ -6,7 +6,7 @@
 require("scripts/globals/status")
 require("scripts/globals/msg")
 
-tpz = tpz or {}
+xi = xi or {}
 
 xi.jobAbility =
 {

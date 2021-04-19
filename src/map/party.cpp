@@ -24,6 +24,7 @@
 
 #include "alliance.h"
 #include "entities/battleentity.h"
+#include "job_points.h"
 #include "latent_effect_container.h"
 #include "map.h"
 #include "message.h"
@@ -67,8 +68,8 @@ struct CParty::partyInfo_t
 
 CParty::CParty(CBattleEntity* PEntity)
 {
-    TPZ_DEBUG_BREAK_IF(PEntity == nullptr);
-    TPZ_DEBUG_BREAK_IF(PEntity->PParty != nullptr);
+    XI_DEBUG_BREAK_IF(PEntity == nullptr);
+    XI_DEBUG_BREAK_IF(PEntity->PParty != nullptr);
 
     m_PartyID     = PEntity->id;
     m_PartyType   = PEntity->objtype == TYPE_PC ? PARTY_PCS : PARTY_MOBS;
@@ -171,7 +172,7 @@ void CParty::DisbandParty(bool playerInitiated)
 
 void CParty::AssignPartyRole(int8* MemberName, uint8 role)
 {
-    TPZ_DEBUG_BREAK_IF(m_PartyType != PARTY_PCS);
+    XI_DEBUG_BREAK_IF(m_PartyType != PARTY_PCS);
 
     switch (role)
     {
@@ -229,7 +230,7 @@ uint8 CParty::MemberCount(uint16 ZoneID)
 
 CBattleEntity* CParty::GetMemberByName(const int8* MemberName)
 {
-    TPZ_DEBUG_BREAK_IF(m_PartyType != PARTY_PCS);
+    XI_DEBUG_BREAK_IF(m_PartyType != PARTY_PCS);
 
     for (auto& member : members)
     {
@@ -250,8 +251,8 @@ CBattleEntity* CParty::GetMemberByName(const int8* MemberName)
 
 void CParty::RemoveMember(CBattleEntity* PEntity)
 {
-    TPZ_DEBUG_BREAK_IF(PEntity == nullptr);
-    TPZ_DEBUG_BREAK_IF(PEntity->PParty != this);
+    XI_DEBUG_BREAK_IF(PEntity == nullptr);
+    XI_DEBUG_BREAK_IF(PEntity->PParty != this);
 
     if (m_PLeader == PEntity)
     {
@@ -331,8 +332,8 @@ void CParty::RemoveMember(CBattleEntity* PEntity)
 
 void CParty::DelMember(CBattleEntity* PEntity)
 {
-    TPZ_DEBUG_BREAK_IF(PEntity == nullptr);
-    TPZ_DEBUG_BREAK_IF(PEntity->PParty != this);
+    XI_DEBUG_BREAK_IF(PEntity == nullptr);
+    XI_DEBUG_BREAK_IF(PEntity->PParty != this);
 
     if (m_PLeader == PEntity)
     {
@@ -440,7 +441,7 @@ void CParty::PopMember(CBattleEntity* PEntity)
 
 void CParty::RemovePartyLeader(CBattleEntity* PEntity)
 {
-    TPZ_DEBUG_BREAK_IF(members.empty());
+    XI_DEBUG_BREAK_IF(members.empty());
 
     int ret = Sql_Query(SqlHandle, "SELECT charname FROM accounts_sessions JOIN chars ON accounts_sessions.charid = chars.charid \
                                     JOIN accounts_parties ON accounts_parties.charid = chars.charid WHERE partyid = %u AND NOT partyflag & %d \
@@ -489,8 +490,8 @@ std::vector<CParty::partyInfo_t> CParty::GetPartyInfo() const
 
 void CParty::AddMember(CBattleEntity* PEntity)
 {
-    TPZ_DEBUG_BREAK_IF(PEntity == nullptr);
-    TPZ_DEBUG_BREAK_IF(PEntity->PParty != nullptr);
+    XI_DEBUG_BREAK_IF(PEntity == nullptr);
+    XI_DEBUG_BREAK_IF(PEntity->PParty != nullptr);
 
     PEntity->PParty = this;
     members.push_back(PEntity);
@@ -502,7 +503,7 @@ void CParty::AddMember(CBattleEntity* PEntity)
 
     if (m_PartyType == PARTY_PCS)
     {
-        TPZ_DEBUG_BREAK_IF(PEntity->objtype != TYPE_PC);
+        XI_DEBUG_BREAK_IF(PEntity->objtype != TYPE_PC);
 
         CCharEntity* PChar = (CCharEntity*)PEntity;
 
@@ -592,8 +593,8 @@ void CParty::AddMember(uint32 id)
 
 void CParty::PushMember(CBattleEntity* PEntity)
 {
-    TPZ_DEBUG_BREAK_IF(PEntity == nullptr);
-    TPZ_DEBUG_BREAK_IF(PEntity->PParty != nullptr);
+    XI_DEBUG_BREAK_IF(PEntity == nullptr);
+    XI_DEBUG_BREAK_IF(PEntity->PParty != nullptr);
 
     PEntity->PParty = this;
     members.push_back(PEntity);
@@ -679,8 +680,8 @@ CBattleEntity* CParty::GetQuaterMaster()
 
 uint16 CParty::GetMemberFlags(CBattleEntity* PEntity)
 {
-    TPZ_DEBUG_BREAK_IF(PEntity == nullptr);
-    TPZ_DEBUG_BREAK_IF(PEntity->PParty != this);
+    XI_DEBUG_BREAK_IF(PEntity == nullptr);
+    XI_DEBUG_BREAK_IF(PEntity->PParty != this);
 
     uint16 Flags = 0;
 
@@ -859,7 +860,7 @@ void CParty::ReloadPartyMembers(CCharEntity* PChar)
 
 void CParty::ReloadTreasurePool(CCharEntity* PChar)
 {
-    TPZ_DEBUG_BREAK_IF(PChar == nullptr);
+    XI_DEBUG_BREAK_IF(PChar == nullptr);
 
     if (PChar->PTreasurePool != nullptr && PChar->PTreasurePool->GetPoolType() == TREASUREPOOL_ZONE)
     {
@@ -1191,6 +1192,7 @@ void CParty::RefreshSync()
             charutils::ApplyAllEquipMods(member);
 
             blueutils::ValidateBlueSpells(member);
+            jobpointutils::RefreshGiftMods(member);
             charutils::BuildingCharSkillsTable(member);
             charutils::CalculateStats(member);
             charutils::BuildingCharTraitsTable(member);

@@ -8,7 +8,7 @@ require("scripts/globals/keyitems")
 require("scripts/globals/status")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.atma = xi.atma or {}
 
 local ATMA_OFFSET = xi.ki.ATMA_OF_THE_LION - 1

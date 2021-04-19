@@ -6,7 +6,7 @@ require("scripts/globals/keyitems")
 require("scripts/globals/zone")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.manaclipper = xi.manaclipper or {}
 
 local act =

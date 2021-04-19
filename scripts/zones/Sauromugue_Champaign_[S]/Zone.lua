@@ -11,7 +11,8 @@ local zone_object = {}
 
 zone_object.onInitialize = function(zone)
     UpdateNMSpawnPoint(ID.mob.COQUECIGRUE)
-    GetMobByID(ID.mob.COQUECIGRUE):setRespawnTime(900)
+    GetMobByID(ID.mob.COQUECIGRUE):setRespawnTime(math.random(7200, 7800))
+    xi.voidwalker.zoneOnInit(zone)
 end
 
 zone_object.onZoneIn = function(player, prevZone)

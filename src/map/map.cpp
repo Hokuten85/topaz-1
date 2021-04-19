@@ -36,6 +36,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "ability.h"
 #include "alliance.h"
 #include "conquest_system.h"
+#include "job_points.h"
 #include "linkshell.h"
 #include "map.h"
 #include "message.h"
@@ -184,7 +185,7 @@ int32 do_init(int32 argc, char** argv)
     MAP_CONF_FILENAME = "./conf/map.conf";
 
     srand((uint32)time(nullptr));
-    tpzrand::seed();
+    xirand::seed();
 
     map_config_default();
     map_config_read((const int8*)MAP_CONF_FILENAME);
@@ -246,6 +247,7 @@ int32 do_init(int32 argc, char** argv)
     petutils::LoadPetList();
     trustutils::LoadTrustList();
     mobutils::LoadCustomMods();
+    jobpointutils::LoadGifts();
     daily::LoadDailyItems();
     roeutils::UpdateUnityRankings();
 
@@ -339,7 +341,7 @@ void do_abort()
 
 void set_server_type()
 {
-    SERVER_TYPE = TOPAZ_SERVER_MAP;
+    SERVER_TYPE = XI_SERVER_MAP;
     SOCKET_TYPE = socket_type::UDP;
 }
 
@@ -972,7 +974,7 @@ void map_helpscreen(int32 flag)
 
 void map_versionscreen(int32 flag)
 {
-    ShowInfo(CL_WHITE "Topaz version %d.%02d.%02d" CL_RESET "\n", TOPAZ_MAJOR_VERSION, TOPAZ_MINOR_VERSION, TOPAZ_REVISION);
+    ShowInfo(CL_WHITE "Topaz version %d%02d_%d (%s)" CL_RESET "\n", XI_MAJOR_VERSION, XI_MINOR_VERSION, XI_REVISION, XI_RELEASE_FLAG ? "stable" : "unstable");
     if (flag)
     {
         exit(EXIT_FAILURE);
@@ -992,7 +994,7 @@ int32 map_config_default()
     map_config.mysql_host                  = "127.0.0.1";
     map_config.mysql_login                 = "root";
     map_config.mysql_password              = "root";
-    map_config.mysql_database              = "tpzdb";
+    map_config.mysql_database              = "xidb";
     map_config.mysql_port                  = 3306;
     map_config.server_message              = "";
     map_config.buffer_size                 = 1800;
@@ -1006,6 +1008,7 @@ int32 map_config_default()
     map_config.exp_loss_rate               = 1.0f;
     map_config.exp_retain                  = 0.0f;
     map_config.exp_loss_level              = 4;
+    map_config.capacity_rate               = 1.0f;
     map_config.level_sync_enable           = false;
     map_config.disable_gear_scaling        = false;
     map_config.all_jobs_widescan           = true;
@@ -1080,13 +1083,13 @@ int32 map_config_default()
 
 int32 map_config_from_env()
 {
-    map_config.mysql_login     = std::getenv("TPZ_DB_USER") ? std::getenv("TPZ_DB_USER") : map_config.mysql_login;
-    map_config.mysql_password  = std::getenv("TPZ_DB_USER_PASSWD") ? std::getenv("TPZ_DB_USER_PASSWD") : map_config.mysql_password;
-    map_config.mysql_host      = std::getenv("TPZ_DB_HOST") ? std::getenv("TPZ_DB_HOST") : map_config.mysql_host;
-    map_config.mysql_port      = std::getenv("TPZ_DB_PORT") ? std::stoi(std::getenv("TPZ_DB_PORT")) : map_config.mysql_port;
-    map_config.mysql_database  = std::getenv("TPZ_DB_NAME") ? std::getenv("TPZ_DB_NAME") : map_config.mysql_database;
-    map_config.msg_server_ip   = std::getenv("TPZ_MSG_IP") ? std::getenv("TPZ_MSG_IP") : map_config.msg_server_ip;
-    map_config.msg_server_port = std::getenv("TPZ_MSG_PORT") ? std::stoi(std::getenv("TPZ_MSG_PORT")) : map_config.msg_server_port;
+    map_config.mysql_login     = std::getenv("XI_DB_USER") ? std::getenv("XI_DB_USER") : map_config.mysql_login;
+    map_config.mysql_password  = std::getenv("XI_DB_USER_PASSWD") ? std::getenv("XI_DB_USER_PASSWD") : map_config.mysql_password;
+    map_config.mysql_host      = std::getenv("XI_DB_HOST") ? std::getenv("XI_DB_HOST") : map_config.mysql_host;
+    map_config.mysql_port      = std::getenv("XI_DB_PORT") ? std::stoi(std::getenv("XI_DB_PORT")) : map_config.mysql_port;
+    map_config.mysql_database  = std::getenv("XI_DB_NAME") ? std::getenv("XI_DB_NAME") : map_config.mysql_database;
+    map_config.msg_server_ip   = std::getenv("XI_MSG_IP") ? std::getenv("XI_MSG_IP") : map_config.msg_server_ip;
+    map_config.msg_server_port = std::getenv("XI_MSG_PORT") ? std::stoi(std::getenv("XI_MSG_PORT")) : map_config.msg_server_port;
     return 0;
 }
 
@@ -1208,6 +1211,10 @@ int32 map_config_read(const int8* cfgName)
         else if (strcmp(w1, "exp_party_gap_penalties") == 0)
         {
             map_config.exp_party_gap_penalties = (uint8)atof(w2);
+        }
+        else if (strcmp(w1, "capacity_rate") == 0)
+        {
+            map_config.capacity_rate = (float)atof(w2);
         }
         else if (strcmp(w1, "mob_tp_multiplier") == 0)
         {

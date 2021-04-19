@@ -22,6 +22,7 @@
 #include "puppetutils.h"
 #include "../entities/automatonentity.h"
 #include "../lua/luautils.h"
+#include "../job_points.h"
 #include "../packets/char_job_extra.h"
 #include "../packets/message_basic.h"
 #include "../status_effect_container.h"
@@ -86,12 +87,16 @@ namespace puppetutils
                     {
                         tempEquip.Attachments[i] = 0;
                     }
+
+                    int16 elemCapacityBonus = 0 + PChar->getMod(Mod::AUTO_ELEM_CAPACITY);
+
                     for (int i = 0; i < 6; i++)
                     {
-                        PChar->PAutomaton->setElementMax(i, 5);
+                        PChar->PAutomaton->setElementMax(i, 5 + elemCapacityBonus);
                     }
-                    PChar->PAutomaton->setElementMax(6, 3);
-                    PChar->PAutomaton->setElementMax(7, 3);
+                    PChar->PAutomaton->setElementMax(6, 3 + elemCapacityBonus);
+                    PChar->PAutomaton->setElementMax(7, 3 + elemCapacityBonus);
+
                     for (int i = 0; i < 8; i++)
                     {
                         PChar->PAutomaton->m_ElementEquip[i] = 0;
@@ -118,6 +123,9 @@ namespace puppetutils
                         setAttachment(PChar, i, tempEquip.Attachments[i]);
                     }
                 }
+
+                // Set burden based on JP
+                PChar->PAutomaton->setAllBurden(30 - PChar->PJobPoints->GetJobPointValue(JP_ACTIVATE_EFFECT));
 
                 PChar->PAutomaton->UpdateHealth();
                 PChar->PAutomaton->health.hp = PChar->PAutomaton->GetMaxHP();
@@ -569,7 +577,7 @@ namespace puppetutils
 
     void TrySkillUP(CAutomatonEntity* PAutomaton, SKILLTYPE SkillID, uint8 lvl)
     {
-        TPZ_DEBUG_BREAK_IF(!PAutomaton->PMaster || PAutomaton->PMaster->objtype != TYPE_PC);
+        XI_DEBUG_BREAK_IF(!PAutomaton->PMaster || PAutomaton->PMaster->objtype != TYPE_PC);
 
         CCharEntity* PChar = (CCharEntity*)PAutomaton->PMaster;
         if (getSkillCap(PChar, SkillID) != 0 && !(PAutomaton->WorkingSkills.skill[SkillID] & 0x8000))
@@ -580,7 +588,7 @@ namespace puppetutils
             int16  Diff          = MaxSkill - CurSkill / 10;
             double SkillUpChance = Diff / 5.0 + map_config.skillup_chance_multiplier * (2.0 - log10(1.0 + CurSkill / 100));
 
-            double random = tpzrand::GetRandomNumber(1.);
+            double random = xirand::GetRandomNumber(1.);
 
             if (SkillUpChance > 0.5)
             {
@@ -597,7 +605,7 @@ namespace puppetutils
 
                 for (uint8 i = 0; i < 4; ++i) // 1 + 4 возможных дополнительных (максимум 5)
                 {
-                    random = tpzrand::GetRandomNumber(1.);
+                    random = xirand::GetRandomNumber(1.);
 
                     switch (tier)
                     {

@@ -18,7 +18,7 @@ entity.onTrigger = function(player, npc)
 
     if (player:getCurrentMission(ZILART) == xi.mission.id.zilart.HEADSTONE_PILGRIMAGE) then
         if (player:hasKeyItem(xi.ki.ICE_FRAGMENT) == false) then
-            player:startEvent(200,xi.ki.ICE_FRAGMENT);
+            player:startEvent(200, xi.ki.ICE_FRAGMENT);
         elseif
             player:hasKeyItem(xi.ki.FIRE_FRAGMENT) and
             player:hasKeyItem(xi.ki.ICE_FRAGMENT) and

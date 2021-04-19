@@ -139,7 +139,7 @@ end
 -- public functions
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.player = {}
 
 -- called by core after a player logs into the server or zones

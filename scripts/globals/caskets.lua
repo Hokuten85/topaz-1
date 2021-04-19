@@ -24,7 +24,7 @@ require("scripts/globals/roe")
 -- 2425 -- Black with Red chest 2
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.caskets = xi.caskets or {}
 
 local casketInfo =

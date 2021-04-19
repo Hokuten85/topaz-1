@@ -1,17 +1,10 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               10.5.7-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
--- HeidiSQL Version:             9.5.0.5196
--- --------------------------------------------------------
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for table tpzdbw.unity_system
+-- Dumping structure for table xidbw.unity_system
 DROP TABLE IF EXISTS `unity_system`;
 CREATE TABLE `unity_system` (
   `leader` tinyint(4) NOT NULL,
@@ -22,7 +15,7 @@ CREATE TABLE `unity_system` (
   PRIMARY KEY (`leader`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table tpzdbw.unity_system: ~12 rows (approximately)
+-- Dumping data for table xidbw.unity_system: ~12 rows (approximately)
 /*!40000 ALTER TABLE `unity_system` DISABLE KEYS */;
 INSERT INTO `unity_system` (`leader`, `members_current`, `points_current`, `members_prev`, `points_prev`) VALUES
 	(1, 0, 0, 0, 0),

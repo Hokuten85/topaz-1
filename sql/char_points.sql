@@ -1,18 +1,3 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : oo
-Source Server Version : 50136
-Source Host           : localhost:3306
-Source Database       : tpzdb
-
-Target Server Type    : MYSQL
-Target Server Version : 50136
-File Encoding         : 65001
-
-Date: 2012-07-17 14:50:32
-*/
-
 SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for `char_points`
@@ -125,7 +110,7 @@ CREATE TABLE `char_points` (
   `prev_accolades` int(10) unsigned NOT NULL DEFAULT 0,
 
   PRIMARY KEY (`charid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of char_points

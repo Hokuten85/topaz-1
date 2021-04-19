@@ -1,6 +1,6 @@
 require("scripts/globals/msg")
 
-tpz = tpz or {}
+xi = xi or {}
 
 local MaxAreas =
 {

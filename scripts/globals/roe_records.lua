@@ -80,27 +80,171 @@ function getRoeRecords(triggers)
       -----------------------------------
       -- Tutorial -> Intermediate
       -----------------------------------
-        --[[ TODO
         [1045] = { -- Achieve Level 99 (gives Kupon A-PK109 x5)
-            reward =  { sparks = 200, xp = 300, item = { 8733, 5 } }
+            check = function(self, player, params)
+                return player:getMainLvl() >= self.reqs.mJobLvl and true or false
+            end,
+            flags = set{"retro"},
+            reqs = { mJobLvl = 99 }, 
+            reward =  { 
+                sparks = 200,
+                xp = 300,
+                item = { { 8733, 5 } },
+            }
         },
 
         [1046] = { -- An Eminent Scholar (gives Kupon W-EMI)
-            reward =  { sparks = 200, xp = 200, item = { 9188 } }
+            check = function(self, player, params)
+                return player:getCurrency("spark_of_eminence") >= self.reqs.collectSparks and true or false
+            end,
+            trigger = triggers.talkToRoeNpc,
+            reqs = { collectSparks = 2000 },
+            reward =  {
+                sparks = 200, 
+                xp = 200, 
+                item = { 9188 } 
+            }
         },
 
         [1047] = { -- An Eminent Scholar 2 (gives Kupon A-EMI)
-            reward =  { sparks = 200, xp = 200, item = { 9226 } }
+            check = function(self, player, params)
+                return player:getCurrency("spark_of_eminence") >= self.reqs.collectSparks and true or false
+            end,
+            trigger = triggers.talkToRoeNpc,
+            reqs = { collectSparks = 4000 },
+            reward =  {
+                sparks = 200,
+                xp = 200,
+                item = { 9226 }
+            }
         },
 
         [1048] = { -- An Eminent Scholar 3 (gives Kupon A-EMI)
-            reward =  { sparks = 200, xp = 200, item = { 9226 } }
+            check = function(self, player, params)
+                return player:getCurrency("spark_of_eminence") >= self.reqs.collectSparks and true or false
+            end,
+            trigger = triggers.talkToRoeNpc,
+            reqs = { collectSparks = 6000 },
+            reward =  {
+                sparks = 200,
+                xp = 200,
+                item = { 9226 }
+            }
         },
 
         [1049] = { -- Always Stand on 117 (gives Cipher: Koru-Moru)
-            reward =  { sparks = 200, xp = 300, item = { 10140 }  }
+            check = function(self, player, params)
+                local count = 0
+                for _, slot in pairs( {
+                    xi.slot.MAIN, 
+                    xi.slot.SUB, 
+                    xi.slot.RANGED, 
+                    xi.slot.HEAD,
+                    xi.slot.BODY,
+                    xi.slot.HANDS,
+                    xi.slot.LEGS,
+                    xi.slot.FEET,
+                } ) do
+                    local item = player:getEquippedItem(slot)
+                    if item and item:getILvl() and item:getILvl() == self.reqs.hasEquip.ilevel then
+                        count = count + 1
+                    end
+                end
+                return count >= self.reqs.hasEquip.count and true or false
+            end,
+            trigger = triggers.talkToRoeNpc,
+            reqs = { hasEquip = { ilevel = 117, count = 3 } },
+            reward =  {
+                sparks = 200,
+                xp = 300,
+                item = { 10140 }
+            }
         },
-        ]]
+        
+
+      -----------------------------------
+      -- Tutorial -> Synthesis
+      -----------------------------------
+
+        [ 100] = { -- Speak to Carpenters' Guild Master
+            reward =  { sparks = 100, xp = 500 }
+        },
+
+        [ 101] = { -- Speak to Blacksmiths' Guild Master
+            reward =  { sparks = 100, xp = 500 }
+        },
+
+        [ 102] = { -- Speak to Goldsmiths' Guild Master
+            reward =  { sparks = 100, xp = 500 }
+        },
+
+        [ 103] = { -- Speak to Weavers' Guild Master
+            reward =  { sparks = 100, xp = 500 }
+        },
+
+        [ 104] = { -- Speak to Tanners' Guild Master
+            reward =  { sparks = 100, xp = 500 }
+        },
+
+        [ 105] = { -- Speak to Boneworkers' Guild Master
+            reward =  { sparks = 100, xp = 500 }
+        },
+
+        [ 106] = { -- Speak to Alchemists' Guild Master
+            reward =  { sparks = 100, xp = 500 }
+        },
+
+        [ 107] = { -- Speak to Culinarians' Guild Master
+            reward =  { sparks = 100, xp = 500 }
+        },
+
+        [ 108] = { -- Woodworking: Padded Box
+            trigger = triggers.synthSuccess,
+            reqs = { itemID = set{ 2775 } },
+            reward = { sparks = 100, xp = 500 },
+        },
+
+        [ 109] = { -- Smithing: Bronze Knife
+            trigger = triggers.synthSuccess,
+            reqs = { itemID = set{ 16465, 16491 } },
+            reward = { sparks = 100, xp = 500 },
+        },
+
+        [ 110] = { -- Goldsmithing: Copper Ring
+            trigger = triggers.synthSuccess,
+            reqs = { itemID = set{ 13454, 13492 } },
+            reward = { sparks = 100, xp = 500 },
+        },
+
+        [ 111] = { -- Weaving: Headgear
+            trigger = triggers.synthSuccess,
+            reqs = { itemID = set{ 12464, 12471 } },
+            reward = { sparks = 100, xp = 500 },
+        },
+
+        [ 112] = { -- Tanning: Leather Bandana
+            trigger = triggers.synthSuccess,
+            reqs = { itemID = set{ 12440, 12542 } },
+            reward = { sparks = 100, xp = 500 },
+        },
+
+        [ 113] = { -- Boneworking: Shell Powder
+            trigger = triggers.synthSuccess,
+            reqs = { itemID = set{ 1883 } },
+            reward = { sparks = 100, xp = 500 },
+        },
+
+        [ 114] = { -- Alchemy: Black Ink
+            trigger = triggers.synthSuccess,
+            reqs = { itemID = set{ 929 } },
+            reward = { sparks = 100, xp = 500 },
+        },
+
+        [ 115] = { -- Cooking: Pebble Soup
+            trigger = triggers.synthSuccess,
+            reqs = { itemID = set{ 4455, 4592 } },
+            reward = { sparks = 100, xp = 500 },
+        },
 
       -----------------------------------
       -- Tutorial -> Quests 1
@@ -1635,6 +1779,41 @@ function getRoeRecords(triggers)
           reward = { sparks = 300, xp = 500 },
       },
 
+      [1396] = { -- Chains of Promathia Chapter 4
+          trigger = triggers.missionComplete,
+          reqs = { missionComplete = {xi.mission.log_id.COP, xi.mission.id.cop.SLANDEROUS_UTTERINGS} },
+          flags = set{"retro"},
+          reward = { sparks = 300, xp = 500 },
+      },
+
+      [1397] = { -- Chains of Promathia Chapter 5
+          trigger = triggers.missionComplete,
+          reqs = { missionComplete = {xi.mission.log_id.COP, xi.mission.id.cop.THREE_PATHS} },
+          flags = set{"retro"},
+          reward = { sparks = 300, xp = 500 },
+      },
+
+      [1398] = { -- Chains of Promathia Chapter 6
+          trigger = triggers.missionComplete,
+          reqs = { missionComplete = {xi.mission.log_id.COP, xi.mission.id.cop.ONE_TO_BE_FEARED} },
+          flags = set{"retro"},
+          reward = { sparks = 300, xp = 500 },
+      },
+
+      [1399] = { -- Chains of Promathia Chapter 7
+          trigger = triggers.missionComplete,
+          reqs = { missionComplete = {xi.mission.log_id.COP, xi.mission.id.cop.THE_WARRIOR_S_PATH} },
+          flags = set{"retro"},
+          reward = { sparks = 300, xp = 500 },
+      },
+
+      [1400] = { -- Chains of Promathia Chapter 8
+          trigger = triggers.missionComplete,
+          reqs = { missionComplete = {xi.mission.log_id.COP, xi.mission.id.cop.DAWN} },
+          flags = set{"retro"},
+          reward = { sparks = 300, xp = 500 },
+      },
+
       -----------------------------------
       -- Tutorial -> Missions (Treasures of Aht Urhgan)
       -----------------------------------
@@ -3023,9 +3202,369 @@ function getRoeRecords(triggers)
       -- Combat (Region) - Adoulin 1
       -----------------------------------
 
+        [ 310] = { -- Conflict: Rala Waterways I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Spoutdrenched_Toad"}, zone = set{258} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 311] = { -- Conflict: Rala Waterways II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Stillwater_Funguar"}, zone = set{258} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 312] = { -- Conflict: Rala Waterways III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Pewter_Diremite"}, zone = set{258} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 313] = { -- Conflict: Ceizak Battlegrounds I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Blanched_Mandragora"}, zone = set{261} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 314] = { -- Conflict: Ceizak Battlegrounds II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Careening_Twitherym"}, zone = set{261} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 315] = { -- Conflict: Ceizak Battlegrounds III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Resplendent_Luckybug"}, zone = set{261} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 316] = { -- Conflict: Yahse Hunting Grounds I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Calfcleaving_Chapuli"}, zone = set{260} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 317] = { -- Conflict: Yahse Hunting Grounds II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Twitherym_Infestation"}, zone = set{260} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 318] = { -- Conflict: Yahse Hunting Grounds III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Nettled_Wasp"}, zone = set{260} },
+            flags = set{"repeat"},
+            reward = { sparks = 100, xp = 500, capacity = 100, accolades = 10 },
+        },
+
+        [ 319] = { -- Conflict: Foret de Hennitiel I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Perfidious_Crab"}, zone = set{262} },
+            flags = set{"repeat"},
+            reward = { sparks = 110, xp = 500, capacity = 100, accolades = 11 },
+        },
+
+        [ 320] = { -- Conflict: Foret de Hennitiel II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Scummy_Slug"}, zone = set{262} },
+            flags = set{"repeat"},
+            reward = { sparks = 110, xp = 500, capacity = 100, accolades = 11 },
+        },
+
+        [ 321] = { -- Conflict: Foret de Hennitiel III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Vorst_Gnat"}, zone = set{262} },
+            flags = set{"repeat"},
+            reward = { sparks = 110, xp = 500, capacity = 100, accolades = 11 },
+        },
+
+        [ 322] = { -- Conflict: Morimar Basalt Fields I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Sinewy_Matamata"}, zone = set{265} },
+            flags = set{"repeat"},
+            reward = { sparks = 110, xp = 500, capacity = 100, accolades = 11 },
+        },
+
+        [ 323] = { -- Conflict: Morimar Basalt Fields II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Tephra_Lizard"}, zone = set{265} },
+            flags = set{"repeat"},
+            reward = { sparks = 110, xp = 500, capacity = 100, accolades = 11 },
+        },
+
+        [ 324] = { -- Conflict: Morimar Basalt Fields III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Maca_Maca"}, zone = set{265} },
+            flags = set{"repeat"},
+            reward = { sparks = 110, xp = 500, capacity = 100, accolades = 11 },
+        },
+
+        [ 325] = { -- Conflict: Yorcia Weald I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Snapweed"}, zone = set{263} },
+            flags = set{"repeat"},
+            reward = { sparks = 120, xp = 500, capacity = 100, accolades = 12 },
+        },
+
+        [ 326] = { -- Conflict: Yorcia Weald II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Cheeky_Opo-opo"}, zone = set{263} },
+            flags = set{"repeat"},
+            reward = { sparks = 120, xp = 500, capacity = 100, accolades = 12 },
+        },
+
+        [ 327] = { -- Conflict: Yorcia Weald III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Bronzecap"}, zone = set{263} },
+            flags = set{"repeat"},
+            reward = { sparks = 120, xp = 500, capacity = 100, accolades = 12 },
+        },
+
+        [ 328] = { -- Conflict: Marjami Ravine I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Vinelash_Vulture"}, zone = set{266} },
+            flags = set{"repeat"},
+            reward = { sparks = 120, xp = 500, capacity = 100, accolades = 12 },
+        },
+
+        [ 329] = { -- Conflict: Marjami Ravine II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Stryx"}, zone = set{266} },
+            flags = set{"repeat"},
+            reward = { sparks = 120, xp = 500, capacity = 100, accolades = 12 },
+        },
+
+        [ 330] = { -- Conflict: Marjami Ravine III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Lapinion"}, zone = set{266} },
+            flags = set{"repeat"},
+            reward = { sparks = 120, xp = 500, capacity = 100, accolades = 12 },
+        },
+
       -----------------------------------
       -- Combat (Region) - Adoulin 2
       -----------------------------------
+
+        [ 331] = { -- Conflict: Kamihr Drifts I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Snowpelt_Rabbit"}, zone = set{267} },
+            flags = set{"repeat"},
+            reward = { sparks = 130, xp = 500, capacity = 100, accolades = 13 },
+        },
+
+        [ 332] = { -- Conflict: Kamihr Drifts II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Cicatricose_Raaz"}, zone = set{267} },
+            flags = set{"repeat"},
+            reward = { sparks = 130, xp = 500, capacity = 100, accolades = 13 },
+        },
+
+        [ 333] = { -- Conflict: Kamihr Drifts III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Shaggy_Ovim"}, zone = set{267} },
+            flags = set{"repeat"},
+            reward = { sparks = 130, xp = 500, capacity = 100, accolades = 13 },
+        },
+
+        [ 334] = { -- Conflict: Sih Gates I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Bonaria"}, zone = set{268} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 335] = { -- Conflict: Sih Gates II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Loathsome_Obdella"}, zone = set{268} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 336] = { -- Conflict: Sih Gates III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Ferocious_Funguar"}, zone = set{268} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 337] = { -- Conflict: Moh Gates I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Conflagrant_Eruca"}, zone = set{269} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 338] = { -- Conflict: Moh Gates II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Erythemic_Eft"}, zone = set{269} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 339] = { -- Conflict: Moh Gates III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Writhing_Obdella"}, zone = set{269} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 340] = { -- Conflict: Cirdas Caverns I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Subterrane_Spider"}, zone = set{270} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 341] = { -- Conflict: Cirdas Caverns II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Livid_Umbril"}, zone = set{270} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 342] = { -- Conflict: Cirdas Caverns III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Flatus_Acuex"}, zone = set{270} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 343] = { -- Conflict: Dho Gates I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Velkk_Magus"}, zone = set{272} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 344] = { -- Conflict: Dho Gates II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Ripsaw_Jagil"}, zone = set{272} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 345] = { -- Conflict: Dho Gates III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Unyielding_Tarichuk"}, zone = set{272} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 346] = { -- Conflict: Woh Gates I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Metalcruncher_Worm"}, zone = set{273} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 347] = { -- Conflict: Woh Gates II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Drusy_Twitherym"}, zone = set{273} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 348] = { -- Conflict: Woh Gates III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Wheezing_Acuex"}, zone = set{273} },
+            flags = set{"repeat"},
+            reward = { sparks = 160, xp = 500, capacity = 100, accolades = 16 },
+        },
+
+        [ 494] = { -- Conflict: Outer Ra'Kaznar I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Restless_Twitherym"}, zone = set{274} },
+            flags = set{"repeat"},
+            reward = { sparks = 170, xp = 500, capacity = 100, accolades = 17 },
+        },
+
+        [ 495] = { -- Conflict: Outer Ra'Kaznar II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Bristlehair_Bat"}, zone = set{274} },
+            flags = set{"repeat"},
+            reward = { sparks = 170, xp = 500, capacity = 100, accolades = 17 },
+        },
+
+        [ 496] = { -- Conflict: Outer Ra'Kaznar III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Astringent_Acuex"}, zone = set{274} },
+            flags = set{"repeat"},
+            reward = { sparks = 170, xp = 500, capacity = 100, accolades = 17 },
+        },
+
+        [ 762] = { -- Conflict: Ra'Kaznar Inner Court I
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Bilespouting_Acuex"}, zone = set{276} },
+            flags = set{"repeat"},
+            reward = { sparks = 180, xp = 600, capacity = 100, accolades = 18 },
+        },
+
+        [ 763] = { -- Conflict: Ra'Kaznar Inner Court II
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Scowling_Vodoriga"}, zone = set{276} },
+            flags = set{"repeat"},
+            reward = { sparks = 180, xp = 600, capacity = 100, accolades = 18 },
+        },
+
+        [ 764] = { -- Conflict: Ra'Kaznar Inner Court III
+            trigger = triggers.mobKill,
+            goal = 5,
+            reqs = { mobName = set{"Unrepentant_Byrgen"}, zone = set{276} },
+            flags = set{"repeat"},
+            reward = { sparks = 180, xp = 600, capacity = 100, accolades = 18 },
+        },
 
       -----------------------------------
       -- Combat (Region) - Zilart 1

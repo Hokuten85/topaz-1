@@ -5,7 +5,7 @@ require("scripts/globals/common")
 require("scripts/globals/status")
 require("scripts/globals/weaponskillids")
 
-tpz = tpz or {}
+xi = xi or {}
 
 xi.aftermath = {}
 

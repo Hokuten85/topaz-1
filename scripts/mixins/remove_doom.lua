@@ -6,7 +6,7 @@ require("scripts/globals/mixins")
 require("scripts/globals/status")
 require("scripts/globals/msg")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.mix = xi.mix or {}
 xi.mix.clear_doom = xi.mix.clear_doom or {}
 

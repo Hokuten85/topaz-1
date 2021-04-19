@@ -11,7 +11,7 @@ require("scripts/globals/status")
 require("scripts/globals/zone")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.treasure = xi.treasure or {}
 
 xi.treasure.type =

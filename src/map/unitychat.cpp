@@ -1,6 +1,6 @@
 ﻿/*
 ===========================================================================
-  Copyright (c) 2021 Topaz Dev Teams
+  Copyright (c) 2021 Ixion Dev Teams
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
@@ -90,7 +90,7 @@ namespace unitychat
 
     bool AddOnlineMember(CCharEntity* PChar, uint32 leader)
     {
-        TPZ_DEBUG_BREAK_IF(PChar == nullptr);
+        XI_DEBUG_BREAK_IF(PChar == nullptr);
         CUnityChat* PUnity = nullptr;
         if (auto UnityChatListUnity = UnityChatList.find(leader); UnityChatListUnity != UnityChatList.end())
         {
@@ -109,7 +109,7 @@ namespace unitychat
 
     bool DelOnlineMember(CCharEntity* PChar, uint32 leader)
     {
-        TPZ_DEBUG_BREAK_IF(PChar == nullptr);
+        XI_DEBUG_BREAK_IF(PChar == nullptr);
         try
         {
             CUnityChat* PUnityChat = UnityChatList.at(leader).get();

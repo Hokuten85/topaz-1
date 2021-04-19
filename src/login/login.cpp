@@ -255,7 +255,7 @@ void do_abort()
 }
 void set_server_type()
 {
-    SERVER_TYPE = TOPAZ_SERVER_LOGIN;
+    SERVER_TYPE = XI_SERVER_LOGIN;
     SOCKET_TYPE = socket_type::TCP;
 }
 
@@ -518,13 +518,13 @@ void login_config_default()
 
 void login_config_read_from_env()
 {
-    login_config.mysql_login     = std::getenv("TPZ_DB_USER") ? std::getenv("TPZ_DB_USER") : login_config.mysql_login;
-    login_config.mysql_password  = std::getenv("TPZ_DB_USER_PASSWD") ? std::getenv("TPZ_DB_USER_PASSWD") : login_config.mysql_password;
-    login_config.mysql_host      = std::getenv("TPZ_DB_HOST") ? std::getenv("TPZ_DB_HOST") : login_config.mysql_host;
-    login_config.mysql_port      = std::getenv("TPZ_DB_PORT") ? std::stoi(std::getenv("TPZ_DB_PORT")) : login_config.mysql_port;
-    login_config.mysql_database  = std::getenv("TPZ_DB_NAME") ? std::getenv("TPZ_DB_NAME") : login_config.mysql_database;
-    login_config.msg_server_ip   = std::getenv("TPZ_MSG_IP") ? std::getenv("TPZ_MSG_IP") : login_config.msg_server_ip;
-    login_config.msg_server_port = std::getenv("TPZ_MSG_PORT") ? std::stoi(std::getenv("TPZ_MSG_PORT")) : login_config.msg_server_port;
+    login_config.mysql_login     = std::getenv("XI_DB_USER") ? std::getenv("XI_DB_USER") : login_config.mysql_login;
+    login_config.mysql_password  = std::getenv("XI_DB_USER_PASSWD") ? std::getenv("XI_DB_USER_PASSWD") : login_config.mysql_password;
+    login_config.mysql_host      = std::getenv("XI_DB_HOST") ? std::getenv("XI_DB_HOST") : login_config.mysql_host;
+    login_config.mysql_port      = std::getenv("XI_DB_PORT") ? std::stoi(std::getenv("XI_DB_PORT")) : login_config.mysql_port;
+    login_config.mysql_database  = std::getenv("XI_DB_NAME") ? std::getenv("XI_DB_NAME") : login_config.mysql_database;
+    login_config.msg_server_ip   = std::getenv("XI_MSG_IP") ? std::getenv("XI_MSG_IP") : login_config.msg_server_ip;
+    login_config.msg_server_port = std::getenv("XI_MSG_PORT") ? std::stoi(std::getenv("XI_MSG_PORT")) : login_config.msg_server_port;
 }
 
 void version_info_default()
@@ -670,8 +670,8 @@ int32 config_write(const char* fileName, const char* config, const std::function
 
 void login_versionscreen(int32 flag)
 {
-    ShowInfo(CL_WHITE "Topaz version %d.%02d.%02d" CL_RESET "\n", TOPAZ_MAJOR_VERSION, TOPAZ_MINOR_VERSION, TOPAZ_REVISION);
-    ShowInfo(CL_GREEN "Forum:" CL_RESET "\thttps://github.com/topaz-next/topaz\n");
+    ShowInfo(CL_WHITE "Topaz version %d.%02d.%02d" CL_RESET "\n", XI_MAJOR_VERSION, XI_MINOR_VERSION, XI_REVISION);
+    ShowInfo(CL_GREEN "Website:" CL_RESET "\thttps://github.com/DerpyProjectGroup/topaz\n");
     if (flag)
     {
         exit(EXIT_FAILURE);

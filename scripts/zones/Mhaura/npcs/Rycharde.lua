@@ -297,7 +297,7 @@ entity.onEventFinish = function(player, csid, option)
     elseif (csid == 94) then  --accept quest the basics
         if (option == 85 ) then
                         --TODO pay for ferry
-            player:addKeyItem(xi.ki.MHAURAN_COUSCOUS) --xi.ki.MHAURAN_COUSCOUS                = 92
+            player:addKeyItem(xi.ki.MHAURAN_COUSCOUS) -- xi.ki.MHAURAN_COUSCOUS                = 92
             player:messageSpecial(ID.text.KEYITEM_OBTAINED, xi.ki.MHAURAN_COUSCOUS)
             player:addQuest(xi.quest.log_id.OTHER_AREAS, xi.quest.id.otherAreas.THE_BASICS)
         end

@@ -4,7 +4,7 @@
 require("scripts/globals/npc_util")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 
 xi.ephemeral = {}
 

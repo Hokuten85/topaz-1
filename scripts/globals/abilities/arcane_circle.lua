@@ -20,16 +20,16 @@ ability_object.onUseAbility = function(player, target, ability)
         local subPower = 5;
     
         if (player:getMainLvl() > 50) then
-            subPower = subPower + math.floor((player:getMainLvl() - 50) / 5);
+            subPower = subPower + math.floor((player:getMainLvl() - 50) / 5)
         end
         
         if player:getSubJob() == xi.job.DRK then
-            subPower = math.floor(subPower / 2);
+            subPower = math.floor(subPower / 2)
         end
         
         target:addStatusEffect(xi.effect.ARCANE_CIRCLE,15,0,duration,0,subPower)
     else
-        target:addStatusEffect(xi.effect.ARCANE_CIRCLE,15,0,duration);
+        target:addStatusEffect(xi.effect.ARCANE_CIRCLE,15,0,duration)
     end
 end
 

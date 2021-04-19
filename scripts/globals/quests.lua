@@ -1,7 +1,7 @@
 require("scripts/globals/log_ids")
 require("scripts/globals/zone")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.quest = xi.quest or {}
 
 -----------------------------------

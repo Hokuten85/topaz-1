@@ -7,7 +7,7 @@
 
 require("scripts/globals/zone")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.casket_loot = xi.casket_loot or {}
 
 xi.casket_loot.casketItems =

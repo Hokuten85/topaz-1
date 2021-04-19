@@ -1,6 +1,7 @@
 -----------------------------------
 -- Global version of onMobDeath
 -----------------------------------
+require("scripts/globals/magiantrials")
 require("scripts/globals/missions")
 require("scripts/globals/quests")
 require("scripts/globals/status")
@@ -10,7 +11,7 @@ require("scripts/globals/zone")
 require("scripts/globals/msg")
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.mob = xi.mob or {}
 
 -- onMobDeathEx is called from the core
@@ -105,6 +106,15 @@ xi.mob.phOnDespawn = function(ph, phList, chance, cooldown, immediate)
 
     return false
 end
+
+-----------------------------------
+-- Mob skills
+-----------------------------------
+xi.mob.skills =
+{
+    RECOIL_DIVE = 641,
+    CYTOKINESIS = 2514
+}
 
 -----------------------------------
 -- mob additional melee effects

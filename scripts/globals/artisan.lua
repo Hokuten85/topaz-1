@@ -7,7 +7,7 @@ require('scripts/globals/zone')
 require('scripts/globals/status')
 -----------------------------------
 
-tpz = tpz or {}
+xi = xi or {}
 xi.artisan = xi.artisan or {}
 
 local event =

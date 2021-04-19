@@ -2,7 +2,7 @@ require("scripts/globals/keyitems")
 require("scripts/globals/log_ids")
 require("scripts/globals/zone")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.mission = xi.mission or {}
 
 xi.mission.log_id =
@@ -41,15 +41,22 @@ xi.mission.area =
     [xi.mission.log_id.ROV]         = 'rov',
 }
 
-xi.mission.logEx =
+--[[
+xi.mission.status =
 {
-    -- Chains of Promathia
-    SANDORIA   = 0,
-    WINDURST   = 1,
-    LOUVERANCE = 2,
-    TENZEN     = 3,
-    ULMIA      = 4,
+    COP =
+    {
+        SANDORIA   = 0,
+        WINDURST   = 1,
+        LOUVERANCE = 2,
+        TENZEN     = 3,
+        ULMIA      = 4,
+        PROMY      = 5,
+        CID        = 6,
+        RUBIOUS    = 7,
+    },
 }
+]]--
 
 xi.mission.id =
 {
@@ -58,6 +65,7 @@ xi.mission.id =
     -----------------------------------
     ['nation'] =
     {
+        RANK2       = 6,
         MAGICITE    = 13,
         ARCHLICH    = 14,
         SHADOW_LORD = 15,
@@ -1060,7 +1068,7 @@ function getMissionMask(player)
         end
     end
 
-    if (player:getCurrentMission(nation) == xi.mission.id.sandoria.THE_RUINS_OF_FEI_YIN and player:getCharVar("MissionStatus") == 8) then
+    if (player:getCurrentMission(nation) == xi.mission.id.nation.ARCHLICH and player:getMissionStatus(nation) == 8) then
         mission_mask = 2147483647 - 16384
     else
         mission_mask = 2147483647 - repeat_mission - first_mission -- 2^31 -1 - ..
@@ -1166,7 +1174,7 @@ function finishMissionTimeline(player, guard, csid, option)
     -- 11: player:setRank(number)
     -- 12: player:completeMission(nation, mission)
     -- 13: player:addTitle(number)
-    -- 14: player:setCharVar("MissionStatus", value)
+    -- 14: player:setMissionStatus(nation, value)
 
     if (nation == xi.nation.SANDORIA) then
         if ((csid == 1009 or csid == 2009) and option ~= 1073741824 and option ~= 31) then
@@ -1177,7 +1185,7 @@ function finishMissionTimeline(player, guard, csid, option)
                     timeline = {badoption[op+1], {1009, badoption[op]}, {2009, badoption[op]}, {0, 0}, {0, 0}, {{1}, {2}}} end
                 end
             elseif (option == 14) then
-                timeline = {option, {1009, option}, {2009, option}, {0, 0}, {0, 0}, {{1}, {2}, {3, "MissionStatus", 9}}}
+                timeline = {option, {1009, option}, {2009, option}, {0, 0}, {0, 0}, {{1}, {2}, {14, 9}}}
             else
                 timeline = {option, {1009, option}, {2009, option}, {0, 0}, {0, 0}, {{1}, {2}}}
             end
@@ -1208,7 +1216,7 @@ function finishMissionTimeline(player, guard, csid, option)
                 15, {0, 0},      {0, 0},     {61, 0}, {0, 0}, {{14, 0}, {9, 74}, {8, 20000}, {6}, {12}},                             -- MISSION 5-2 (Finish 2nd Part (Trion in Great Hall))
                 16, {0, 0},      {0, 0},     {111, 0}, {0, 0}, {{14, 0}, {9, 268}, {10, 270}, {12}},                                 -- MISSION 6-1 (Finish (Chalvatot))
                 17, {1034, 0}, {1033, 0}, {0, 0}, {0, 0}, {{14, 0}, {11, 7}, {8, 40000}, {6}, {12}},                                -- MISSION 6-2 (Finish (Guard))
-                18, {0, 0},      {0, 0},     {7, 0}, {0, 0}, {{14, 1}},                                                     -- MISSION 7-1 (setCharVar("MissionStatus", 1) (Door: Papal Chambers))
+                18, {0, 0},      {0, 0},     {7, 0}, {0, 0}, {{14, 1}},                                                     -- MISSION 7-1 (setMissionStatus(nation, 1) (Door: Papal Chambers))
                 18, {0, 0},      {0, 0},     {8, 0}, {0, 0}, {{14, 0}, {9, 283}, {5, 1000}, {12}},                                 -- MISSION 7-1 (Finish (Door: Papal Chambers))
                 19, {1044, 0}, {1043, 0}, {0, 0}, {0, 0}, {{14, 0}, {6}, {3, "SecretWeaponStatus", 0}, {9, 284}, {11, 8}, {8, 60000}, {12}}, -- MISSION 7-2 (Finish)
                 20, {0, 0},      {0, 0},     {102, 0}, {0, 0}, {{14, 0}, {9, 288}, {5, 800}, {12}},                                    -- MISSION 8-1 (Finish)
@@ -1292,20 +1300,20 @@ function finishMissionTimeline(player, guard, csid, option)
                 messList = timeline[cs + 5][nb]
 
                 switch (messList[1]) : caseof {
-                    [1] = function (x) if (messList[2] ~= nil) then player:addMission(nation,messList[2]); else player:addMission(nation,timeline[cs]); end end,
-                    [2] = function (x) player:messageSpecial(zones[player:getZoneID()].text.YOU_ACCEPT_THE_MISSION); end,
-                    [3] = function (x) player:setCharVar(messList[2],messList[3]); end,
-                    [4] = function (x) player:tradeComplete(); end,
-                    [5] = function (x) if ((player:getRankPoints() + messList[2]) > 4000) then player:setRankPoints(4000); else player:addRankPoints(messList[2]); end end,
-                    [6] = function (x) player:setRankPoints(0); end,
-                    [7] = function (x) player:addCP(messList[2]); player:messageSpecial(zones[player:getZoneID()].text.YOUVE_EARNED_CONQUEST_POINTS); end,
-                    [8] = function (x) local g=GIL_RATE*messList[2]; player:addGil(g); player:messageSpecial(zones[player:getZoneID()].text.GIL_OBTAINED,g); addColoredDrop(player); end,
-                    [9] = function (x) player:delKeyItem(messList[2]); end,
-                    [10] = function (x) player:addKeyItem(messList[2]); player:messageSpecial(zones[player:getZoneID()].text.KEYITEM_OBTAINED,messList[2]); end,
-                    [11] = function (x) player:setRank(messList[2]); end,
-                    [12] = function (x) player:completeMission(nation,timeline[cs]); end,
-                    [13] = function (x) player:addTitle(messList[2]); end,
-                    [14] = function (x) player:setCharVar("MissionStatus",messList[2]); end,
+                    [1] = function (x) if (messList[2] ~= nil) then player:addMission(nation, messList[2]) else player:addMission(nation, timeline[cs]) end end,
+                    [2] = function (x) player:messageSpecial(zones[player:getZoneID()].text.YOU_ACCEPT_THE_MISSION) end,
+                    [3] = function (x) player:setCharVar(messList[2], messList[3]) end,
+                    [4] = function (x) player:tradeComplete() end,
+                    [5] = function (x) if ((player:getRankPoints() + messList[2]) > 4000) then player:setRankPoints(4000) else player:addRankPoints(messList[2]) end end,
+                    [6] = function (x) player:setRankPoints(0) end,
+                    [7] = function (x) player:addCP(messList[2]) player:messageSpecial(zones[player:getZoneID()].text.YOUVE_EARNED_CONQUEST_POINTS) end,
+                    [8] = function (x) player:addGil(GIL_RATE*messList[2]) player:messageSpecial(zones[player:getZoneID()].text.GIL_OBTAINED, GIL_RATE*messList[2]) end,
+                    [9] = function (x) player:delKeyItem(messList[2]) end,
+                    [10] = function (x) player:addKeyItem(messList[2]) player:messageSpecial(zones[player:getZoneID()].text.KEYITEM_OBTAINED, messList[2]) end,
+                    [11] = function (x) player:setRank(messList[2]) end,
+                    [12] = function (x) player:completeMission(nation, timeline[cs]) end,
+                    [13] = function (x) player:addTitle(messList[2]) end,
+                    [14] = function (x) player:setMissionStatus(nation, messList[2]) end,
                 }
             end
         end

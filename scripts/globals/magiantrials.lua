@@ -7,7 +7,7 @@ require("scripts/globals/zone")
 require("scripts/globals/msg")
 require("scripts/globals/utils")
 -----------------------------------
-tpz = tpz or {}
+xi = xi or {}
 xi.magian = xi.magian or {}
 xi.magian.trialCache = xi.magian.trialCache or {}
 
@@ -555,7 +555,7 @@ xi.magian.magianOnEventFinish = function(player, itemId, csid, option, EVENT_IDS
     local ID = require("scripts/zones/RuLude_Gardens/IDs")
 
     if csid == EVENT_IDS[2] and option == 1 then
-        player:messageSpecial(ID.text.KEYITEM_OBTAINED,xi.ki.MAGIAN_TRIAL_LOG)
+        player:messageSpecial(ID.text.KEYITEM_OBTAINED, xi.ki.MAGIAN_TRIAL_LOG)
         player:addKeyItem(xi.ki.MAGIAN_TRIAL_LOG)
 
     -- starts a trial
@@ -600,7 +600,7 @@ xi.magian.magianOnEventFinish = function(player, itemId, csid, option, EVENT_IDS
                 break
             end
         end
-        player:addItem(t.reqItem, 1, t.reqItemAug1, t.reqItemAugValue1, t.reqItemAug2, t.reqItemAugValue2, t.reqItemAug3, t.reqItemAugValue3, t.reqItemAug4, t.reqItemAugValue4, trialId)
+        player:addItem(t.reqItem, 1, t.reqItemAug1, t.reqItemAugValue1, t.reqItemAug2, t.reqItemAugValue2, t.reqItemAug3, t.reqItemAugValue3, t.reqItemAug4, t.reqItemAugValue4, 0)
         player:messageSpecial(msg.RETURN_MAGIAN_ITEM, t.reqItem)
 
     -- finishes a trial

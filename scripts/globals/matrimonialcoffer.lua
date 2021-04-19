@@ -3,7 +3,7 @@
 -----------------------------------
 require("scripts/globals/npc_util")
 
-tpz = tpz or {}
+xi = xi or {}
 xi.matrimonialcoffer = xi.matrimonialcoffer or {}
 
 function xi.matrimonialcoffer.startEvent(player)
