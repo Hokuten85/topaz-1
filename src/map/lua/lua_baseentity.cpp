@@ -10320,7 +10320,7 @@ uint16 CLuaBaseEntity::getRATT()
 
 uint8 CLuaBaseEntity::getHitRate(CLuaBaseEntity* target)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
 
     return battleutils::GetHitRate(static_cast<CBattleEntity*>(m_PBaseEntity), static_cast<CBattleEntity*>(target->m_PBaseEntity));
 }
@@ -10334,7 +10334,7 @@ uint8 CLuaBaseEntity::getHitRate(CLuaBaseEntity* target)
 
 uint8 CLuaBaseEntity::getRangedHitRate(CLuaBaseEntity* target)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
 
     return battleutils::GetRangedHitRate(static_cast<CBattleEntity*>(m_PBaseEntity), static_cast<CBattleEntity*>(target->m_PBaseEntity), false);
 }
@@ -10989,7 +10989,7 @@ void CLuaBaseEntity::addSimpleGambitEx(uint16 targ, uint16 cond, uint32 conditio
 
 inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_TRUST);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_TRUST);
 
     using namespace gambits;
 
@@ -11088,7 +11088,7 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
 
 void CLuaBaseEntity::deleteCustomGambit(uint16 index)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_TRUST);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_TRUST);
 
     auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
     auto* controller = static_cast<CTrustController*>(trust->PAI->GetController());
@@ -11098,7 +11098,7 @@ void CLuaBaseEntity::deleteCustomGambit(uint16 index)
 
 sol::table CLuaBaseEntity::getCustomGambits()
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
 
     auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
     auto* controller = static_cast<CTrustController*>(trust->PAI->GetController());
@@ -12024,10 +12024,10 @@ bool CLuaBaseEntity::hasTrait(uint8 traitID)
 
 inline int32 CLuaBaseEntity::getTraitValue(lua_State* L)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
-    TPZ_DEBUG_BREAK_IF(lua_isnil(L, 1) || !lua_isnumber(L, 1));
+    XI_DEBUG_BREAK_IF(lua_isnil(L, 1) || !lua_isnumber(L, 1));
 
     lua_pushinteger(L, charutils::getTraitValue((CCharEntity*)m_PBaseEntity, lua_tointeger(L, 1)));
     return 1;
@@ -12852,7 +12852,7 @@ void CLuaBaseEntity::addDropListModification(uint16 id, uint16 newRate, sol::var
 
 inline int32 CLuaBaseEntity::addCharMod(uint16 modid, int16 modValue)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
     auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
     auto  mod   = static_cast<Mod>(modid);
@@ -12873,7 +12873,7 @@ inline int32 CLuaBaseEntity::addCharMod(uint16 modid, int16 modValue)
 
 inline int32 CLuaBaseEntity::getCharMod(uint16 modid)
 {
-    TPZ_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
     auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
     auto  mod   = static_cast<Mod>(modid);
@@ -12918,7 +12918,7 @@ inline auto CLuaBaseEntity::getBountyMob(uint8 bountyType) -> std::tuple<uint32,
     if (bountyMob != nullptr)
     {
         mobId = bountyMob->Mob->id;
-        CItem* dropItem = bountyMob->Items->at(tpzrand::GetRandomNumber(bountyMob->Items->size()));
+        CItem* dropItem = bountyMob->Items->at(xirand::GetRandomNumber(bountyMob->Items->size()));
         if (dropItem != nullptr)
         {
             itemId = dropItem->getID();

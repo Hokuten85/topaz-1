@@ -212,7 +212,7 @@ uint8 CLuaItem::getSkillType()
 
 inline int32 CLuaItem::getSubSkillType(lua_State* L)
 {
-    TPZ_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
+    XI_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
 
     auto PItem = dynamic_cast<CItemWeapon*>(m_PLuaItem);
 
@@ -306,7 +306,7 @@ bool CLuaItem::isInstalled()
 
 inline int32 CLuaItem::getSlotType(lua_State* L)
 {
-    TPZ_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
+    XI_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
 
     if (CItemEquipment* PEquip = dynamic_cast<CItemEquipment*>(m_PLuaItem))
         lua_pushinteger(L, PEquip->getSlotType());

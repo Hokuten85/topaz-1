@@ -1153,7 +1153,7 @@ BountyMob_t* GetBountyMob(uint8 charLevel, uint8 bountyType)
         }
     }
 
-    uint16 randomNum = tpzrand::GetRandomNumber(nmPoolSize);
+    uint16 randomNum = xirand::GetRandomNumber(nmPoolSize);
     for (uint8 i = minLevel; i < maxLevel; i++)
     {
         if (bountyDropMap[i] != nullptr)

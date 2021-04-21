@@ -1607,7 +1607,7 @@ namespace petutils
         PPet->SetMJob(JOB_DRG);
         PPet->SetMLevel(PMaster->GetMLevel());
 
-        LoadAvatarStats(PPet); //follows PC calcs (w/o SJ)
+        LoadAvatarStats(PMaster, PPet); //follows PC calcs (w/o SJ)
         ((CItemWeapon*)PPet->m_Weapons[SLOT_MAIN])->setDelay((uint16)(floor(1000.0f * (280.0f / 60.0f)))); //320 delay
         ((CItemWeapon*)PPet->m_Weapons[SLOT_MAIN])->setDamage((uint16)(1 + floor(PPet->GetMLevel() * 0.9f)));
         // Set A+ weapon skill

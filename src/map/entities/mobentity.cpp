@@ -957,9 +957,9 @@ void CMobEntity::DropItems(CCharEntity* PChar)
         {
             for (int16 roll = 0; roll < maxRolls; ++roll)
             {
-                if (tpzrand::GetRandomNumber(1000) < map_config.global_equipment_drop_rate + bonus)
+                if (xirand::GetRandomNumber(1000) < map_config.global_equipment_drop_rate + bonus)
                 {
-                    DropEquip_t* drop = equipDrops->at(tpzrand::GetRandomNumber(equipDrops->size()));
+                    DropEquip_t* drop = equipDrops->at(xirand::GetRandomNumber(equipDrops->size()));
 
                     if (AddItemToPool(drop->ItemID, ++dropCount))
                         return;
@@ -972,9 +972,9 @@ void CMobEntity::DropItems(CCharEntity* PChar)
         {
             for (int16 roll = 0; roll < maxRolls; ++roll)
             {
-                if (tpzrand::GetRandomNumber(1000) < 250 + bonus)
+                if (xirand::GetRandomNumber(1000) < 250 + bonus)
                 {
-                    uint16 itemId = coloredDrops[tpzrand::GetRandomNumber(coloredDrops.size())];
+                    uint16 itemId = coloredDrops[xirand::GetRandomNumber(coloredDrops.size())];
 
                     if (AddItemToPool(itemId, ++dropCount))
                         return;
