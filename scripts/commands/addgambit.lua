@@ -92,7 +92,7 @@ function onTrigger(player, target_type, condition, condition_arg, react, select,
         return
     end
     
-    local cond_arg = tonumber(condition_arg[1]) or tableDepthSearch(tpz, condition_arg)
+    local cond_arg = tonumber(condition_arg[1]) or tableDepthSearch(xi, condition_arg)
     if not cond_arg then
         error(player, "No valid condition arg found.")
         return
@@ -110,7 +110,7 @@ function onTrigger(player, target_type, condition, condition_arg, react, select,
         return
     end
     
-    local select_arg = tonumber(selector_arg[1]) or tableDepthSearch(tpz, selector_arg)
+    local select_arg = tonumber(selector_arg[1]) or tableDepthSearch(xi, selector_arg)
     if not select_arg then
         error(player, "No valid selector arg found.")
         return
