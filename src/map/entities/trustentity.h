@@ -88,6 +88,7 @@ public:
     std::map<uint8, std::vector<CModifier>> equipmentMods;
     CUContainer*             UContainer; // container used for universal actions -- used for trading at least despite the dedicated trading container above
     uint8                    m_Abilities[62]; // список текущих способностей
+    uint8                    cmbSkill;
 
     std::map<BRD_SONG_BUCKET, std::vector<SpellID>> melee_songs{
         { BRD_SONG_BUCKET::NORMAL, std::vector<SpellID>() },

@@ -234,6 +234,7 @@ namespace trustutils
         PTrust->m_ModelSize      = trustData->size;
         PTrust->m_EcoSystem      = trustData->EcoSystem;
         PTrust->m_MovementType   = static_cast<TRUST_MOVEMENT_TYPE>(trustData->behaviour);
+        PTrust->cmbSkill         = trustData->cmbSkill;
 
         PTrust->SetMJob(trustData->mJob);
         PTrust->SetSJob(trustData->sJob);
@@ -249,13 +250,13 @@ namespace trustutils
         {
             case SKILL_ARCHERY:
             case SKILL_MARKSMANSHIP:
-                dynamic_cast<CItemWeapon*>(PTrust->m_Weapons[SLOT_RANGED])->setSkillType(trustData->cmbSkill);
+                dynamic_cast<CItemWeapon*>(PTrust->m_Weapons[SLOT_RANGED])->setSkillType(PTrust->cmbSkill);
                 break;
             case SKILL_THROWING:
-                dynamic_cast<CItemWeapon*>(PTrust->m_Weapons[SLOT_AMMO])->setSkillType(trustData->cmbSkill);
+                dynamic_cast<CItemWeapon*>(PTrust->m_Weapons[SLOT_AMMO])->setSkillType(PTrust->cmbSkill);
                 break;
             default:
-                dynamic_cast<CItemWeapon*>(PTrust->m_Weapons[SLOT_MAIN])->setSkillType(trustData->cmbSkill);
+                dynamic_cast<CItemWeapon*>(PTrust->m_Weapons[SLOT_MAIN])->setSkillType(PTrust->cmbSkill);
         }
 
         LoadTrustEquipment(PTrust, PMaster);
@@ -615,7 +616,7 @@ namespace trustutils
                                         {
                                             auto weapon        = static_cast<CItemWeapon*>(PEquip);
                                             auto currentWeapon = static_cast<CItemWeapon*>(PTrust->m_Weapons[(SLOTTYPE)slotId]);
-                                            if ((float)weapon->getDamage() / weapon->getDelay() > (float)currentWeapon->getDamage() / weapon->getDelay())
+                                            if (weapon->getSkillType() == PTrust->cmbSkill && (float)weapon->getDamage() / weapon->getDelay() > (float)currentWeapon->getDamage() / weapon->getDelay())
                                             {
                                                 PTrust->m_Weapons[(SLOTTYPE)slotId] = PEquip;
                                                 PTrust->equip[slotId]               = PEquip;
@@ -623,12 +624,6 @@ namespace trustutils
                                         }
                                         else
                                         {
-                                            auto currentShield = PTrust->m_Weapons[(SLOTTYPE)slotId];
-                                            if (PEquip->getShieldAbsorption() > currentShield->getShieldAbsorption())
-                                            {
-                                                PTrust->m_Weapons[(SLOTTYPE)slotId] = PEquip;
-                                            }
-
                                             auto blockRate = [](CItemEquipment* PEquip) {
                                                 if (PEquip->IsShield())
                                                 {
@@ -658,9 +653,11 @@ namespace trustutils
                                                 return 0;
                                             };
 
-                                            if (blockRate(PEquip) > blockRate(currentShield))
+                                            auto currentShield = PTrust->m_Weapons[(SLOTTYPE)slotId];
+                                            if (PEquip->getShieldAbsorption() * blockRate(PEquip) > currentShield->getShieldAbsorption() * blockRate(currentShield))
                                             {
-                                                PTrust->equip[slotId] = PEquip;
+                                                PTrust->m_Weapons[(SLOTTYPE)slotId] = PEquip;
+                                                PTrust->equip[slotId]               = PEquip;
                                             }
                                         }
                                     }

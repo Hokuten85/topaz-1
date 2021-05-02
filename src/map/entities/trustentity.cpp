@@ -642,7 +642,7 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
                     {
                         auto weapon        = static_cast<CItemWeapon*>(PItem);
                         auto currentWeapon = static_cast<CItemWeapon*>(this->m_Weapons[(SLOTTYPE)slotId]);
-                        if ((float)weapon->getDamage() / weapon->getDelay() > (float)currentWeapon->getDamage() / weapon->getDelay())
+                        if (weapon->getSkillType() == this->cmbSkill && (float) weapon->getDamage() / weapon->getDelay() > (float)currentWeapon->getDamage() / weapon->getDelay())
                         {
                             this->m_Weapons[(SLOTTYPE)slotId] = PItem;
                             this->equip[slotId]               = PItem;
@@ -650,12 +650,6 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
                     }
                     else
                     {
-                        auto currentShield = this->m_Weapons[(SLOTTYPE)slotId];
-                        if (PItem->getShieldAbsorption() > currentShield->getShieldAbsorption())
-                        {
-                            this->m_Weapons[(SLOTTYPE)slotId] = PItem;
-                        }
-
                         auto blockRate = [](CItemEquipment* PEquip) {
                             if (PEquip->IsShield())
                             {
@@ -685,9 +679,11 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
                             return 0;
                         };
 
-                        if (blockRate(PItem) > blockRate(currentShield))
+                        auto currentShield = this->m_Weapons[(SLOTTYPE)slotId];
+                        if (PItem->getShieldAbsorption() * blockRate(PItem) > currentShield->getShieldAbsorption() * blockRate(currentShield))
                         {
-                            this->equip[slotId] = PItem;
+                            this->m_Weapons[(SLOTTYPE)slotId] = PItem;
+                            this->equip[slotId]               = PItem;
                         }
                     }
                 }
