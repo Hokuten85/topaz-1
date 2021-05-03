@@ -881,7 +881,6 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
                     else
                     {
                         auto trustEquip = *it2;
-                        delete trustEquip->PItem;
                         trustEquip->PItem = newPItem;
                     }
                 }
