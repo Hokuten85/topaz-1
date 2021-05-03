@@ -457,6 +457,13 @@ bool CTrustController::Ability(uint16 targid, uint16 abilityid)
         return false;
     }
 
+    CAbility* PAbility = ability::GetAbility(abilityid);
+    auto PTarget = POwner->PAI->TargetFind->getValidTarget(targid, PAbility->getValidTarget());
+    if (PTarget != nullptr && distance(POwner->loc.p, PTarget->loc.p) > PAbility->getRange())
+    {
+        return false;
+    }
+
     if (POwner->PAI->CanChangeState())
     {
         return POwner->PAI->Internal_Ability(targid, abilityid);
