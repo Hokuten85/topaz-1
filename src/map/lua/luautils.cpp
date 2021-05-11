@@ -159,6 +159,7 @@ namespace luautils
 
         set_function("garbageCollectStep", &luautils::garbageCollectStep);
         set_function("garbageCollectFull", &luautils::garbageCollectFull);
+        set_function("GetZone", &luautils::GetZone);
         set_function("getNPCByID", &luautils::GetNPCByID);
         set_function("getMobByID", &luautils::GetMobByID);
         set_function("weekUpdateConquest", &luautils::WeekUpdateConquest);
@@ -184,6 +185,7 @@ namespace luautils
         set_function("vanadielDayOfTheYear", &luautils::VanadielDayOfTheYear);
         set_function("vanadielYear", &luautils::VanadielYear);
         set_function("vanadielMonth", &luautils::VanadielMonth);
+        set_function("vanadielUniqueDay", &luautils::VanadielUniqueDay);
         set_function("vanadielDayElement", &luautils::VanadielDayElement);
         set_function("vanadielMoonPhase", &luautils::VanadielMoonPhase);
         set_function("vanadielMoonDirection", &luautils::VanadielMoonDirection);
@@ -637,11 +639,43 @@ namespace luautils
         return std::optional<CLuaBaseEntity>(PNpc);
     }
 
+    void InitInteractionGlobal()
+    {
+        CacheLuaObjectFromFile("./scripts/globals/interaction/interaction_global.lua");
+
+        auto initZones = lua["xi"]["globals"]["interaction"]["interaction_global"]["initZones"];
+        std::vector<uint16> zoneIds;
+        zoneutils::ForEachZone([&zoneIds](CZone* PZone) {
+            zoneIds.push_back(PZone->GetID());
+        });
+
+        auto result = initZones(zoneIds);
+
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ShowError("luautils::InitInteractionGlobal: %s\n", err.what());
+        }
+    }
+
     /************************************************************************
      *                                                                       *
      *                                                                       *
      *                                                                       *
      ************************************************************************/
+
+    std::optional<CLuaZone> GetZone(uint16 zoneId)
+    {
+        TracyZoneScoped;
+
+        CZone* zone = zoneutils::GetZone(zoneId);
+        if (zone)
+        {
+            return std::optional<CLuaZone>(zone);
+        }
+
+        return std::nullopt;
+    }
 
     std::optional<CLuaBaseEntity> GetMobByID(uint32 mobid, sol::object const& instanceObj)
     {
@@ -824,6 +858,27 @@ namespace luautils
     {
         TracyZoneScoped;
         return CVanaTime::getInstance()->getMonth();
+    }
+
+    /************************************************************************
+     *                                                                       *
+     *   Return Vanadiel Unique Day                                          *
+     *                                                                       *
+     ************************************************************************/
+
+    uint32 VanadielUniqueDay()
+    {
+        TracyZoneScoped;
+
+        int32 day;
+        int32 month;
+        int32 year;
+
+        day   = CVanaTime::getInstance()->getDayOfTheMonth();
+        month = CVanaTime::getInstance()->getMonth();
+        year  = CVanaTime::getInstance()->getYear();
+
+        return (year * 360) + (month * 30 - 30) + day;
     }
 
     /************************************************************************
@@ -1438,13 +1493,10 @@ namespace luautils
 
         auto name = PChar->m_moghouseID ? "Residential_Area" : (const char*)zoneutils::GetZone(PChar->loc.destination)->GetName();
 
+        auto onZoneInFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onZoneIn"];
         auto onZoneIn = lua["xi"]["zones"][name]["Zone"]["onZoneIn"];
-        if (!onZoneIn.valid())
-        {
-            return -1;
-        }
 
-        auto result = onZoneIn(CLuaBaseEntity(PChar), PChar->loc.prevzone);
+        auto result = onZoneInFramework(CLuaBaseEntity(PChar), PChar->loc.prevzone, onZoneIn);
         if (!result.valid())
         {
             sol::error err = result;
@@ -1516,12 +1568,8 @@ namespace luautils
             onRegionEnter = lua["xi"]["zones"][name]["Zone"]["onRegionEnter"];
         }
 
-        if (!onRegionEnter.valid())
-        {
-            return -1;
-        }
-
-        auto result = onRegionEnter(CLuaBaseEntity(PChar), CLuaRegion(PRegion));
+        auto onRegionEnterFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onRegionEnter"];
+        auto result                 = onRegionEnterFramework(CLuaBaseEntity(PChar), CLuaRegion(PRegion), onRegionEnter);
         if (!result.valid())
         {
             sol::error err = result;
@@ -1573,12 +1621,8 @@ namespace luautils
             onRegionLeave = lua["xi"]["zones"][name]["Zone"]["onRegionLeave"];
         }
 
-        if (!onRegionLeave.valid())
-        {
-            return -1;
-        }
-
-        auto result = onRegionLeave(CLuaBaseEntity(PChar), CLuaRegion(PRegion));
+        auto onRegionLeaveFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onRegionLeave"];
+        auto result                 = onRegionLeaveFramework(CLuaBaseEntity(PChar), CLuaRegion(PRegion), onRegionLeave);
         if (!result.valid())
         {
             sol::error err = result;
@@ -1609,14 +1653,10 @@ namespace luautils
 
         PChar->StatusEffectContainer->DelStatusEffect(EFFECT_BOOST);
 
+        auto onTriggerFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onTrigger"];
         auto onTrigger = GetCacheEntryFromFilename(filename)["onTrigger"];
-        if (!onTrigger.valid())
-        {
-            ShowWarning("luautils::onTrigger - No Valid Function for %s in %s\n", PNpc->GetName(), PChar->loc.zone->GetName());
-            return -1;
-        }
 
-        auto result = onTrigger(CLuaBaseEntity(PChar), CLuaBaseEntity(PNpc));
+        auto result = onTriggerFramework(CLuaBaseEntity(PChar), CLuaBaseEntity(PNpc), onTrigger);
         if (!result.valid())
         {
             sol::error err = result;
@@ -1669,12 +1709,8 @@ namespace luautils
     {
         TracyZoneScoped;
 
+        auto onEventUpdateFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onEventUpdate"];
         auto onEventUpdate = LoadEventScript(PChar, "onEventUpdate");
-        if (!onEventUpdate.valid())
-        {
-            ShowError("luautils::onEventUpdate: undefined procedure onEventUpdate\n");
-            return -1;
-        }
 
         std::optional<CLuaBaseEntity> optTarget = std::nullopt;
         if (PChar->m_event.Target)
@@ -1682,7 +1718,7 @@ namespace luautils
             optTarget = CLuaBaseEntity(PChar->m_event.Target);
         }
 
-        auto func_result = onEventUpdate(CLuaBaseEntity(PChar), eventID, result, optTarget);
+        auto func_result = onEventUpdateFramework(CLuaBaseEntity(PChar), eventID, result, optTarget, onEventUpdate);
         if (!func_result.valid())
         {
             sol::error err = func_result;
@@ -1697,12 +1733,8 @@ namespace luautils
     {
         TracyZoneScoped;
 
+        auto onEventUpdateFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onEventUpdate"];
         auto onEventUpdate = LoadEventScript(PChar, "onEventUpdate");
-        if (!onEventUpdate.valid())
-        {
-            ShowError("luautils::onEventUpdate: undefined procedure onEventUpdate\n");
-            return -1;
-        }
 
         std::optional<CLuaBaseEntity> optTarget = std::nullopt;
         if (PChar->m_event.Target)
@@ -1710,7 +1742,7 @@ namespace luautils
             optTarget = CLuaBaseEntity(PChar->m_event.Target);
         }
 
-        auto result = onEventUpdate(CLuaBaseEntity(PChar), PChar->m_event.EventID, updateString, optTarget);
+        auto result = onEventUpdateFramework(CLuaBaseEntity(PChar), PChar->m_event.EventID, updateString, optTarget, onEventUpdate);
         if (!result.valid())
         {
             sol::error err = result;
@@ -1731,12 +1763,8 @@ namespace luautils
     {
         TracyZoneScoped;
 
+        auto onEventFinishFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onEventFinish"];
         auto onEventFinish = LoadEventScript(PChar, "onEventFinish");
-        if (!onEventFinish.valid())
-        {
-            ShowError("luautils::onEventFinish: undefined procedure onEventFinish\n");
-            return -1;
-        }
 
         std::optional<CLuaBaseEntity> optTarget = std::nullopt;
         if (PChar->m_event.Target)
@@ -1749,7 +1777,7 @@ namespace luautils
             optTarget = CLuaBaseEntity(PChar->m_event.Target);
         }
 
-        auto func_result = onEventFinish(CLuaBaseEntity(PChar), eventID, result, optTarget);
+        auto func_result = onEventFinishFramework(CLuaBaseEntity(PChar), eventID, result, optTarget, onEventFinish);
         if (!func_result.valid())
         {
             sol::error err = func_result;
@@ -1785,13 +1813,10 @@ namespace luautils
         PChar->m_event.Target = PNpc;
         PChar->m_event.Script = filename;
 
+        auto onTradeFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onTrade"];
         auto onTrade = lua["xi"]["zones"][zone]["npcs"][name]["onTrade"];
-        if (!onTrade.valid())
-        {
-            return -1;
-        }
 
-        auto result = onTrade(CLuaBaseEntity(PChar), CLuaBaseEntity(PNpc), CLuaTradeContainer(PChar->TradeContainer));
+        auto result = onTradeFramework(CLuaBaseEntity(PChar), CLuaBaseEntity(PNpc), CLuaTradeContainer(PChar->TradeContainer), onTrade);
         if (!result.valid())
         {
             sol::error err = result;
@@ -2803,14 +2828,10 @@ namespace luautils
 
             auto filename = fmt::format("./scripts/zones/{}/mobs/{}.lua", PMob->loc.zone->GetName(), PMob->GetName());
 
+            auto onMobDeathFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onMobDeath"];
             sol::function onMobDeath = getEntityCachedFunction(PMob, "onMobDeath");
-            if (!onMobDeath.valid())
-            {
-                // ShowError("luautils::onMobDeath (%s): undefined procedure onMobDeath\n", filename);
-                return -1;
-            }
 
-            PChar->ForAlliance([PMob, PChar, &onMobDeath, &filename](CBattleEntity* PPartyMember) {
+            PChar->ForAlliance([PMob, PChar, &onMobDeathFramework, &onMobDeath, &filename](CBattleEntity* PPartyMember) {
                 CCharEntity* PMember = (CCharEntity*)PPartyMember;
                 if (PMember && PMember->getZone() == PChar->getZone())
                 {
@@ -2828,7 +2849,7 @@ namespace luautils
                     PMember->m_event.Script = filename;
 
                     // onMobDeath(mob, player, isKiller, noKiller)
-                    auto result = onMobDeath(LuaMobEntity, optLuaAllyEntity, isKiller, noKiller);
+                    auto result = onMobDeathFramework(LuaMobEntity, optLuaAllyEntity, isKiller, noKiller, onMobDeath);
                     if (!result.valid())
                     {
                         sol::error err = result;
@@ -2839,15 +2860,11 @@ namespace luautils
         }
         else
         {
+            auto onMobDeathFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onMobDeath"];
             sol::function onMobDeath = getEntityCachedFunction(PMob, "onMobDeath");
-            if (!onMobDeath.valid())
-            {
-                // ShowError("luautils::onMobDeath (%s - %s): undefined procedure onMobDeath\n", PMob->GetName(), PMob->loc.zone->GetName());
-                return -1;
-            }
 
             // onMobDeath(mob, player, isKiller, noKiller)
-            auto result = onMobDeath(CLuaBaseEntity(PMob), sol::nil, sol::nil, true);
+            auto result = onMobDeathFramework(CLuaBaseEntity(PMob), sol::nil, sol::nil, true, onMobDeath);
             if (!result.valid())
             {
                 sol::error err = result;
