@@ -32,6 +32,7 @@ mission.sections =
                 [32001] = function(player, csid, option, npc)
                     if player:getLocalVar("battlefieldWin") == 192 then
                         mission:complete(player)
+                        addColoredDrop(player)
                     end
                 end,
             },

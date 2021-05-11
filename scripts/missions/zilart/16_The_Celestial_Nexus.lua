@@ -41,6 +41,7 @@ mission.sections =
                     if player:getLocalVar("battlefieldWin") == 320 then
                         player:setMissionStatus(xi.mission.log_id.ZILART, 0)
                         mission:complete(player)
+                        addColoredDrop(player)
                     end
                     player:setPos(0, -18, 137, 64, 251) -- Hall of the Gods
                 end,

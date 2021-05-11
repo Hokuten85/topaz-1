@@ -67,6 +67,7 @@ mission.sections =
                     -- TODO: npcUtil and message about removing the KI?
                     player:delKeyItem(xi.ki.SACRIFICIAL_CHAMBER_KEY)
                     mission:complete(player)
+                    addColoredDrop(player)
                 end,
             },
         },

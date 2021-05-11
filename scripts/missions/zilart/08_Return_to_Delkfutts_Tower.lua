@@ -122,6 +122,7 @@ mission.sections =
                         else
                             player:setMissionStatus(xi.mission.log_id.ZILART, 0)
                             mission:complete(player)
+                            addColoredDrop(player)
                         end
                     end
                 end,
