@@ -129,6 +129,8 @@ namespace luautils
     void OnEntityLoad(CBaseEntity* PEntity);
 
     void  SendEntityVisualPacket(uint32 npcid, const char* command);
+    void  InitInteractionGlobal();
+    auto  GetZone(uint16 zoneId) -> std::optional<CLuaZone>;
     auto  GetNPCByID(uint32 npcid, sol::object const& instanceObj) -> std::optional<CLuaBaseEntity>;
     auto  GetMobByID(uint32 mobid, sol::object const& instanceObj) -> std::optional<CLuaBaseEntity>;
     void  WeekUpdateConquest(sol::variadic_args va);
@@ -162,6 +164,7 @@ namespace luautils
     uint32 VanadielDayOfTheWeek();  // Gets day of the week (Fire Earth Water Wind Ice Lightning Light Dark)
     uint32 VanadielYear();          // Gets the current Vanadiel Year
     uint32 VanadielMonth();         // Gets the current Vanadiel Month
+    uint32 VanadielUniqueDay();     // Gets the unique day number. (Vanadiel year * 360 + VanadielDayOfTheYear)
     uint8  VanadielDayElement();    // Gets element of the day (1: fire, 2: ice, 3: wind, 4: earth, 5: thunder, 6: water, 7: light, 8: dark)
     uint32 VanadielMoonPhase();     // Gets the current Vanadiel Moon Phase
     uint8  VanadielMoonDirection(); // Gets the current Vanadiel Moon Phasing direction (waxing, waning, neither)
