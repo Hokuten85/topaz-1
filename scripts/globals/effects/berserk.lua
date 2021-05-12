@@ -13,7 +13,6 @@ effect_object.onEffectGain = function(target, effect)
 
     target:addMod(xi.mod.ATTP, power)
     target:addMod(xi.mod.RATTP, power)
-    target:addMod(xi.mod.DEFP, -power)
 
     -- Job Point Bonuses
     target:addMod(xi.mod.ATT, jpEffect)
@@ -30,7 +29,6 @@ effect_object.onEffectLose = function(target, effect)
 
     target:delMod(xi.mod.ATTP, power)
     target:delMod(xi.mod.RATTP, power)
-    target:delMod(xi.mod.DEFP, -power)
 
     -- Job Point Bonuses
     target:delMod(xi.mod.ATT, jpEffect)
