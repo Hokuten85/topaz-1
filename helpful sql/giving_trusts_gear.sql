@@ -303,3 +303,4 @@ CALL GiveTrustEquipment(2, 898);
 CALL GiveTrustEquipment(2, 910);
 CALL GiveTrustEquipment(2, 911);
 CALL GiveTrustEquipment(2, 952);
+CALL GiveTrustEquipment(2, 1010);
