@@ -36,6 +36,25 @@
 
 std::vector<TrustSpell_ID*> g_PTrustIDList;
 std::vector<Trust_t*> g_PTrustList;
+std::unordered_map<JOBTYPE, std::unordered_map<Mod, ModSetting>> g_TrustModSettings;
+
+//------------------------------------------------------------------------------
+/// \brief Determines a nested map contains two keys (the outer containing the inner)
+/// \param[in] data Outer-most map
+/// \param[in] a    Key used to find the inner map
+/// \param[in] b    Key used to find the value within the inner map
+/// \return True if both keys exist, false otherwise
+//------------------------------------------------------------------------------
+template <class key1_t, class key2_t, class value_t>
+bool nested_key_exists(std::unordered_map<key1_t, std::unordered_map<key2_t, value_t>> const& data, key1_t const a, key2_t const b)
+{
+    auto itInner = data.find(a);
+    if (itInner != data.end())
+    {
+        return itInner->second.find(b) != itInner->second.end();
+    }
+    return false;
+}
 
 namespace trustutils
 {
@@ -63,6 +82,22 @@ namespace trustutils
         for (auto& index : g_PTrustIDList)
         {
             BuildTrust(index->spellID);
+        }
+
+        const char* Query2 = "SELECT \
+                 job, modId, setting \
+                 FROM trust_mod_settings";
+
+        if (Sql_Query(SqlHandle, Query2) != SQL_ERROR && Sql_NumRows(SqlHandle) != 0)
+        {
+            while (Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+            {
+                auto job     = (JOBTYPE)Sql_GetIntData(SqlHandle, 0);
+                auto modId   = (Mod)Sql_GetIntData(SqlHandle, 1);
+                auto setting = (ModSetting)Sql_GetIntData(SqlHandle, 2);
+
+                g_TrustModSettings[job][modId] = setting;
+            }
         }
     }
 
@@ -676,6 +711,23 @@ namespace trustutils
                             std::vector<CModifier> consolidatedMods;
                             for (auto& modifier : PEquip->modList)
                             {
+                                if (hasModSetting(PTrust->GetMJob(), modifier.getModID()))
+                                {
+                                    auto modSetting = trustutils::getModSetting(PTrust->GetMJob(), modifier.getModID());
+                                    if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0))
+                                    {
+                                        continue;
+                                    }
+                                }
+                                else if (hasModSetting(JOBTYPE::JOB_NON, modifier.getModID()))
+                                {
+                                    auto modSetting = trustutils::getModSetting(JOBTYPE::JOB_NON, modifier.getModID());
+                                    if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0))
+                                    {
+                                        continue;
+                                    }
+                                }
+
                                 auto mergeIt = std::find_if(consolidatedMods.begin(), consolidatedMods.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
                                 if (mergeIt == consolidatedMods.end())
                                 {
@@ -696,10 +748,10 @@ namespace trustutils
                             }
                             else
                             {
+                                auto& modMap = iterator->second;
                                 for (auto& modifier : consolidatedMods)
                                 {
-                                    auto& modMap = iterator->second;
-                                    auto  it2    = std::find_if(modMap.begin(), modMap.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
+                                    auto  it2 = std::find_if(modMap.begin(), modMap.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
 
                                     if (it2 == modMap.end())
                                     {
@@ -707,8 +759,25 @@ namespace trustutils
                                     }
                                     else
                                     {
+                                        bool operation = false; // false = +, true = -
+                                        if (hasModSetting(PTrust->GetMJob(), modifier.getModID()))
+                                        {
+                                            operation = getModSetting(PTrust->GetMJob(), modifier.getModID()) == ModSetting::Negative;
+                                        }
+                                        else if (hasModSetting(JOBTYPE::JOB_NON, modifier.getModID()))
+                                        {
+                                            operation = getModSetting(JOBTYPE::JOB_NON, modifier.getModID()) == ModSetting::Negative;
+                                        }
+
                                         auto& mod = *it2;
-                                        if (mod.getModAmount() < modifier.getModAmount())
+                                        if (operation)
+                                        {
+                                            if (mod.getModAmount() > modifier.getModAmount())
+                                            {
+                                                mod.setModAmount(modifier.getModAmount());
+                                            }
+                                        }
+                                        else if (mod.getModAmount() < modifier.getModAmount())
                                         {
                                             mod.setModAmount(modifier.getModAmount());
                                         }
@@ -896,5 +965,20 @@ namespace trustutils
     int32 addAbility(CTrustEntity* PTrust, uint16 AbilityID)
     {
         return addBit(AbilityID, PTrust->m_Abilities, sizeof(PTrust->m_Abilities));
+    }
+
+    bool hasModSetting(JOBTYPE job, Mod modId)
+    {
+        return nested_key_exists(g_TrustModSettings, job, modId);
+    }
+
+    ModSetting getModSetting(JOBTYPE job, Mod modId)
+    {
+        if (hasModSetting(job, modId))
+        {
+            return g_TrustModSettings[job][modId];
+        }
+
+        return ModSetting::Nothing;
     }
 }; // namespace trustutils

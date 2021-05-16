@@ -162,9 +162,12 @@ BEGIN
 					ON ie.itemId = im.itemId
 				INNER JOIN item_basic ib
 					ON ie.itemId = ib.itemid
+				INNER JOIN mods m
+					ON im.modid = m.modid
 				WHERE ie.`level` BETWEEN 2 AND plvl
 				AND ie.jobs & (1 << (pjob-1))
 				AND NOT ib.flags & (0x8000 | 0x4000)
+				AND m.ignore = 0
 				GROUP BY ie.slot, im.modId
 			) mods
 			INNER JOIN item_equipment ie

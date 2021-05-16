@@ -23,6 +23,14 @@ struct SongPriority_t
     uint8       spell_count;
 };
 
+enum class ModSetting : uint8
+{
+    Nothing  = 0,
+    Negative = 1,
+    Ignore   = 2,
+    Positive = 3
+};
+
 struct Trust_t
 {
     uint32    trustID;
@@ -108,6 +116,9 @@ namespace trustutils
     void  BuildingTrustAbilityTable(CTrustEntity* PTrust);
     int32 hasAbility(CTrustEntity* PTrust, uint16 AbilityID); // проверяем наличие ключевого предмета
     int32 addAbility(CTrustEntity* PTrust, uint16 AbilityID); // добавляем ключевой предмет
+
+    bool hasModSetting(JOBTYPE job, Mod modId);
+    ModSetting getModSetting(JOBTYPE job, Mod modId);
 }; // namespace trustutils
 
 #endif

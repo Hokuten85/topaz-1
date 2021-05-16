@@ -592,6 +592,23 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
         std::vector<CModifier> consolidatedMods;
         for (auto& modifier : PItem->modList)
         {
+            if (trustutils::hasModSetting(this->GetMJob(), modifier.getModID()))
+            {
+                auto modSetting = trustutils::getModSetting(this->GetMJob(), modifier.getModID());
+                if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0))
+                {
+                    continue;
+                }
+            }
+            else if (trustutils::hasModSetting(JOBTYPE::JOB_NON, modifier.getModID()))
+            {
+                auto modSetting = trustutils::getModSetting(JOBTYPE::JOB_NON, modifier.getModID());
+                if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0))
+                {
+                    continue;
+                }
+            }
+
             auto mergeIt = std::find_if(consolidatedMods.begin(), consolidatedMods.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
             if (mergeIt == consolidatedMods.end())
             {
@@ -610,10 +627,10 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
         }
         else
         {
+            auto& modMap = iterator->second;
             for (auto& modifier : consolidatedMods)
             {
-                auto& modMap = iterator->second;
-                auto  it2    = std::find_if(modMap.begin(), modMap.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
+                auto  it2 = std::find_if(modMap.begin(), modMap.end(), [&modifier](CModifier& mod) { return mod.getModID() == modifier.getModID(); });
 
                 if (it2 == modMap.end())
                 {
@@ -621,8 +638,25 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
                 }
                 else
                 {
+                    bool operation = false; // false = +, true = -
+                    if (trustutils::hasModSetting(this->GetMJob(), modifier.getModID()))
+                    {
+                        operation = trustutils::getModSetting(this->GetMJob(), modifier.getModID()) == ModSetting::Negative;
+                    }
+                    else if (trustutils::hasModSetting(JOBTYPE::JOB_NON, modifier.getModID()))
+                    {
+                        operation = trustutils::getModSetting(JOBTYPE::JOB_NON, modifier.getModID()) == ModSetting::Negative;
+                    }
+
                     auto& mod = *it2;
-                    if (mod.getModAmount() < modifier.getModAmount())
+                    if (operation)
+                    {
+                        if (mod.getModAmount() > modifier.getModAmount())
+                        {
+                            mod.setModAmount(modifier.getModAmount());
+                        }
+                    }
+                    else if (mod.getModAmount() < modifier.getModAmount())
                     {
                         mod.setModAmount(modifier.getModAmount());
                     }

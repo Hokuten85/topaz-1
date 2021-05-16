@@ -780,3 +780,84 @@ INNER JOIN mob_family_system mfs
 SET mp.behavior = 3
 WHERE sl.spellid >= 896
 AND sl.spellid IN (898, 952);
+
+-- TRUST Mod Settings -- 1 - negative, 2 - ignore, 3 - positive -- Job 0 is default -- Provide specific job settings if necessary
+INSERT INTO trust_mod_settings VALUES (6, 27, 2);
+INSERT INTO trust_mod_settings VALUES (7, 27, 3);
+INSERT INTO trust_mod_settings VALUES (13, 27, 2);
+
+INSERT INTO trust_mod_settings VALUES (0, 27, 1);
+INSERT INTO trust_mod_settings VALUES (0, 160, 1);
+INSERT INTO trust_mod_settings VALUES (0, 161, 1);
+INSERT INTO trust_mod_settings VALUES (0, 162, 1);
+INSERT INTO trust_mod_settings VALUES (0, 163, 1);
+INSERT INTO trust_mod_settings VALUES (0, 164, 1);
+INSERT INTO trust_mod_settings VALUES (0, 190, 1);
+INSERT INTO trust_mod_settings VALUES (0, 831, 1);
+INSERT INTO trust_mod_settings VALUES (0, 387, 1);
+INSERT INTO trust_mod_settings VALUES (0, 388, 1);
+INSERT INTO trust_mod_settings VALUES (0, 389, 1);
+INSERT INTO trust_mod_settings VALUES (0, 390, 1);
+
+INSERT INTO trust_mod_settings VALUES (0, 4, 2);
+INSERT INTO trust_mod_settings VALUES (0, 7, 2);
+
+INSERT INTO trust_mod_settings VALUES (0, 64, 2);
+INSERT INTO trust_mod_settings VALUES (0, 65, 2);
+
+INSERT INTO trust_mod_settings VALUES (0, 127, 2);
+INSERT INTO trust_mod_settings VALUES (0, 128, 2);
+INSERT INTO trust_mod_settings VALUES (0, 129, 2);
+INSERT INTO trust_mod_settings VALUES (0, 130, 2);
+INSERT INTO trust_mod_settings VALUES (0, 131, 2);
+INSERT INTO trust_mod_settings VALUES (0, 132, 2);
+INSERT INTO trust_mod_settings VALUES (0, 133, 2);
+INSERT INTO trust_mod_settings VALUES (0, 134, 2);
+INSERT INTO trust_mod_settings VALUES (0, 135, 2);
+INSERT INTO trust_mod_settings VALUES (0, 136, 2);
+INSERT INTO trust_mod_settings VALUES (0, 137, 2);
+
+INSERT INTO trust_mod_settings VALUES (0, 144, 2);
+INSERT INTO trust_mod_settings VALUES (0, 145, 2);
+INSERT INTO trust_mod_settings VALUES (0, 146, 2);
+INSERT INTO trust_mod_settings VALUES (0, 147, 2);
+INSERT INTO trust_mod_settings VALUES (0, 148, 2);
+INSERT INTO trust_mod_settings VALUES (0, 149, 2);
+INSERT INTO trust_mod_settings VALUES (0, 150, 2);
+INSERT INTO trust_mod_settings VALUES (0, 151, 2);
+
+INSERT INTO trust_mod_settings VALUES (0, 303, 2); -- treasure hunter
+
+INSERT INTO trust_mod_settings VALUES (0, 340, 2);
+
+INSERT INTO trust_mod_settings VALUES (0, 380, 2);
+INSERT INTO trust_mod_settings VALUES (0, 381, 2);
+
+INSERT INTO trust_mod_settings VALUES (0, 509, 2);
+INSERT INTO trust_mod_settings VALUES (0, 510, 2);
+INSERT INTO trust_mod_settings VALUES (0, 511, 2);
+INSERT INTO trust_mod_settings VALUES (0, 513, 2);
+INSERT INTO trust_mod_settings VALUES (0, 514, 2);
+INSERT INTO trust_mod_settings VALUES (0, 515, 2);
+
+INSERT INTO trust_mod_settings VALUES (0, 851, 2);
+INSERT INTO trust_mod_settings VALUES (0, 852, 2);
+INSERT INTO trust_mod_settings VALUES (0, 861, 2);
+INSERT INTO trust_mod_settings VALUES (0, 862, 2);
+INSERT INTO trust_mod_settings VALUES (0, 916, 2);
+INSERT INTO trust_mod_settings VALUES (0, 917, 2);
+INSERT INTO trust_mod_settings VALUES (0, 918, 2);
+INSERT INTO trust_mod_settings VALUES (0, 919, 2);
+INSERT INTO trust_mod_settings VALUES (0, 920, 2);
+INSERT INTO trust_mod_settings VALUES (0, 921, 2);
+INSERT INTO trust_mod_settings VALUES (0, 922, 2);
+INSERT INTO trust_mod_settings VALUES (0, 923, 2);
+INSERT INTO trust_mod_settings VALUES (0, 924, 2);
+INSERT INTO trust_mod_settings VALUES (0, 925, 2);
+INSERT INTO trust_mod_settings VALUES (0, 926, 2);
+INSERT INTO trust_mod_settings VALUES (0, 927, 2);
+INSERT INTO trust_mod_settings VALUES (0, 928, 2);
+INSERT INTO trust_mod_settings VALUES (0, 929, 2);
+INSERT INTO trust_mod_settings VALUES (0, 930, 2);
+INSERT INTO trust_mod_settings VALUES (0, 931, 2);
+INSERT INTO trust_mod_settings VALUES (0, 932, 2);
