@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `mods`;
 create table mods (
 	`modName` VARCHAR(50) NOT NULL,
 	`modid` INT NOT NULL,
@@ -8,10 +9,10 @@ INSERT INTO mods (modName, modid) VALUES ('NONE', 0);
 INSERT INTO mods (modName, modid) VALUES ('DEF', 1);
 INSERT INTO mods (modName, modid) VALUES ('HP', 2);
 INSERT INTO mods (modName, modid) VALUES ('HPP', 3);
-INSERT INTO mods (modName, modid) VALUES ('CONVMPTOHP', 4);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('CONVMPTOHP', 4, 1);
 INSERT INTO mods (modName, modid) VALUES ('MP', 5);
 INSERT INTO mods (modName, modid) VALUES ('MPP', 6);
-INSERT INTO mods (modName, modid) VALUES ('CONVHPTOMP', 7);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('CONVHPTOMP', 7, 1);
 INSERT INTO mods (modName, modid) VALUES ('STR', 8);
 INSERT INTO mods (modName, modid) VALUES ('DEX', 9);
 INSERT INTO mods (modName, modid) VALUES ('VIT', 10);
@@ -60,8 +61,8 @@ INSERT INTO mods (modName, modid) VALUES ('IMPACTRES', 51);
 INSERT INTO mods (modName, modid) VALUES ('HTHRES', 52);
 INSERT INTO mods (modName, modid) VALUES ('FIRERES', 54);
 INSERT INTO mods (modName, modid) VALUES ('ICERES', 55);
-INSERT INTO mods (modName, modid) VALUES ('WINDRES', 56);
-INSERT INTO mods (modName, modid) VALUES ('EARTHRES', 57);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('WINDRES', 56, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('EARTHRES', 57, 1);
 INSERT INTO mods (modName, modid) VALUES ('THUNDERRES', 58);
 INSERT INTO mods (modName, modid) VALUES ('WATERRES', 59);
 INSERT INTO mods (modName, modid) VALUES ('LIGHTRES', 60);
@@ -124,25 +125,25 @@ INSERT INTO mods (modName, modid) VALUES ('CHAKRA_MULT', 123);
 INSERT INTO mods (modName, modid) VALUES ('CHAKRA_REMOVAL', 124); 
 INSERT INTO mods (modName, modid) VALUES ('SUPPRESS_OVERLOAD', 125); 
 INSERT INTO mods (modName, modid) VALUES ('BP_DAMAGE', 126); 
-INSERT INTO mods (modName, modid) VALUES ('FISH', 127);
-INSERT INTO mods (modName, modid) VALUES ('WOOD', 128);
-INSERT INTO mods (modName, modid) VALUES ('SMITH', 129);
-INSERT INTO mods (modName, modid) VALUES ('GOLDSMITH', 130);
-INSERT INTO mods (modName, modid) VALUES ('CLOTH', 131);
-INSERT INTO mods (modName, modid) VALUES ('LEATHER', 132);
-INSERT INTO mods (modName, modid) VALUES ('BONE', 133);
-INSERT INTO mods (modName, modid) VALUES ('ALCHEMY', 134);
-INSERT INTO mods (modName, modid) VALUES ('COOK', 135);
-INSERT INTO mods (modName, modid) VALUES ('SYNERGY', 136);
-INSERT INTO mods (modName, modid) VALUES ('RIDING', 137);
-INSERT INTO mods (modName, modid) VALUES ('ANTIHQ_WOOD', 144);
-INSERT INTO mods (modName, modid) VALUES ('ANTIHQ_SMITH', 145);
-INSERT INTO mods (modName, modid) VALUES ('ANTIHQ_GOLDSMITH', 146);
-INSERT INTO mods (modName, modid) VALUES ('ANTIHQ_CLOTH', 147);
-INSERT INTO mods (modName, modid) VALUES ('ANTIHQ_LEATHER', 148);
-INSERT INTO mods (modName, modid) VALUES ('ANTIHQ_BONE', 149);
-INSERT INTO mods (modName, modid) VALUES ('ANTIHQ_ALCHEMY', 150);
-INSERT INTO mods (modName, modid) VALUES ('ANTIHQ_COOK', 151);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('FISH', 127, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('WOOD', 128, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SMITH', 129, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('GOLDSMITH', 130, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('CLOTH', 131, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('LEATHER', 132, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('BONE', 133, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ALCHEMY', 134, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('COOK', 135, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNERGY', 136, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('RIDING', 137, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ANTIHQ_WOOD', 144, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ANTIHQ_SMITH', 145, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ANTIHQ_GOLDSMITH', 146, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ANTIHQ_CLOTH', 147, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ANTIHQ_LEATHER', 148, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ANTIHQ_BONE', 149, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ANTIHQ_ALCHEMY', 150, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('ANTIHQ_COOK', 151, 1);
 INSERT INTO mods (modName, modid) VALUES ('DMG', 160);
 INSERT INTO mods (modName, modid) VALUES ('DMGPHYS', 161);
 INSERT INTO mods (modName, modid) VALUES ('DMGPHYS_II', 190); 
@@ -247,7 +248,7 @@ INSERT INTO mods (modName, modid) VALUES ('BLINK', 299);
 INSERT INTO mods (modName, modid) VALUES ('STONESKIN', 300);
 INSERT INTO mods (modName, modid) VALUES ('PHALANX', 301);
 INSERT INTO mods (modName, modid) VALUES ('TRIPLE_ATTACK', 302);
-INSERT INTO mods (modName, modid) VALUES ('TREASURE_HUNTER', 303);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('TREASURE_HUNTER', 303, 1);
 INSERT INTO mods (modName, modid) VALUES ('TAME', 304);
 INSERT INTO mods (modName, modid) VALUES ('RECYCLE', 305);
 INSERT INTO mods (modName, modid) VALUES ('ZANSHIN', 306);
@@ -293,7 +294,7 @@ INSERT INTO mods (modName, modid) VALUES ('STEP_FINISH', 494);
 INSERT INTO mods (modName, modid) VALUES ('STEP_ACCURACY', 403);
 INSERT INTO mods (modName, modid) VALUES ('WALTZ_DELAY', 497);
 INSERT INTO mods (modName, modid) VALUES ('SAMBA_PDURATION', 498);
-INSERT INTO mods (modName, modid) VALUES ('WIDESCAN', 340);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('WIDESCAN', 340, 1);
 INSERT INTO mods (modName, modid) VALUES ('BARRAGE_ACC', 420);
 INSERT INTO mods (modName, modid) VALUES ('ENSPELL', 341);
 INSERT INTO mods (modName, modid) VALUES ('SPIKES', 342);
@@ -349,8 +350,8 @@ INSERT INTO mods (modName, modid) VALUES ('CURE_POTENCY', 374);
 INSERT INTO mods (modName, modid) VALUES ('CURE_POTENCY_II', 260);
 INSERT INTO mods (modName, modid) VALUES ('CURE_POTENCY_RCVD', 375);
 INSERT INTO mods (modName, modid) VALUES ('RANGED_DMG_RATING', 376);
-INSERT INTO mods (modName, modid) VALUES ('DELAYP', 380);
-INSERT INTO mods (modName, modid) VALUES ('RANGED_DELAYP', 381);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('DELAYP', 380, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('RANGED_DELAYP', 381, 1);
 INSERT INTO mods (modName, modid) VALUES ('EXP_BONUS', 382);
 INSERT INTO mods (modName, modid) VALUES ('HASTE_ABILITY', 383);
 INSERT INTO mods (modName, modid) VALUES ('HASTE_GEAR', 384);
@@ -494,12 +495,12 @@ INSERT INTO mods (modName, modid) VALUES ('ENHANCES_HOLYWATER', 495);
 INSERT INTO mods (modName, modid) VALUES ('RETALIATION', 414);
 INSERT INTO mods (modName, modid) VALUES ('THIRD_EYE_COUNTER_RATE', 508);
 INSERT INTO mods (modName, modid) VALUES ('THIRD_EYE_ANTICIPATE_RATE', 839);
-INSERT INTO mods (modName, modid) VALUES ('CLAMMING_IMPROVED_RESULTS', 509);
-INSERT INTO mods (modName, modid) VALUES ('CLAMMING_REDUCED_INCIDENTS', 510);
-INSERT INTO mods (modName, modid) VALUES ('CHOCOBO_RIDING_TIME', 511);
-INSERT INTO mods (modName, modid) VALUES ('HARVESTING_RESULT', 513);
-INSERT INTO mods (modName, modid) VALUES ('LOGGING_RESULT', 514);
-INSERT INTO mods (modName, modid) VALUES ('MINING_RESULT', 515);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('CLAMMING_IMPROVED_RESULTS', 509, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('CLAMMING_REDUCED_INCIDENTS', 510, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('CHOCOBO_RIDING_TIME', 511, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('HARVESTING_RESULT', 513, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('LOGGING_RESULT', 514, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('MINING_RESULT', 515, 1);
 INSERT INTO mods (modName, modid) VALUES ('EGGHELM', 517);
 INSERT INTO mods (modName, modid) VALUES ('SHIELDBLOCKRATE', 518);
 INSERT INTO mods (modName, modid) VALUES ('SCAVENGE_EFFECT', 312);
@@ -573,27 +574,27 @@ INSERT INTO mods (modName, modid) VALUES ('AUGMENTS_CONSPIRATOR', 912);
 INSERT INTO mods (modName, modid) VALUES ('JUG_LEVEL_RANGE', 564);
 INSERT INTO mods (modName, modid) VALUES ('FORCE_JUMP_CRIT', 828);
 INSERT INTO mods (modName, modid) VALUES ('QUICK_DRAW_DMG_PERCENT', 834);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_SUCCESS', 851);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_SKILL_GAIN', 852);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE', 861);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_HQ_RATE', 862);
-INSERT INTO mods (modName, modid) VALUES ('DESYNTH_SUCCESS', 916);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_FIRE', 917);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_ICE', 918);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_WIND', 919);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_EARTH', 920);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_LIGHTNING', 921);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_WATER', 922);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_LIGHT', 923);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_DARK', 924);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_WOOD', 925);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_SMITH', 926);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_GOLDSMITH', 927);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_CLOTH', 928);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_LEATHER', 929);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_BONE', 930);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_ALCHEMY', 931);
-INSERT INTO mods (modName, modid) VALUES ('SYNTH_FAIL_RATE_COOK', 932);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_SUCCESS', 851, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_SKILL_GAIN', 852, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE', 861, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_HQ_RATE', 862, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('DESYNTH_SUCCESS', 916, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_FIRE', 917, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_ICE', 918, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_WIND', 919, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_EARTH', 920, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_LIGHTNING', 921, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_WATER', 922, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_LIGHT', 923, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_DARK', 924, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_WOOD', 925, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_SMITH', 926, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_GOLDSMITH', 927, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_CLOTH', 928, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_LEATHER', 929, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_BONE', 930, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_ALCHEMY', 931, 1);
+INSERT INTO mods (modName, modid, `ignore`) VALUES ('SYNTH_FAIL_RATE_COOK', 932, 1);
 INSERT INTO mods (modName, modid) VALUES ('WEAPONSKILL_DAMAGE_BASE', 570);
 INSERT INTO mods (modName, modid) VALUES ('ALL_WSDMG_ALL_HITS', 840);
 INSERT INTO mods (modName, modid) VALUES ('ALL_WSDMG_FIRST_HIT', 841);
@@ -649,60 +650,3 @@ INSERT INTO mods (modName, modid) VALUES ('ONE_HOUR_RECAST', 996);
 INSERT INTO mods (modName, modid) VALUES ('DREAD_SPIKES_EFFECT', 998);
 INSERT INTO mods (modName, modid) VALUES ('ENMITY_CAP', 2000);
 INSERT INTO mods (modName, modid) VALUES ('DMG_II', 2001)
-
-UPDATE mods
-SET `ignore` = 1
-WHERE modid IN (4,
-7,
-64,
-65,
-127,
-128,
-129,
-130,
-131,
-132,
-133,
-134,
-135,
-136,
-137,
-144,
-145,
-146,
-147,
-148,
-149,
-150,
-151,
-303,
-340,
-380,
-381,
-509,
-510,
-511,
-513,
-514,
-515,
-851,
-852,
-861,
-862,
-916,
-917,
-918,
-919,
-920,
-921,
-922,
-923,
-924,
-925,
-926,
-927,
-928,
-929,
-930,
-931,
-932);
