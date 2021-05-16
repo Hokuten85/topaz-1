@@ -117,6 +117,7 @@ mission.sections =
                         if hasAllFragments(player) then
                             player:messageSpecial(behemothsDominionID.text.FOUND_ALL_FRAGS, xi.ki.LIGHTNING_FRAGMENT)
                             mission:complete(player)
+                            addColoredDrop(player)
                         else
                             player:messageSpecial(behemothsDominionID.text.KEYITEM_OBTAINED, xi.ki.LIGHTNING_FRAGMENT)
                         end
@@ -153,6 +154,7 @@ mission.sections =
                         if hasAllFragments(player) then
                             player:messageSpecial(capeTerigganID.text.FOUND_ALL_FRAGS, xi.ki.WIND_FRAGMENT)
                             mission:complete(player)
+                            addColoredDrop(player)
                         else
                             player:messageSpecial(capeTerigganID.text.KEYITEM_OBTAINED, xi.ki.WIND_FRAGMENT)
                         end
@@ -261,6 +263,7 @@ mission.sections =
                         if hasAllFragments(player) then
                             player:messageSpecial(sanctuaryOfZitahID.text.FOUND_ALL_FRAGS, xi.ki.LIGHT_FRAGMENT)
                             mission:complete(player)
+                            addColoredDrop(player)
                         else
                             player:messageSpecial(sanctuaryOfZitahID.text.KEYITEM_OBTAINED, xi.ki.LIGHT_FRAGMENT)
                         end
@@ -327,6 +330,7 @@ mission.sections =
                         if hasAllFragments(player) then
                             player:messageSpecial(yuhtungaJungleID.text.FOUND_ALL_FRAGS, xi.ki.FIRE_FRAGMENT)
                             mission:complete(player)
+                            addColoredDrop(player)
                         else
                             player:messageSpecial(yuhtungaJungleID.text.KEYITEM_OBTAINED, xi.ki.FIRE_FRAGMENT)
                         end
