@@ -14,24 +14,24 @@ else()
     set(resource "${CMAKE_SOURCE_DIR}/res/searchserver.rc")
 endif()
 
-add_executable(topaz_search
+add_executable(ivalice_search
     ${SOURCES}
     ${resource})
 
 if(WIN32)
-    set_target_properties(topaz_search PROPERTIES OUTPUT_NAME topaz_search${spacer}${platform_suffix})
+    set_target_properties(ivalice_search PROPERTIES OUTPUT_NAME ivalice_search${spacer}${platform_suffix})
 endif()
 
 target_compile_definitions(
-    topaz_search
+    ivalice_search
     PUBLIC
     -DDEBUGLOGSEARCH
     -DDEFINE_OWN_MAIN
 )
 
-target_compile_definitions(topaz_search PUBLIC DEFINE_OWN_MAIN)
+target_compile_definitions(ivalice_search PUBLIC DEFINE_OWN_MAIN)
 
-target_link_libraries(topaz_search
+target_link_libraries(ivalice_search
     PUBLIC
     common
     search_packets
@@ -40,4 +40,4 @@ target_link_libraries(topaz_search
     project_warnings
 )
 
-set_target_output_directory(topaz_search)
+set_target_output_directory(ivalice_search)

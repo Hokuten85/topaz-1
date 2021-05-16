@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Check if exists
-if [ -e /etc/systemd/system/topaz.service ]
+if [ -e /etc/systemd/system/ivalice.service ]
 then
-    echo "Topaz service already exists!"
+    echo "Ivalice service already exists!"
     exit
 fi
 # Make sure its running with root
@@ -25,12 +25,12 @@ PPWD="$(dirname "$(pwd)")"
 DEBIAN="^debian|[[:space:]]debian|^ubuntu|[[:space:]]ubuntu"
 ARCH="^arch|[[:space:]]arch"
 # Try to create new user
-echo "Create a user to run the Topaz service, leave blank for default. (default: topaz)"
+echo "Create a user to run the Ivalice service, leave blank for default. (default: topaz)"
 echo "WARNING! This user will need access to the current directory."
 read -r -p "User: " XI_USER
 if [ -z "$XI_USER" ]
 then
-    XI_USER="topaz"
+    XI_USER="ivalice"
 fi
 if [ $OS = "debian" ] || [[ $OS_LIKE =~ $DEBIAN ]]
 then
@@ -43,14 +43,14 @@ else
 fi
 # Give user permission to start and stop the service
 cat > /etc/sudoers.d/$XI_USER << SUDO
-$XI_USER ALL= NOPASSWD: /bin/systemctl restart topaz.service
-$XI_USER ALL= NOPASSWD: /bin/systemctl stop topaz.service
-$XI_USER ALL= NOPASSWD: /bin/systemctl start topaz.service
+$XI_USER ALL= NOPASSWD: /bin/systemctl restart ivalice.service
+$XI_USER ALL= NOPASSWD: /bin/systemctl stop ivalice.service
+$XI_USER ALL= NOPASSWD: /bin/systemctl start ivalice.service
 SUDO
 # Systemd combined service
-SYSTEMD_TOPAZ="""
+SYSTEMD_IVALICE="""
 [Unit]
-Description=Topaz - FFXI Server Emulator
+Description=Ivalice - FFXI Server Emulator
 After=mysql.service
 
 [Service]
@@ -64,12 +64,12 @@ WantedBy=multi-user.target
 # Systemd game server service
 SYSTEMD_GAME="""
 [Unit]
-Description=Topaz Game Server
+Description=ivalice Game Server
 Wants=network.target
 StartLimitIntervalSec=120
 StartLimitBurst=5
-PartOf=topaz.service
-After=topaz.service
+PartOf=ivalice.service
+After=ivalice.service
 
 [Service]
 Type=simple
@@ -79,28 +79,28 @@ User=$XI_USER
 Group=$XI_USER
 WorkingDirectory=$PPWD
 # For multiple map servers:
-# - Make a copy of this file for each server. Rename appropriately, e.g. topaz_game-cities.service
+# - Make a copy of this file for each server. Rename appropriately, e.g. ivalice_game-cities.service
 # - Uncomment line in update.sh 'echo IP=\$IP > ip.txt'.
 # - Change the zone ports in zone_settings table. A custom.sql file is useful for this, see update.sh.
 # - Run update.sh and change your server IP. Manually type the IP even if you're not changing it.
-# - Remove the line below, 'ExecStart=$PPWD/topaz_game'.
+# - Remove the line below, 'ExecStart=$PPWD/ivalice_game'.
 # - Uncomment and edit the 2 lines below with the appropriate port and log location for each zone server.
 #EnvironmentFile=$PPWD/ip.txt
-#ExecStart=$PPWD/topaz_game --ip \$IP --port 54230 --log $PPWD/log/map_server.log
-ExecStart=$PPWD/topaz_game
+#ExecStart=$PPWD/ivalice_game --ip \$IP --port 54230 --log $PPWD/log/map_server.log
+ExecStart=$PPWD/ivalice_game
 
 [Install]
-WantedBy=topaz.service
+WantedBy=ivalice.service
 """
 # Systemd connect server service
 SYSTEMD_CONNECT="""
 [Unit]
-Description=Topaz Connect Server
+Description=ivalice Connect Server
 Wants=network.target
 StartLimitIntervalSec=120
 StartLimitBurst=5
-PartOf=topaz.service
-After=topaz.service
+PartOf=ivalice.service
+After=ivalice.service
 
 [Service]
 Type=simple
@@ -109,20 +109,20 @@ RestartSec=5
 User=$XI_USER
 Group=$XI_USER
 WorkingDirectory=$PPWD
-ExecStart=$PPWD/topaz_connect
+ExecStart=$PPWD/ivalice_connect
 
 [Install]
-WantedBy=topaz.service
+WantedBy=ivalice.service
 """
 # Systemd search server service
 SYSTEMD_SEARCH="""
 [Unit]
-Description=Topaz Search Server
+Description=ivalice Search Server
 Wants=network.target
 StartLimitIntervalSec=120
 StartLimitBurst=5
-PartOf=topaz.service
-After=topaz.service
+PartOf=ivalice.service
+After=ivalice.service
 
 [Service]
 Type=simple
@@ -131,21 +131,21 @@ RestartSec=5
 User=$XI_USER
 Group=$XI_USER
 WorkingDirectory=$PPWD
-ExecStart=$PPWD/topaz_search
+ExecStart=$PPWD/ivalice_search
 
 [Install]
-WantedBy=topaz.service
+WantedBy=ivalice.service
 """
 # Create services and enable child services
 usermod -aG $XI_USER $SUDO_USER
 chown -R $XI_USER:$XI_USER $PPWD
 chmod -R g=u $PPWD 2>/dev/null
-echo "$SYSTEMD_TOPAZ" > /etc/systemd/system/topaz.service
-echo "$SYSTEMD_GAME" > /etc/systemd/system/topaz_game.service
-echo "$SYSTEMD_CONNECT" > /etc/systemd/system/topaz_connect.service
-echo "$SYSTEMD_SEARCH" > /etc/systemd/system/topaz_search.service
-chmod 755 /etc/systemd/system/topaz*
+echo "$SYSTEMD_IVALICE" > /etc/systemd/system/ivalice.service
+echo "$SYSTEMD_GAME" > /etc/systemd/system/ivalice_game.service
+echo "$SYSTEMD_CONNECT" > /etc/systemd/system/ivalice_connect.service
+echo "$SYSTEMD_SEARCH" > /etc/systemd/system/ivalice_search.service
+chmod 755 /etc/systemd/system/ivalice*
 systemctl daemon-reload
-systemctl enable topaz_game topaz_connect topaz_search
+systemctl enable ivalice_game ivalice_connect ivalice_search
 echo "Services installed!"
-echo "Start with 'systemctl start topaz', enable start on boot with 'systemctl enable topaz'."
+echo "Start with 'systemctl start ivalice', enable start on boot with 'systemctl enable ivalice'."

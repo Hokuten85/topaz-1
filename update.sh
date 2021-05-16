@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REMOTE="origin" # Remote to pull from
-SERVICE="" # Systemd service (e.g. "topaz.service")
+SERVICE="" # Systemd service (e.g. "ivalice.service")
 
 stash() {
     git status --porcelain | grep "^." >/dev/null

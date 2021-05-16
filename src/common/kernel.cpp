@@ -216,7 +216,7 @@ void signals_init()
 
 static void display_title()
 {
-    ShowInfo("Topaz\n");
+    ShowInfo("Ivalice\n");
 }
 
 /************************************************************************
@@ -230,7 +230,7 @@ void usercheck()
 #ifndef _WIN32
     if ((getuid() == 0) && (getgid() == 0))
     {
-        ShowWarning("You are running Topaz as the root superuser.\n");
+        ShowWarning("You are running Ivalice as the root superuser.\n");
         ShowWarning("It is unnecessary and unsafe to run with root privileges.\n");
         sleep(3);
     }
