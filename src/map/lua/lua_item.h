@@ -68,7 +68,7 @@ public:
     // int32 setAugment(lua_State*);           // set the augment id and power in slot
 
     uint8  getSkillType(); // get skill type
-    int32 getSubSkillType(lua_State*);      // get subskill type
+    int32 getSubSkillType();      // get subskill type
     uint16 getWeaponskillPoints();   // get current ws points
 
     bool isTwoHanded();  // is a two handed weapon
@@ -76,7 +76,7 @@ public:
     bool isShield();     // is a Shield
 
     auto getSignature() -> std::string;
-    int32 getSlotType(lua_State*);             // is a Shield
+    int32 getSlotType();             // is a Shield
     bool isInstalled();
 
     static void Register();

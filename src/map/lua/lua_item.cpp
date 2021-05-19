@@ -210,18 +210,11 @@ uint8 CLuaItem::getSkillType()
     return PItem ? PItem->getSkillType() : -1;
 }
 
-inline int32 CLuaItem::getSubSkillType(lua_State* L)
+int32 CLuaItem::getSubSkillType()
 {
-    XI_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
-
     auto PItem = dynamic_cast<CItemWeapon*>(m_PLuaItem);
 
-    if (PItem)
-        lua_pushinteger(L, PItem->getSubSkillType());
-    else
-        lua_pushinteger(L, -1);
-
-    return 1;
+    return PItem != nullptr ? PItem->getSubSkillType() : -1;
 }
 
 uint16 CLuaItem::getWeaponskillPoints()
@@ -304,16 +297,12 @@ bool CLuaItem::isInstalled()
     return PFurnishing->isInstalled();
 }
 
-inline int32 CLuaItem::getSlotType(lua_State* L)
+int32 CLuaItem::getSlotType()
 {
-    XI_DEBUG_BREAK_IF(m_PLuaItem == nullptr);
-
     if (CItemEquipment* PEquip = dynamic_cast<CItemEquipment*>(m_PLuaItem))
-        lua_pushinteger(L, PEquip->getSlotType());
-    else
-        lua_pushinteger(L, -1);
-
-    return 1;
+        return PEquip->getSlotType();
+    
+    return -1;
 }
 //==========================================================//
 

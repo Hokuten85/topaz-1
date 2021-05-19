@@ -4,6 +4,9 @@
 UPDATE augments SET multiplier = 100, value = 1 WHERE augmentId = 49;
 UPDATE augments SET multiplier = -100, value = 1 WHERE augmentId = 50;
 UPDATE augments SET multiplier = 100, value = 1 WHERE augmentId = 111;
+UPDATE augments SET multiplier = 10, value = 1 WHERE augmentId = 1152;
+UPDATE augments SET multiplier = 3, value = 1 WHERE augmentId = 1153;
+UPDATE augments SET multiplier = 3, value = 1 WHERE augmentId = 1154;
 
 -- ABILITIES
 UPDATE Abilities SET CE = 100, VE = 10000 WHERE abilityId = 22; -- invincible
