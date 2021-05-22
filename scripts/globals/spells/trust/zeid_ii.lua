@@ -49,7 +49,6 @@ spell_object.onMobSpawn = function(mob)
     -- mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.ACCURACY_BOOST, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.ABSORB_ACC)
 
     mob:setTrustTPSkillSettings(ai.tp.CLOSER, ai.s.RANDOM)
-    mob:addMod(xi.mod.ACC, 200)
 end
 
 spell_object.onMobDespawn = function(mob)

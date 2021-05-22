@@ -771,7 +771,7 @@ INNER JOIN mob_pools mp
 	ON mfs.familyid = mp.familyid
 INNER JOIN  spell_list sl
 	ON mp.poolid = sl.spellid+5000
-SET mfs.ATT = 1, mfs.DEF = 1, mfs.ACC = 1, mfs.EVA = 1
+SET mfs.ATT = 1, mfs.DEF = 1, mfs.ACC = 1, mfs.EVA = 1, mfs.speed = 80
 WHERE sl.spellid >= 896;
 
 -- TRUST mob_pools
@@ -783,6 +783,10 @@ INNER JOIN mob_family_system mfs
 SET mp.behavior = 3
 WHERE sl.spellid >= 896
 AND sl.spellid IN (898, 952);
+
+UPDATE mob_pools
+SET cmbDmgMult = 200, sJob = 1
+WHERE poolid IN (5900,5908); -- Ayame, Tenzen pool
 
 -- TRUST Mod Settings -- 1 - negative, 2 - ignore, 3 - positive -- Job 0 is default -- Provide specific job settings if necessary
 INSERT INTO trust_mod_settings VALUES (6, 27, 2);

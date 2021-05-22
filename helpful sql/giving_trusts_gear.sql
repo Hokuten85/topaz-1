@@ -303,6 +303,11 @@ END$$
 DELIMITER ;
 
 CALL GiveTrustEquipment(2, 898);
+
+CALL GiveTrustEquipment(2, 900);
+CALL GiveTrustEquipment(2, 908);
+CALL GiveTrustEquipment(2, 915);
+
 CALL GiveTrustEquipment(2, 910);
 CALL GiveTrustEquipment(2, 911);
 CALL GiveTrustEquipment(2, 952);
