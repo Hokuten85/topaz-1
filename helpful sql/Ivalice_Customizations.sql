@@ -771,7 +771,7 @@ INNER JOIN mob_pools mp
 	ON mfs.familyid = mp.familyid
 INNER JOIN  spell_list sl
 	ON mp.poolid = sl.spellid+5000
-SET mfs.ATT = 1, mfs.DEF = 1, mfs.ACC = 1, mfs.EVA = 1, mfs.speed = 80
+SET mfs.ATT = 1, mfs.DEF = 1, mfs.ACC = 1, mfs.EVA = 1, mfs.speed = 100
 WHERE sl.spellid >= 896;
 
 -- TRUST mob_pools
