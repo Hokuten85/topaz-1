@@ -6151,29 +6151,32 @@ bool CLuaBaseEntity::hasEminenceRecord(uint16 recordID)
 void CLuaBaseEntity::triggerRoeEvent(uint8 eventNum, sol::object const& reqTable)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
-    RoeDatagramList roeEventData({});
-    ROE_EVENT       eventID = static_cast<ROE_EVENT>(eventNum);
-
-    if (reqTable.get_type() == sol::type::table)
+    if (m_PBaseEntity->objtype == TYPE_PC)
     {
-        for (const auto& kv : reqTable.as<sol::table>())
+        RoeDatagramList roeEventData({});
+        ROE_EVENT       eventID = static_cast<ROE_EVENT>(eventNum);
+
+        if (reqTable.get_type() == sol::type::table)
         {
-            if (kv.first.get_type() == sol::type::string)
+            for (const auto& kv : reqTable.as<sol::table>())
             {
-                if (kv.second.get_type() == sol::type::number)
+                if (kv.first.get_type() == sol::type::string)
                 {
-                    roeEventData.emplace_back(RoeDatagram(kv.first.as<std::string>(), kv.second.as<uint32>()));
-                }
-                else if (kv.second.get_type() == sol::type::string)
-                {
-                    roeEventData.emplace_back(RoeDatagram(kv.first.as<std::string>(), kv.second.as<std::string>()));
+                    if (kv.second.get_type() == sol::type::number)
+                    {
+                        roeEventData.emplace_back(RoeDatagram(kv.first.as<std::string>(), kv.second.as<uint32>()));
+                    }
+                    else if (kv.second.get_type() == sol::type::string)
+                    {
+                        roeEventData.emplace_back(RoeDatagram(kv.first.as<std::string>(), kv.second.as<std::string>()));
+                    }
                 }
             }
         }
-    }
 
-    auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
-    roeutils::event(eventID, PChar, roeEventData);
+        auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
+        roeutils::event(eventID, PChar, roeEventData);
+    }
 }
 
 /************************************************************************

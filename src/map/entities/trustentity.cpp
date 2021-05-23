@@ -975,6 +975,7 @@ void CTrustEntity::OnItemFinish(CItemState& state, action_t& action)
 
         Sql_Query(SqlHandle, Query, this->PMaster->id, this->m_TrustID, 16);
 
+        this->food = nullptr;
         delete PItem;
     }
     else

@@ -13,7 +13,7 @@ LEFT OUTER JOIN mob_skills ms
    	ON msl.mob_skill_id = ms.mob_skill_id
 LEFT OUTER JOIN mob_spell_lists mspl
 	ON mp.spellList = mspl.spell_list_id
-WHERE sl.spellid IN (900,908,915,1010);
+WHERE sl.spellid >= 896;
 
 
 SELECT * FROM mob_skills WHERE mob_skill_id = 56
@@ -30,3 +30,11 @@ SELECT * FROM weapon_skills
 UPDATE mob_pools
 SET cmbDmgMult = 200
 WHERE poolid = 5900; -- Ayame pool
+
+SELECT * 
+FROM mob_family_system mfs
+INNER JOIN mob_pools mp
+	ON mfs.familyid = mp.familyid
+INNER JOIN  spell_list sl
+	ON mp.poolid = sl.spellid+5000
+WHERE sl.spellid >= 896;

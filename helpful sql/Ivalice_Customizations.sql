@@ -782,10 +782,10 @@ INNER JOIN mob_family_system mfs
 	ON mp.familyid = mfs.familyid
 SET mp.behavior = 3
 WHERE sl.spellid >= 896
-AND sl.spellid IN (898, 952);
+AND sl.spellid IN (898, 952,1019);
 
 UPDATE mob_pools
-SET cmbDmgMult = 200, sJob = 1
+SET cmbDmgMult = 150, sJob = 1
 WHERE poolid IN (5900,5908); -- Ayame, Tenzen pool
 
 -- TRUST Mod Settings -- 1 - negative, 2 - ignore, 3 - positive -- Job 0 is default -- Provide specific job settings if necessary
