@@ -1,4 +1,4 @@
-/*
+﻿/*
 ===========================================================================
 
   Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -356,12 +356,13 @@ namespace luautils
             for (auto const& entry : std::filesystem::recursive_directory_iterator(subFolder))
             {
                 auto path = entry.path();
+                path.make_preferred();
 
                 // TODO(compiler updates):
                 // entry.depth() is not yet available in all of our compilers, so we'll use a hack: counting slashes!
                 // std::filesystem defines '/' as an acceptable path separator
-                auto relPathString = entry.path().relative_path().string();
-                std::size_t numSlashes = std::count_if(relPathString.begin(), relPathString.end(), [](char c){ return c == '/'; });
+                auto relPathString  = path.relative_path().string();
+                std::size_t numSlashes     = std::count_if(relPathString.begin(), relPathString.end(), [&path](char c) { return c == path.preferred_separator; });
                 bool isCorrectDepth = numSlashes == 3;
 
                 bool isHelperFile = path.filename() == "helper.lua" || path.filename() == "helpers.lua";
