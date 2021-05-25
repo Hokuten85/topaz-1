@@ -52,7 +52,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
             player:setCharVar("PromathiaStatus", 0)
             player:addKeyItem(ki)
             player:messageSpecial(ID.text.CANT_REMEMBER, ki)
-
+            addColoredDrop(player);
         elseif player:getCurrentMission(COP) == xi.mission.id.cop.THE_MOTHERCRYSTALS and not player:hasKeyItem(ki) then
 
             -- second promyvion completed
@@ -60,7 +60,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
                 player:setCharVar("cspromy3", 1)
                 player:addKeyItem(ki)
                 player:messageSpecial(ID.text.CANT_REMEMBER, ki)
-
+                addColoredDrop(player);
             -- final promyvion completed
             else
                 addColoredDrop(player);

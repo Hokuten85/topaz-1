@@ -39,6 +39,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
         player:addExp(1500)
         player:addTitle(xi.title.FROZEN_DEAD_BODY)
         player:setPos(-340.00, -100.25, 140.00, 64, 111) -- {R}
+        addColoredDrop(player);
     end
 end
 

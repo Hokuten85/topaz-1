@@ -27,7 +27,8 @@ spell_object.onMobSpawn = function(mob)
         [xi.magic.spell.AJIDO_MARUJIDO] = xi.trust.message_offset.TEAMWORK_2,
     })
     
-    mob:addSimpleGambit(ai.t.SELF, ai.c.MPP_LT, 5, ai.r.ITEM, 0, 0)
+    --mob:addSimpleGambit(ai.t.SELF, ai.c.MPP_LT, 5, ai.r.ITEM, 0, 0)
+    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.REFRESH, ai.r.ITEM, 0, 0)
     
     mob:addSimpleGambit(ai.t.SELF, ai.c.MPP_LT, 5,
                         ai.r.JA, ai.s.SPECIFIC, xi.ja.CONVERT)
