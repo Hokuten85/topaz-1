@@ -49,6 +49,8 @@ public:
     void setMsg(uint16 messageID);
     void setAnimation(uint16 animationID);
     void setRecast(uint16 recastTime);
+    uint16 getCE(uint16 ce);
+    uint16 getVE(uint16 ve);
     void setCE(uint16 ce);
     void setVE(uint16 ve);
     void setRange(float range);

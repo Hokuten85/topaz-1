@@ -83,6 +83,16 @@ void CLuaAbility::setRecast(uint16 recastTime)
     m_PLuaAbility->setRecastTime(recastTime);
 }
 
+uint16 CLuaAbility::getCE(uint16 ce)
+{
+    return m_PLuaAbility->getCE();
+}
+
+uint16 CLuaAbility::getVE(uint16 ve)
+{
+    return m_PLuaAbility->getVE();
+}
+
 void CLuaAbility::setCE(uint16 ce)
 {
     m_PLuaAbility->setCE(ce);
@@ -112,6 +122,8 @@ void CLuaAbility::Register()
     SOL_REGISTER("setMsg", CLuaAbility::setMsg);
     SOL_REGISTER("setAnimation", CLuaAbility::setAnimation);
     SOL_REGISTER("setRecast", CLuaAbility::setRecast);
+    SOL_REGISTER("getCE", CLuaAbility::getCE);
+    SOL_REGISTER("getVE", CLuaAbility::getVE);
     SOL_REGISTER("setCE", CLuaAbility::setCE);
     SOL_REGISTER("setVE", CLuaAbility::setVE);
     SOL_REGISTER("setRange", CLuaAbility::setRange);
