@@ -168,12 +168,13 @@ void CTrustController::DoCombatTick(time_point tick)
 
                     if (distance(POwner->loc.p, PTarget->loc.p) > spelldistance)
                     {
-                        if (POwner->PAI->PathFind->CanSeePoint(PTarget->loc.p, false))
+                        if (POwner->PAI->PathFind->CanSeePoint(PTarget->loc.p, false) && m_failedRepositionAttempts < 3)
                         {
                             PathOutToDistance(PTarget, spelldistance);
                         }
                         else
                         {
+                            m_failedRepositionAttempts = 0;
                             POwner->PAI->PathFind->WarpTo(PTarget->loc.p);
                         }
                     }
