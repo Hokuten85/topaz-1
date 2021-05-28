@@ -218,6 +218,18 @@ AND mg.respawntime > 1
 AND mfs.systemid NOT IN (19)
 AND mg.groupid = mg.groupid;
 
+-- NMs respawn timer to 900 seconds
+UPDATE mob_spawn_points msp
+INNER JOIN mob_groups mg
+	ON msp.groupid = mg.groupid
+	AND mg.zoneid = ((msp.mobid >> 12) & 0xFFF)
+INNER JOIN mob_pools mp
+	ON mg.poolid = mp.poolid
+SET mg.respawntime = 900
+WHERE mp.mobType & 0x02
+AND mg.spawntype = 0
+AND mg.respawntime > 900;
+
 -- mob_droplist
 -- newDrops is for situations where dropid is repeated across NMs that we have special augment drops for, so break it up into different dropids, then add the augment drops
 DROP TABLE IF EXISTS `newDrops`;
