@@ -111,6 +111,11 @@ WHERE ib.stackSize = 1
 AND NOT ib.flags & (0x8000 | 0x4000 | 0x0080)
 AND ib.aH IN (58);
 
+-- Fuma Kyahan, Okote, Healing staff RARE
+UPDATE item_basic
+SET flags = flags | 0x8000
+WHERE itemid IN (13054,13952,17108);
+
 -- ITEM_EQUIPMENT
 
 UPDATE item_equipment SET jobs = 14785 WHERE itemid = 12430;
