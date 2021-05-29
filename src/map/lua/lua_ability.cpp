@@ -88,14 +88,14 @@ uint16 CLuaAbility::getCE()
     return m_PLuaAbility->getCE();
 }
 
-uint16 CLuaAbility::getVE()
-{
-    return m_PLuaAbility->getVE();
-}
-
 void CLuaAbility::setCE(uint16 ce)
 {
     m_PLuaAbility->setCE(ce);
+}
+
+uint16 CLuaAbility::getVE()
+{
+    return m_PLuaAbility->getVE();
 }
 
 void CLuaAbility::setVE(uint16 ve)
@@ -123,8 +123,8 @@ void CLuaAbility::Register()
     SOL_REGISTER("setAnimation", CLuaAbility::setAnimation);
     SOL_REGISTER("setRecast", CLuaAbility::setRecast);
     SOL_REGISTER("getCE", CLuaAbility::getCE);
-    SOL_REGISTER("getVE", CLuaAbility::getVE);
     SOL_REGISTER("setCE", CLuaAbility::setCE);
+    SOL_REGISTER("getVE", CLuaAbility::getVE);
     SOL_REGISTER("setVE", CLuaAbility::setVE);
     SOL_REGISTER("setRange", CLuaAbility::setRange);
 }

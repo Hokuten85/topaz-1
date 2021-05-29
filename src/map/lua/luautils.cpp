@@ -371,24 +371,20 @@ namespace luautils
         {
             for (auto const& entry : std::filesystem::recursive_directory_iterator(subFolder))
             {
-                auto path = entry.path();
-                path.make_preferred();
+                auto path = entry.path().relative_path();
 
                 // TODO(compiler updates):
-                // entry.depth() is not yet available in all of our compilers, so we'll use a hack: counting slashes!
-                // std::filesystem defines '/' as an acceptable path separator
-                auto relPathString = path.relative_path().string();
-                std::size_t numSlashes = std::count_if(relPathString.begin(), relPathString.end(), [&path](char c) { return c == path.preferred_separator; });
-                bool isCorrectDepth = numSlashes == 3;
+                // entry.depth() is not yet available in all of our compilers
+                auto depth = std::distance(path.begin(), path.end());
 
                 bool isHelperFile = path.filename() == "helper.lua" || path.filename() == "helpers.lua";
 
                 if (!entry.is_directory() &&
                     path.extension() == ".lua" &&
-                    isCorrectDepth &&
+                    depth == 4 &&
                     !isHelperFile)
                 {
-                    outVec.emplace_back(path.relative_path().replace_extension("").generic_string());
+                    outVec.emplace_back(path.replace_extension("").make_preferred().string());
                 }
             }
         };
