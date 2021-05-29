@@ -40,6 +40,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
             player:addMission(xi.mission.log_id.COP, xi.mission.id.cop.THE_CALL_OF_THE_WYRMKING)
             player:setCharVar("VowsDone", 1)
             player:setCharVar("PromathiaStatus", 0)
+            addColoredDrop(player)
             player:setPos(694, -5.5, -619, 74, 107) -- South Gustaberg
         end
     end
