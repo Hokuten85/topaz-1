@@ -52,18 +52,17 @@ local corsairRollMods =
 -- Check for xi.mod.PHANTOM_ROLL Value and apply non-stack logic.
 local function phantombuffMultiple(caster)
     local phantomValue = caster:getMod(xi.mod.PHANTOM_ROLL)
-    local phantombuffValue = 0
     local phantomBuffMultiplier = 0
 
     if phantomValue == 3 then
-        phantombuffMultiplier = 3
+        phantomBuffMultiplier = 3
     elseif phantomValue == 5 or phantomValue == 8 then
-        phantombuffMultiplier = 5
+        phantomBuffMultiplier = 5
     elseif phantomValue == 7 or phantomValue == 10 or phantomValue == 12 or phantomValue == 15 then
-        phantombuffMultiplier = 7
+        phantomBuffMultiplier = 7
     end
 
-    return phantombuffMultiplier
+    return phantomBuffMultiplier
 end
 
 -- Sets local var if party contains specified job
@@ -141,6 +140,9 @@ local function corsairSetup(caster, ability, action, effect, job)
     if checkForElevenRoll(caster) then
         action:setRecast(action:getRecast() / 2) -- halves phantom roll recast timer for all rolls while under the effects of an 11 (upon first hitting 11, phantom roll cooldown is reset in double-up.lua)
     end
+    if caster:getMainJob() == xi.job.COR then
+        action:setRecast(action:getRecast() - caster:getMerit(xi.merit.PHANTOM_ROLL_RECAST)) -- Recast merits have value of 2 from DB
+    end
 
     checkForJobBonus(caster, job)
 end
@@ -163,7 +165,7 @@ local function applyRoll(caster, target, ability, action, total)
 
     -- Apply Additional Phantom Roll+ Buff
     local phantomBase = corsairRollMods[abilityId][2] -- Base increment buff
-    local effectpower = effectpower + (phantomBase * phantombuffMultiple(caster))
+    effectpower = effectpower + (phantomBase * phantombuffMultiple(caster))
 
     -- Check if COR Main or Sub
     if caster:getMainJob() == xi.job.COR and caster:getMainLvl() < target:getMainLvl() then
@@ -239,7 +241,7 @@ xi.job_utils.corsair.useDoubleUp = function(caster, target, ability, action)
     if prev_ability then
         action:setAnimation(target:getID(), prev_ability:getAnimation())
         action:actionID(prev_ability:getID())
-        local total = applyRoll(caster, target, prev_ability, action, total)
+        total = applyRoll(caster, target, prev_ability, action, total)
         local msg = ability:getMsg()
         if msg == 420 then
             ability:setMsg(xi.msg.basic.DOUBLEUP)

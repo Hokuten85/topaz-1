@@ -75,6 +75,9 @@ global_objects=(
     Sequence
     Container
     Event
+    onMobDeathEx
+
+    removeSleepEffects
 
     SANDORIA
     BASTOK
@@ -185,6 +188,16 @@ global_objects=(
     updateModPerformance
 
     fTP
+    fSTR
+    fSTR2
+    calculateRawWSDmg
+    calculatedIgnoredDef
+    cMeleeRatio
+    generatePdif
+    getMeleeDmg
+    handleWSGorgetBelt
+
+    getRecommendedAssaultLevel
 
     PATHFLAG_WALLHACK
 
@@ -218,6 +231,9 @@ global_objects=(
     applyHalloweenNpcCostumes
     isHalloweenEnabled
     onHalloweenTrade
+    HALLOWEEN_2008
+    HALLOWEEN_2009
+    HALLOWEEN_2010
 
     salvageUtil
 
@@ -255,21 +271,30 @@ global_objects=(
     getCurePowerOld
     getCureFinal
     getBaseCureOld
+    getEffectResistance
+    getElementalDamageReduction
     getElementalDebuffDOT
     getFlourishAnimation
     getHelixDuration
     getHitRate
+    getMagicHitRate
+    getMagicResist
     getStepAnimation
     getElementalDebuffStatDownFromDOT
+    handleAfflatusMisery
     handleNinjutsuDebuff
     handleThrenody
     hasSleepEffects
     isValidHealTarget
+    skillchainCount
     takeAbilityDamage
     mobAddBonuses
     MobBreathMove
     MobBuffMove
+    MobDrainAttribute
     MobDrainMove
+    MobDrainStatusEffectMove
+    MobFormMagicBurst
     MobGazeMove
     MobHealMove
     MobMagicalMove
@@ -280,6 +305,10 @@ global_objects=(
     MobFinalAdjustments
     MobPhysicalStatusEffectMove
     MobStatusEffectMove
+
+    FormMagicBurst
+
+    BOMB_TOSS_HPP
 
     AbilityFinalAdjustments
 
@@ -295,11 +324,14 @@ global_objects=(
     TP_DMG_BONUS
     TP_DMG_VARIES
     TP_MAB_BONUS
+    TP_MACC_BONUS
     TP_NO_EFFECT
+    TP_RANGED
 
     MOBPARAM_1_SHADOW
     MOBPARAM_2_SHADOW
     MOBPARAM_3_SHADOW
+    MOBPARAM_4_SHADOW
     MOBPARAM_BLUNT
     MOBPARAM_WIPE_SHADOWS
     MOBPARAM_IGNORE_SHADOWS
@@ -308,7 +340,13 @@ global_objects=(
     MOBDRAIN_HP
     MOBDRAIN_MP
     MOBDRAIN_TP
+    MOBTYPE_NORMAL
+    MOBTYPE_0X01
     MOBTYPE_NOTORIOUS
+    MOBTYPE_FISHED
+    MOBTYPE_CALLED
+    MOBTYPE_BATTLEFIELD
+    MOBTYPE_EVENT
 
     MOBSKILL_MAGICAL
     MOBSKILL_PHYSICAL
@@ -320,11 +358,13 @@ global_objects=(
     getSigilTimeStamp
 
     TPMOD_NONE
+    TPMOD_CHANCE
     TPMOD_CRITICAL
     TPMOD_DAMAGE
     TPMOD_ACC
     TPMOD_ATTACK
     TPMOD_DURATION
+    SC_NONE
     SC_IMPACTION
     SC_TRANSFIXION
     SC_DETONATION
@@ -337,8 +377,10 @@ global_objects=(
     SC_FRAGMENTATION
     SC_DISTORTION
     SC_GRAVITATION
-    SC_DARK
+    SC_DARKNESS
     SC_LIGHT
+    SC_LIGHT_II
+    SC_DARKNESS_II
     INT_BASED
     CHR_BASED
     MND_BASED
