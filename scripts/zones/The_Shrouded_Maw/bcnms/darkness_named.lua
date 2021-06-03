@@ -42,6 +42,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
         if player:getCurrentMission(COP) == xi.mission.id.cop.DARKNESS_NAMED and player:getCharVar("PromathiaStatus") == 2 then
             player:addTitle(xi.title.TRANSIENT_DREAMER)
             player:setCharVar("PromathiaStatus", 3)
+            addColoredDrop(player)
         end
         player:addExp(1000)
     end

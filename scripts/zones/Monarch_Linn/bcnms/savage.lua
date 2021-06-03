@@ -37,6 +37,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
             player:setCharVar("PromathiaStatus", 2)
         end
         player:addExp(1500)
+        addColoredDrop(player)
         player:addTitle(xi.title.MIST_MELTER)
     end
 end

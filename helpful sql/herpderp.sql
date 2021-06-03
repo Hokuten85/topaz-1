@@ -38,3 +38,26 @@ INNER JOIN mob_pools mp
 INNER JOIN  spell_list sl
 	ON mp.poolid = sl.spellid+5000
 WHERE sl.spellid >= 896;
+
+SELECT *
+FROM trust_equipment te
+INNER JOIN item_basic ib
+	ON te.itemid = ib.itemid
+INNER JOIN item_mods im
+	ON ib.itemid = im.itemId
+INNER JOIN item_equipment ie
+	ON ib.itemid = ie.itemid
+WHERE trustid IN (900,908)
+AND te.itemid = 13202
+-- AND im.modId = 27
+AND ie.`level` <= 75
+
+SELECT *, jobs | 64
+FROM item_equipment
+WHERE itemid = 13418
+
+SELECT *
+FROM item_equipment
+WHERE itemid = 14807
+
+jobs | 64 WHERE itemid = 13418

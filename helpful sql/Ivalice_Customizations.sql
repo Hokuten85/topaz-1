@@ -111,10 +111,10 @@ WHERE ib.stackSize = 1
 AND NOT ib.flags & (0x8000 | 0x4000 | 0x0080)
 AND ib.aH IN (58);
 
--- Fuma Kyahan, Okote, Healing staff RARE
+-- Brown Belt, Fuma Kyahan, Okote, Healing staff RARE
 UPDATE item_basic
 SET flags = flags | 0x8000
-WHERE itemid IN (13054,13952,17108);
+WHERE itemid IN (13202,13054,13952,17108);
 
 -- ITEM_EQUIPMENT
 
@@ -152,6 +152,8 @@ UPDATE item_equipment SET jobs = 3553 WHERE itemid = 16555;
 UPDATE item_equipment SET jobs = 2111715 WHERE itemid = 18139;
 
 UPDATE item_equipment SET jobs = 2 | 2048 | 4096 WHERE itemid IN (13184,13201,13202,13186);
+
+UPDATE item_equipment SET jobs = jobs | 64 WHERE itemid = 13418;
 
 update item_equipment
 set MId = 16
@@ -802,8 +804,8 @@ WHERE sl.spellid >= 896
 AND sl.spellid IN (898, 952,1019);
 
 UPDATE mob_pools
-SET cmbDmgMult = 150, sJob = 1
-WHERE poolid IN (5900,5908); -- Ayame, Tenzen pool
+SET cmbDmgMult = 100, sJob = 1
+WHERE poolid IN (5900,5908,6010); -- Ayame, Tenzen pool
 
 -- TRUST Mod Settings -- 1 - negative, 2 - ignore, 3 - positive -- Job 0 is default -- Provide specific job settings if necessary
 INSERT INTO trust_mod_settings VALUES (6, 27, 2);
