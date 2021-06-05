@@ -177,17 +177,17 @@ void CTrustController::DoCombatTick(time_point tick)
                             m_failedRepositionAttempts = 0;
                             POwner->PAI->PathFind->WarpTo(PTarget->loc.p);
                         }
+
+                        return;
                     }
                     else
                     {
                         action->requiresMove = false;
                     }
                 }
-                else
-                {
-                    this->Cast(action->targId, static_cast<SpellID>(action->actionId), action->pianissimo);
-                    actionQueue->pop();
-                }
+                
+                this->Cast(action->targId, static_cast<SpellID>(action->actionId), action->pianissimo);
+                actionQueue->pop();
             }
             else if (action->action_type == ACTION_TYPE::JA)
             {
