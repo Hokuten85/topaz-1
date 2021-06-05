@@ -16,8 +16,9 @@ end
 
 ability_object.onUseAbility = function(player, target, ability)
     local duration = 180 + player:getMod(xi.mod.HOLY_CIRCLE_DURATION)
+    local subPower = 0
     if (player:getID() ~= target:getID()) then
-        local subPower = 5;
+        subPower = 5
     
         if (player:getMainLvl() > 50) then
             subPower = subPower + math.floor((player:getMainLvl() - 50) / 5);
@@ -26,11 +27,9 @@ ability_object.onUseAbility = function(player, target, ability)
         if player:getSubJob() == xi.job.PLD then
             subPower = math.floor(subPower / 2);
         end
-    
-        target:addStatusEffect(xi.effect.HOLY_CIRCLE, 15, 0, duration, 0, subPower)
-    else
-        target:addStatusEffect(xi.effect.HOLY_CIRCLE, 15, 0, duration)
     end
+    
+    target:addStatusEffect(xi.effect.HOLY_CIRCLE, 15, 0, duration, 0, subPower)
 end
 
 return ability_object

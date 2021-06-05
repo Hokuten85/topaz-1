@@ -38,6 +38,7 @@ UPDATE Abilities SET recastTime = 1200 WHERE abilityId = 210; -- tabula rasa
 UPDATE Abilities SET recastTime = 150 WHERE abilityId = 230; -- sekkanoki
 UPDATE abilities SET `level` = 75 WHERE abilityId = 278; -- palisade
 UPDATE Abilities SET recastTime = 45 WHERE abilityId IN (656,657,658,659,660,661,662); -- camisado, somnolence, nightmare, ultimate terror, noctoshield, dream shroud, nether blast
+UPDATE abilities SET `level` = 75 WHERE abilityId = 276; -- Conspirator
 
 -- MERITS
 UPDATE merits SET Value = 4 WHERE meritid = 516; -- barspell effect
@@ -394,6 +395,7 @@ UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 102; -
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 103; -- enstone
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 104; -- enthunder
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 105; -- enwater
+UPDATE spell_list SET jobs = 0x00000000210046000000000000000000000000000044 WHERE spellid = 106; -- phalanx
 UPDATE spell_list SET mpCost = 20, recastTime = 9000 WHERE spellid = 109; -- refresh
 UPDATE spell_list SET mpCost = 15, castTime = 1500 WHERE spellid = 143; -- erase
 UPDATE spell_list SET mpCost = 4, base = 10 WHERE spellid IN (144,149,154,159,164,169); -- fire,blizzard, aero, stone, thunder, water
@@ -414,13 +416,14 @@ UPDATE spell_list SET mpCost = 10, recastTime = 50000, VE = 320 WHERE spellid = 
 UPDATE spell_list SET mpCost = 10, recastTime = 50000, VE = 320 WHERE spellid = 270; -- absorb-int
 UPDATE spell_list SET mpCost = 10, recastTime = 50000, VE = 320 WHERE spellid = 271; -- absorb-mnd
 UPDATE spell_list SET mpCost = 10, recastTime = 50000, VE = 320 WHERE spellid = 272; -- absorb-chr
+UPDATE spell_list SET jobs = 0x0000000000004B000000000000000000000000000000 WHERE spellid = 310; -- enlight
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 312; -- enfire 2
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 313; -- enblizzard 2
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 314; -- enaero 2
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 315; -- enstone 2
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 316; -- enthunder 2
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 317; -- enwater 2
-UPDATE spell_list SET jobs = 0x000000004B0000000000000000000000000000000000, mpCost = 30, recastTime = 13500 WHERE spellid = 473; -- refresh 2
+UPDATE spell_list SET jobs = 0x00000000000055000000000000000000000000000000, mpCost = 30, recastTime = 13500 WHERE spellid = 473; -- refresh 2
 UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 479; -- boost-str
 UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 480; -- boost-dex
 UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 481; -- boost-vit
