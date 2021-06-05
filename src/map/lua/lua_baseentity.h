@@ -770,6 +770,8 @@ public:
     int16  getTHlevel();                                                                 // Returns the Monster's current Treasure Hunter Tier
     void   addDropListModification(uint16 id, uint16 newRate, sol::variadic_args va);    // Adds a modification to the drop list of this mob, erased on death
 
+    uint32 getHistory(uint8 index);
+
     int32 addCharMod(uint16 modid, int16 modValue); // Adds permanent mod to character
     int32 getCharMod(uint16 modid);                 // Gets permanent mod for character
 

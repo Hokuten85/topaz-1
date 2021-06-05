@@ -222,6 +222,9 @@ namespace charutils
     void SendTimerPacket(CCharEntity* PChar, duration dur);
     void SendClearTimerPacket(CCharEntity* PChar);
 
+    void ReadHistory(CCharEntity* PChar);
+    void WriteHistory(CCharEntity* PChar);
+
     void AddCharMod(CCharEntity* PChar, Mod type, int value);
 }; // namespace charutils
 

@@ -689,6 +689,7 @@ void CCharEntity::OnEngage(CAttackState& state)
 {
     CBattleEntity::OnEngage(state);
     PLatentEffectContainer->CheckLatentsTargetChange();
+    this->m_charHistory.battlesFought++;
 }
 
 void CCharEntity::OnDisengage(CAttackState& state)
@@ -1781,6 +1782,8 @@ void CCharEntity::Die(duration _duration)
     {
         m_hasRaise = 1;
     }
+
+    this->m_charHistory.timesKnockedOut++;
 
     CBattleEntity::Die();
 }
