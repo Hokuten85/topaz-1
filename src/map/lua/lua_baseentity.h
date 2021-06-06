@@ -714,7 +714,7 @@ public:
     void instantiateMob(uint32 groupID);
 
     bool hasTrait(uint8 traitID);
-    int32 getTraitValue(lua_State*);
+    int32 getTraitValue(uint8 traitID);
     bool hasImmunity(uint32 immunityID); // Check if the mob has immunity for a type of spell (list at mobentity.h)
 
     void setAggressive(bool aggressive);

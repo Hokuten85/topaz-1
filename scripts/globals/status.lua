@@ -2924,4 +2924,4 @@ xi.history =
 -- JOB TRAITS
 ------------------------------------
 TRAIT_ACCURACY_BONUS                = 1;
-TRAIT_STORE_TP                        = 14;
+TRAIT_STORE_TP                      = 14;

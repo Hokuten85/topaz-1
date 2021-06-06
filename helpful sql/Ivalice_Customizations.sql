@@ -791,7 +791,7 @@ WHERE sl.spellid IN (394, 395, 396, 397, 398);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 112);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 114);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 116);
-INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 117);
+-- INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 117); -- no vorpal thrust
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 118);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 119);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 120);
@@ -831,10 +831,10 @@ AND sl.spellid IN (898, 952,1019);
 
 UPDATE mob_pools
 SET cmbDmgMult = 100, sJob = 1
-WHERE poolid IN (5900,5908,5915,6010); -- Ayame, Tenzen pool
+WHERE poolid IN (5900,5908,6010); -- Ayame, Tenzen pool
 
 UPDATE mob_pools
-SET cmbDmgMult = 100, sJob = 12
+SET cmbDmgMult = 100, sJob = 12, cmbSkill = 8
 WHERE poolid IN (5915); -- Shikaree_Z pool
 
 -- TRUST Mod Settings -- 1 - negative, 2 - ignore, 3 - positive -- Job 0 is default -- Provide specific job settings if necessary

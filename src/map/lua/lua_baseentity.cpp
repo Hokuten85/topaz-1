@@ -12172,15 +12172,14 @@ bool CLuaBaseEntity::hasTrait(uint8 traitID)
     return charutils::hasTrait(static_cast<CCharEntity*>(m_PBaseEntity), traitID);
 }
 
-inline int32 CLuaBaseEntity::getTraitValue(lua_State* L)
+inline int32 CLuaBaseEntity::getTraitValue(uint8 traitID)
 {
-    XI_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
-    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
+    if (m_PBaseEntity->objtype == TYPE_PC || m_PBaseEntity->objtype == TYPE_TRUST)
+    {
+        return battleutils::getTraitValue(static_cast<CBattleEntity*>(m_PBaseEntity), traitID);
+    }
 
-    XI_DEBUG_BREAK_IF(lua_isnil(L, 1) || !lua_isnumber(L, 1));
-
-    lua_pushinteger(L, charutils::getTraitValue((CCharEntity*)m_PBaseEntity, lua_tointeger(L, 1)));
-    return 1;
+    return 0;
 }
 
 /************************************************************************

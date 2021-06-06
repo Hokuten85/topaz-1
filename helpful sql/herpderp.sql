@@ -33,6 +33,20 @@ SELECT * FROM mob_pools WHERE poolid = 5900
 
 SELECT * FROM mob_skill_lists WHERE skill_list_id = 1030
 
+SELECT * FROM trust_equipment te
+INNER JOIN item_equipment ie
+	ON te.itemid = ie.itemid
+INNER JOIN item_weapon iw
+	ON te.itemid = iw.itemid
+WHERE trustid = 915
+ORDER BY te.equipslotid, ie.level
+
+DELETE FROM trust_equipment WHERE trustid = 915
+
+SELECT * FROM trust_equipment WHERE trustid = 900
+
+DELETE FROM mob_skill_lists WHERE skill_list_id = 1030 AND mob_skill_id = 117
+
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 112);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 114);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 116);
@@ -85,6 +99,10 @@ SELECT * FROM weapon_skills
 UPDATE mob_pools
 SET cmbDmgMult = 200
 WHERE poolid = 5900; -- Ayame pool
+
+SELECT *
+FROM mob_pools
+WHERE poolid IN (5900,5908,5915,6010); -- Ayame, Tenzen pool
 
 SELECT * 
 FROM mob_family_system mfs

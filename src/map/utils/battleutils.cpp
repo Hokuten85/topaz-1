@@ -1,4 +1,4 @@
-/*
+﻿/*
 ===========================================================================
 
   Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -6638,5 +6638,28 @@ namespace battleutils
         {
             PDefender->addMP(absorbedMP);
         }
+    }
+
+    int32 getTraitValue(CBattleEntity* PEntity, uint8 TraitID)
+    {
+        if (PEntity->objtype == TYPE_PC || PEntity->objtype == TYPE_TRUST)
+        {
+            for (uint8 j = 0; j < PEntity->TraitList.size(); ++j)
+            {
+                CTrait* PEntityTrait = PEntity->TraitList.at(j);
+
+                if (PEntityTrait->getID() == TraitID)
+                {
+                    return PEntityTrait->getValue();
+                }
+            }   
+        }
+        else
+        {
+            ShowError("charutils::hasTrait Attempt to reference a trait from a non-character entity: %s %i", PEntity->name.c_str(), PEntity->id);
+            return 0;
+        }
+
+        return 0;
     }
 }; // namespace battleutils

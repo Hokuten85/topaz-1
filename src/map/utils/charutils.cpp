@@ -3280,27 +3280,6 @@ namespace charutils
         return hasBit(TraitID, PChar->m_TraitList, sizeof(PChar->m_TraitList));
     }
 
-	int32 getTraitValue(CCharEntity* PChar, uint8 TraitID)
-	{
-		if (PChar->objtype != TYPE_PC)
-		{
-			ShowError("charutils::hasTrait Attempt to reference a trait from a non-character entity: %s %i", PChar->name.c_str(), PChar->id);
-			return 0;
-		}
-
-		for (uint8 j = 0; j < PChar->TraitList.size(); ++j)
-		{
-			CTrait* PCharTrait = PChar->TraitList.at(j);
-
-			if (PCharTrait->getID() == TraitID)
-			{
-				return PCharTrait->getValue();
-			}
-		}
-
-		return 0;
-	}
-
     int32 addTrait(CCharEntity* PChar, uint8 TraitID)
     {
         if (PChar->objtype != TYPE_PC)

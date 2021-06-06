@@ -663,6 +663,11 @@ namespace gambits
                         chosen_skill = tp_skills.at(tp_skills.size() - 1);
                     }
 
+                    if (!chosen_skill.has_value())
+                    {
+                        chosen_skill = tp_skills.at(tp_skills.size() - 1);
+                    }
+
                     break;
                 }
                 default:
