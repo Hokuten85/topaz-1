@@ -580,6 +580,11 @@ namespace trustutils
                     break;
                 }
 
+                if (PWeaponSkill->getSkillLevel() > PTrust->WorkingSkills.skill[PWeaponSkill->getType()]) // if weaponskill skill requirement is higher than trust's current skill, skip it
+                {
+                    continue;
+                }
+
                 skill = TrustSkill_t{
                     G_REACTION::WS,
                     skill_id,

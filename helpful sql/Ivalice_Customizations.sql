@@ -787,6 +787,29 @@ SELECT 'TRUST_Joachim', 323, sl.spellid , CAST(CONV(SUBSTR(HEX(jobs),19,2),16,10
 FROM spell_list sl
 WHERE sl.spellid IN (394, 395, 396, 397, 398);
 
+-- TRUST mob_skill_lists
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 112);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 114);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 116);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 117);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 118);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 119);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 120);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 124);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 125);
+
+INSERT INTO mob_skill_lists VALUES ('TRUST_Ayame', 1015, 156);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Ayame', 1015, 157);
+
+INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 48);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 49);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 51);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 53);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 54);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 55);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 59);
+INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 60);
+
 -- TRUST mob_family_system
 UPDATE mob_family_system mfs
 INNER JOIN mob_pools mp
@@ -808,7 +831,11 @@ AND sl.spellid IN (898, 952,1019);
 
 UPDATE mob_pools
 SET cmbDmgMult = 100, sJob = 1
-WHERE poolid IN (5900,5908,6010); -- Ayame, Tenzen pool
+WHERE poolid IN (5900,5908,5915,6010); -- Ayame, Tenzen pool
+
+UPDATE mob_pools
+SET cmbDmgMult = 100, sJob = 12
+WHERE poolid IN (5915); -- Shikaree_Z pool
 
 -- TRUST Mod Settings -- 1 - negative, 2 - ignore, 3 - positive -- Job 0 is default -- Provide specific job settings if necessary
 INSERT INTO trust_mod_settings VALUES (6, 27, 2);
