@@ -424,13 +424,13 @@ UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 315; -
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 316; -- enthunder 2
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 317; -- enwater 2
 UPDATE spell_list SET jobs = 0x00000000000055000000000000000000000000000000, mpCost = 30, recastTime = 13500 WHERE spellid = 473; -- refresh 2
-UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 479; -- boost-str
-UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 480; -- boost-dex
-UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 481; -- boost-vit
-UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 482; -- boost-agi
-UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 483; -- boost-int
-UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 484; -- boost-mnd
-UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000 WHERE spellid = 485; -- boost-chr
+UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000, spell_range = 0 WHERE spellid = 479; -- boost-str
+UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000, spell_range = 0 WHERE spellid = 480; -- boost-dex
+UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000, spell_range = 0 WHERE spellid = 481; -- boost-vit
+UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000, spell_range = 0 WHERE spellid = 482; -- boost-agi
+UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000, spell_range = 0 WHERE spellid = 483; -- boost-int
+UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000, spell_range = 0 WHERE spellid = 484; -- boost-mnd
+UPDATE spell_list SET jobs = 0x00003200000000000000000000000000000000000000, spell_range = 0 WHERE spellid = 485; -- boost-chr
 UPDATE spell_list SET mpCost = 298 WHERE spellid = 496; -- firaja
 UPDATE spell_list SET mpCost = 298 WHERE spellid = 497; -- blizzaja
 UPDATE spell_list SET mpCost = 298 WHERE spellid = 498; -- aeroja
@@ -809,6 +809,9 @@ INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 54);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 55);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 59);
 INSERT INTO mob_skill_lists VALUES ('TRUST_Zied_II', 1125, 60);
+
+-- MOB mob_skill_lists
+DELETE FROM mob_skill_lists WHERE mob_skill_id = 1700;
 
 -- TRUST mob_family_system
 UPDATE mob_family_system mfs

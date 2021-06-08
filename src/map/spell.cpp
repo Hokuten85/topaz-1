@@ -755,7 +755,7 @@ namespace spell
         // brd gets bonus radius from string skill
         if (spell->getSpellGroup() == SPELLGROUP_SONG && (spell->getValidTarget() & TARGET_SELF))
         {
-            if (entity->objtype == TYPE_MOB || (entity->GetMJob() == JOB_BRD && entity->objtype == TYPE_PC && ((CCharEntity*)entity)->getEquip(SLOT_RANGED) &&
+            if (entity->objtype == TYPE_MOB || entity->objtype == TYPE_TRUST || (entity->GetMJob() == JOB_BRD && entity->objtype == TYPE_PC && ((CCharEntity*)entity)->getEquip(SLOT_RANGED) &&
                                                 ((CItemWeapon*)((CCharEntity*)entity)->getEquip(SLOT_RANGED))->getSkillType() == SKILL_STRING_INSTRUMENT))
             {
                 total += ((float)entity->GetSkill(SKILL_STRING_INSTRUMENT) / 276) * 10;

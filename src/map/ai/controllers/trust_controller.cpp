@@ -130,7 +130,7 @@ void CTrustController::DoCombatTick(time_point tick)
     CTrustEntity* PTrust  = static_cast<CTrustEntity*>(POwner);
     CCharEntity*  PMaster = static_cast<CCharEntity*>(POwner->PMaster);
 
-    if (m_InTransit)
+    if (!m_InTransit)
     {
         POwner->PAI->PathFind->FollowPath();
     }
@@ -159,18 +159,16 @@ void CTrustController::DoCombatTick(time_point tick)
                 auto PSpell = spell::GetSpell(static_cast<SpellID>(action->actionId));
                 if (action->requiresMove)
                 {
-                    auto spelldistance = std::max(0.0f, (
-                                (PSpell->getValidTarget() == TARGET_SELF && PSpell->getAOE() == SPELLAOE_RADIAL && PSpell->getRange() == 0) ||
-                                (PSpell->getValidTarget() && TARGET_PLAYER_PARTY_PIANISSIMO && PSpell->getAOE() == SPELLAOE_PIANISSIMO && !POwner->StatusEffectContainer->HasStatusEffect(EFFECT_PIANISSIMO))
-                                    ? PSpell->getRadius()
-                                    : PSpell->getRange()
-                            ) - 2.6f); // PathOutToDistance can put you as close as 2.5f away from where you want to be, so -2.6f makes sure you are in range
+                    auto spelldistance = ((PSpell->getValidTarget() == TARGET_SELF && PSpell->getAOE() == SPELLAOE_RADIAL && PSpell->getRange() == 0) ||
+                                         (PSpell->getValidTarget() && TARGET_PLAYER_PARTY_PIANISSIMO && PSpell->getAOE() == SPELLAOE_PIANISSIMO && !POwner->StatusEffectContainer->HasStatusEffect(EFFECT_PIANISSIMO)))
+                                            ? spell::GetSpellRadius(PSpell, POwner) : PSpell->getRange();
 
                     if (distance(POwner->loc.p, PTarget->loc.p) > spelldistance)
                     {
                         if (POwner->PAI->PathFind->CanSeePoint(PTarget->loc.p, false) && m_failedRepositionAttempts < 3)
                         {
-                            PathOutToDistance(PTarget, spelldistance);
+                            PathOutToDistance(PTarget, std::max(0.0f, spelldistance - 2.5f)); // set path distance to inside casting range
+                            POwner->PAI->PathFind->FollowPath();
                         }
                         else
                         {
@@ -518,9 +516,9 @@ bool CTrustController::Cast(uint16 targid, SpellID spellid, bool pianissimo)
 
     auto PSpell = spell::GetSpell(spellid);
     auto Target = POwner->GetEntity(targid);
-    auto castdistance = (PSpell->getValidTarget() == TARGET_SELF && PSpell->getAOE() == SPELLAOE_RADIAL && PSpell->getRange() == 0) ||
-                        (PSpell->getValidTarget() && TARGET_PLAYER_PARTY_PIANISSIMO && PSpell->getAOE() == SPELLAOE_PIANISSIMO && !POwner->StatusEffectContainer->HasStatusEffect(EFFECT_PIANISSIMO))
-                        ? PSpell->getRadius()
+    auto castdistance = ((PSpell->getValidTarget() == TARGET_SELF && PSpell->getAOE() == SPELLAOE_RADIAL && PSpell->getRange() == 0) ||
+                        (PSpell->getValidTarget() && TARGET_PLAYER_PARTY_PIANISSIMO && PSpell->getAOE() == SPELLAOE_PIANISSIMO && !POwner->StatusEffectContainer->HasStatusEffect(EFFECT_PIANISSIMO)))
+                        ? spell::GetSpellRadius(PSpell, POwner)
                         : PSpell->getRange();
 
     if (distance(POwner->loc.p, Target->loc.p) > castdistance) // check casting distance
