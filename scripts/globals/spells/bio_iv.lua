@@ -53,13 +53,6 @@ spell_object.onSpellCast = function(caster, target, spell)
     target:addStatusEffect(xi.effect.BIO, dotdmg, 3, duration, 0, 25, 4)
     spell:setMsg(xi.msg.basic.MAGIC_DMG)
 
-    -- Try to kill same tier Dia (default behavior)
-    if DIA_OVERWRITE == 1 and dia ~= nil then
-        if dia:getPower() <= 4 then
-            target:delStatusEffect(xi.effect.DIA)
-        end
-    end
-
     return final
 end
 

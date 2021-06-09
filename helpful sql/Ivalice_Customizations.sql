@@ -668,20 +668,36 @@ END $$
 DELIMITER ;
 
 -- WEAPONSKILLS
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 15;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 224;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 226;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 60;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 77;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 93;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 109;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 125;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 141;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 157;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 174;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 191;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 203;
-UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 221;
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 14; -- victory_smite
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 15; -- shijin_spiral
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 31; -- rudras_storm
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 224; -- exenterator
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 225; -- chant_du_cygne
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 226; -- requiescat
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 59; -- torcleaver
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 60; -- resolution
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 76; -- cloudsplitter
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 77; -- ruinator
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 92; -- ukkos_fury
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 93; -- upheaval
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 108; -- quietus
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 109; -- entropy
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 124; -- camlanns_torment
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 125; -- stardiver
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 140; -- blade_hi
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 141; -- blade_shun
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 156; -- tachi_fudo
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 157; -- tachi_shoha
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 173; -- dagan
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 174; -- realmrazer
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 190; -- myrkr
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 191; -- shattersoul
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 202; -- jishnus_radiance
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 203; -- apex_arrow
+UPDATE weapon_skills SET skilllevel = 310 WHERE weaponskillid = 220; -- wildfire
+UPDATE weapon_skills SET skilllevel = 300 WHERE weaponskillid = 221; -- last_stand
+
+SELECT * FROM weapon_skills WHERE NAME = 'Exenterator'
 
 -- STATUS_EFFECTS
 UPDATE status_effects SET flags = flags + 0x0002 WHERE id = 16; -- Amnesia eraseable
