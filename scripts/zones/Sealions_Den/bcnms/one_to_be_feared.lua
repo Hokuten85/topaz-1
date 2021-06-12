@@ -42,6 +42,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
             player:setCharVar("PromathiaStatus", 0)
         end
         player:addExp(1500)
+        addColoredDrop(player)
         player:setPos(438, 0, -18, 11, 24) -- Lufaise
     end
 end

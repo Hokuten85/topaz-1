@@ -35,6 +35,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
         if player:getCurrentMission(COP) == xi.mission.id.cop.WHEN_ANGELS_FALL and player:getCharVar("PromathiaStatus") == 4 then
             player:setCharVar("PromathiaStatus", 5)
         end
+        addColoredDrop(player)
         player:setPos(420, 0, 445, 192)
     end
 end

@@ -39,6 +39,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
             player:setCharVar("PromathiaStatus", 0)
         end
         player:addExp(1000)
+        addColoredDrop(player)
         player:addTitle(xi.title.THE_CHEBUKKIS_WORST_NIGHTMARE)
         player:setPos(-25, -1, -620, 208, 33) -- Al'Taieu
     end

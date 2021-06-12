@@ -36,6 +36,7 @@ battlefield_object.onEventFinish = function(player, csid, option)
             player:setCharVar("COP_Louverance_s_Path", 6)
         end
         player:addExp(1000)
+        addColoredDrop(player)
     end
 end
 
