@@ -908,6 +908,9 @@ INSERT INTO trust_mod_settings VALUES (0, 340, 2);
 INSERT INTO trust_mod_settings VALUES (0, 380, 2);
 INSERT INTO trust_mod_settings VALUES (0, 381, 2);
 
+INSERT INTO trust_mod_settings VALUES (0, 383, 3); -- ability haste
+INSERT INTO trust_mod_settings VALUES (0, 384, 3); -- gear haste
+
 INSERT INTO trust_mod_settings VALUES (0, 509, 2);
 INSERT INTO trust_mod_settings VALUES (0, 510, 2);
 INSERT INTO trust_mod_settings VALUES (0, 511, 2);

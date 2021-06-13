@@ -597,7 +597,7 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
             if (trustutils::hasModSetting(this->GetMJob(), modifier.getModID()))
             {
                 auto modSetting = trustutils::getModSetting(this->GetMJob(), modifier.getModID());
-                if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0))
+                if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0) || (modSetting == ModSetting::Positive && modifier.getModAmount() < 0))
                 {
                     continue;
                 }
@@ -605,7 +605,7 @@ void CTrustEntity::EquipItem(CItemEquipment* PItem, int8 slotId)
             else if (trustutils::hasModSetting(JOBTYPE::JOB_NON, modifier.getModID()))
             {
                 auto modSetting = trustutils::getModSetting(JOBTYPE::JOB_NON, modifier.getModID());
-                if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0))
+                if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0) || (modSetting == ModSetting::Positive && modifier.getModAmount() < 0))
                 {
                     continue;
                 }

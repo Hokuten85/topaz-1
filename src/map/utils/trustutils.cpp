@@ -719,7 +719,7 @@ namespace trustutils
                                 if (hasModSetting(PTrust->GetMJob(), modifier.getModID()))
                                 {
                                     auto modSetting = trustutils::getModSetting(PTrust->GetMJob(), modifier.getModID());
-                                    if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0))
+                                    if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0) || (modSetting == ModSetting::Positive && modifier.getModAmount() < 0))
                                     {
                                         continue;
                                     }
@@ -727,7 +727,7 @@ namespace trustutils
                                 else if (hasModSetting(JOBTYPE::JOB_NON, modifier.getModID()))
                                 {
                                     auto modSetting = trustutils::getModSetting(JOBTYPE::JOB_NON, modifier.getModID());
-                                    if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0))
+                                    if (modSetting == ModSetting::Ignore || (modSetting == ModSetting::Negative && modifier.getModAmount() > 0) || (modSetting == ModSetting::Positive && modifier.getModAmount() < 0))
                                     {
                                         continue;
                                     }
