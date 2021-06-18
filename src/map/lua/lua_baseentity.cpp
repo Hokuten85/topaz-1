@@ -831,20 +831,38 @@ void CLuaBaseEntity::startEvent(uint32 EventID, sol::variadic_args va)
         }
     }
 
-    uint32 param0 = va.get_type(0) == sol::type::number ? va.get<uint32>(0) : 0;
-    uint32 param1 = va.get_type(1) == sol::type::number ? va.get<uint32>(1) : 0;
-    uint32 param2 = va.get_type(2) == sol::type::number ? va.get<uint32>(2) : 0;
-    uint32 param3 = va.get_type(3) == sol::type::number ? va.get<uint32>(3) : 0;
-    uint32 param4 = va.get_type(4) == sol::type::number ? va.get<uint32>(4) : 0;
-    uint32 param5 = va.get_type(5) == sol::type::number ? va.get<uint32>(5) : 0;
-    uint32 param6 = va.get_type(6) == sol::type::number ? va.get<uint32>(6) : 0;
-    uint32 param7 = va.get_type(7) == sol::type::number ? va.get<uint32>(7) : 0;
+    std::vector<std::pair<uint8, uint32>> params;
 
-    int16 textTable = va.get_type(8) == sol::type::number ? va.get<int16>(8) : -1;
+    int16 textTable = -1;
+    if (va.get_type(0) == sol::type::table)
+    {
+        auto table = va.get<sol::table>(0);
+        for (int i = 0; i < 8; i++)
+        {
+            uint32 param = table.get_or<uint32>(i, 0);
+            if (param != 0)
+            {
+                params.emplace_back(i, param);
+            }
+        }
 
-    PChar->pushPacket(new CEventPacket(PChar, EventID, va.size(),
-                                       param0, param1, param2, param3, param4, param5, param6, param7,
-                                       textTable));
+        textTable = table.get_or<int16>("text_table", -1);
+    }
+    else
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (va.get_type(i) == sol::type::number)
+            {
+                params.emplace_back(i, va.get<uint32>(i));
+            }
+        }
+
+        textTable = va.get_type(8) == sol::type::number ? va.get<int16>(8) : -1;
+    }
+
+
+    PChar->pushPacket(new CEventPacket(PChar, EventID, params, textTable));
 
     // if you want to return a dummy result, then do it
     if (textTable != -1)
@@ -912,16 +930,32 @@ void CLuaBaseEntity::updateEvent(sol::variadic_args va)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
-    uint32 param0 = va.get_type(0) == sol::type::number ? va.get<uint32>(0) : 0;
-    uint32 param1 = va.get_type(1) == sol::type::number ? va.get<uint32>(1) : 0;
-    uint32 param2 = va.get_type(2) == sol::type::number ? va.get<uint32>(2) : 0;
-    uint32 param3 = va.get_type(3) == sol::type::number ? va.get<uint32>(3) : 0;
-    uint32 param4 = va.get_type(4) == sol::type::number ? va.get<uint32>(4) : 0;
-    uint32 param5 = va.get_type(5) == sol::type::number ? va.get<uint32>(5) : 0;
-    uint32 param6 = va.get_type(6) == sol::type::number ? va.get<uint32>(6) : 0;
-    uint32 param7 = va.get_type(7) == sol::type::number ? va.get<uint32>(7) : 0;
+    std::vector<std::pair<uint8, uint32>> params;
 
-    static_cast<CCharEntity*>(m_PBaseEntity)->pushPacket(new CEventUpdatePacket(param0, param1, param2, param3, param4, param5, param6, param7));
+    if (va.get_type(0) == sol::type::table)
+    {
+        auto table = va.get<sol::table>(0);
+        for (int i = 0; i < 8; i++)
+        {
+            uint32 param = table.get_or<uint32>(i, 0);
+            if (param != 0)
+            {
+                params.emplace_back(i, param);
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (va.get_type(i) == sol::type::number)
+            {
+                params.emplace_back(i, va.get<uint32>(i));
+            }
+        }
+    }
+
+    static_cast<CCharEntity*>(m_PBaseEntity)->pushPacket(new CEventUpdatePacket(params));
 }
 
 /************************************************************************
@@ -2012,22 +2046,37 @@ void CLuaBaseEntity::sendEmote(CLuaBaseEntity* target, uint8 emID, uint8 emMode)
  *            Default angle is 255-based mob rotation value - NOT a 360 angle
  ************************************************************************/
 
-int16 CLuaBaseEntity::getWorldAngle(CLuaBaseEntity const* target, sol::object const& deg)
+int16 CLuaBaseEntity::getWorldAngle(sol::variadic_args va)
 {
-    int16 angle   = worldAngle(m_PBaseEntity->loc.p, target->GetBaseEntity()->loc.p);
-    int16 degrees = (deg != sol::lua_nil) ? deg.as<int16>() : 256;
+    int16 angle = 0;
 
-    if (degrees != 256)
+    if (va.get_type(0) == sol::type::userdata)
     {
-        if (degrees % 4 == 0)
+        angle = worldAngle(m_PBaseEntity->loc.p, va.get<CLuaBaseEntity*>(0)->GetBaseEntity()->loc.p);
+
+        int16 degrees = (va[1].get_type() == sol::type::number) ? va[1].as<int16>() : 256;
+        if (degrees != 256)
         {
-            angle = static_cast<int16>(round((angle * M_PI / 128) * (degrees / (2 * M_PI))));
-            angle = angle % degrees; // If we rounded up to the "final" angle, we want the starting angle
+            if (degrees % 4 == 0)
+            {
+                angle = static_cast<int16>(round((angle * M_PI / 128) * (degrees / (2 * M_PI))));
+                angle = angle % degrees; // If we rounded up to the "final" angle, we want the starting angle
+            }
+            else
+            {
+                ShowError(CL_RED "getWorldAngle: Called with degrees %d which isn't multiple of 4 \n" CL_RESET, degrees);
+            }
         }
-        else
-        {
-            ShowError(CL_RED "getWorldAngle: Called with degrees %d which isn't multiple of 4 \n" CL_RESET, degrees);
-        }
+    }
+    else
+    {
+        float posX = va.get_type(0) == sol::type::number ? va.get<float>(0) : 0.0f;
+        float posY = va.get_type(1) == sol::type::number ? va.get<float>(1) : 0.0f;
+        float posZ = va.get_type(2) == sol::type::number ? va.get<float>(2) : 0.0f;
+
+        position_t point{ posX, posY, posZ };
+
+        angle = worldAngle(m_PBaseEntity->loc.p, point);
     }
 
     return angle;
@@ -5749,7 +5798,7 @@ void CLuaBaseEntity::addMission(uint8 missionLogID, uint16 missionID)
     {
         auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
 
-        if (PChar->m_missionLog[missionLogID].current != (missionLogID > 2 ? 0 : -1))
+        if (PChar->m_missionLog[missionLogID].current != (missionLogID > 2 ? 0 : std::numeric_limits<uint16>::max()))
         {
             ShowWarning(CL_YELLOW "Lua::addMission: player has a current mission\n" CL_RESET, missionLogID);
         }
