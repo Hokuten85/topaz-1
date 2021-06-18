@@ -32,8 +32,8 @@
 #include "utils/blueutils.h"
 
 CSpell::CSpell(SpellID id)
+: m_ID(id)
 {
-    m_ID = id;
 }
 
 std::unique_ptr<CSpell> CSpell::clone()
@@ -585,6 +585,9 @@ namespace spell
         else
         {
             uint16 spellId = it->second;
+
+            // False positive: this is CSpell*, so it's OK
+            // cppcheck-suppress CastIntegerToAddressAtReturn
             return PSpellList[spellId];
         }
     }
@@ -599,6 +602,8 @@ namespace spell
         {
             return nullptr;
         }
+        // False positive: this is CSpell*, so it's OK
+        // cppcheck-suppress CastIntegerToAddressAtReturn
         return PSpellList[id];
     }
 

@@ -133,14 +133,14 @@ int32 zone_update_weather(time_point tick, CTaskMgr::CTask* PTask)
  ************************************************************************/
 
 CZone::CZone(ZONEID ZoneID, REGION_TYPE RegionID, CONTINENT_TYPE ContinentID)
+: m_zoneID(ZoneID)
+, m_zoneType(ZONE_TYPE::NONE)
+, m_regionID(RegionID)
+, m_continentID(ContinentID)
 {
     std::ignore = m_useNavMesh;
     ZoneTimer   = nullptr;
 
-    m_zoneID             = ZoneID;
-    m_zoneType           = ZONE_TYPE::NONE;
-    m_regionID           = RegionID;
-    m_continentID        = ContinentID;
     m_TreasurePool       = nullptr;
     m_BattlefieldHandler = nullptr;
     m_Weather            = WEATHER_NONE;
@@ -249,7 +249,7 @@ bool CZone::IsWeatherStatic() const
 
 zoneLine_t* CZone::GetZoneLine(uint32 zoneLineID)
 {
-    for (zoneLineList_t::const_iterator i = m_zoneLineList.begin(); i != m_zoneLineList.end(); i++)
+    for (zoneLineList_t::const_iterator i = m_zoneLineList.begin(); i != m_zoneLineList.end(); ++i)
     {
         if ((*i)->m_zoneLineID == zoneLineID)
         {
@@ -600,12 +600,9 @@ void CZone::DecreaseZoneCounter(CCharEntity* PChar)
 {
     m_zoneEntities->DecreaseZoneCounter(PChar);
 
-    if (ZoneTimer && m_zoneEntities->CharListEmpty())
+    if (m_zoneEntities->CharListEmpty())
     {
-        ZoneTimer->m_type = CTaskMgr::TASK_REMOVE;
-        ZoneTimer         = nullptr;
-
-        m_zoneEntities->HealAllMobs();
+        m_timeZoneEmpty = server_clock::now();
     }
     else
     {
@@ -807,6 +804,14 @@ void CZone::ZoneServer(time_point tick, bool check_regions)
     if (m_BattlefieldHandler != nullptr)
     {
         m_BattlefieldHandler->HandleBattlefields(tick);
+    }
+
+    if (ZoneTimer && m_zoneEntities->CharListEmpty() && m_timeZoneEmpty + 5s < server_clock::now())
+    {
+        ZoneTimer->m_type = CTaskMgr::TASK_REMOVE;
+        ZoneTimer         = nullptr;
+
+        m_zoneEntities->HealAllMobs();
     }
 }
 

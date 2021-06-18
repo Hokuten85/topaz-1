@@ -709,6 +709,8 @@ namespace zoneutils
 
         if (g_PZoneList.count(0) == 0)
         {
+            // False positive: "performance: Searching before insertion is not necessary."
+            // cppcheck-suppress stlFindInsert
             g_PZoneList[0] = CreateZone(0);
         }
 
@@ -952,7 +954,9 @@ namespace zoneutils
             case ZONE_NYZUL_ISLE:
             case ZONE_ARRAPAGO_REMNANTS:
             case ZONE_ALZADAAL_UNDERSEA_RUINS:
+            case ZONE_BHAFLAU_REMNANTS:
             case ZONE_SILVER_SEA_REMNANTS:
+            case ZONE_ZHAYOLM_REMNANTS:
                 return REGION_TYPE::ALZADAAL;
             case ZONE_SOUTHERN_SAN_DORIA_S:
             case ZONE_EAST_RONFAURE_S:

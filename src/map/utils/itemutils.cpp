@@ -217,6 +217,8 @@ namespace itemutils
     {
         if (ItemID < MAX_ITEMID)
         {
+            // False positive: this is CItem*, so it's OK
+            // cppcheck-suppress CastIntegerToAddressAtReturn
             return g_pItemList[ItemID];
         }
         ShowWarning(CL_CYAN "ItemID %u too big\n" CL_RESET, ItemID);
@@ -260,6 +262,8 @@ namespace itemutils
     {
         if (DropID < MAX_DROPID)
         {
+            // False positive: this is DropList_t*, so it's OK
+            // cppcheck-suppress CastIntegerToAddressAtReturn
             return g_pDropList[DropID];
         }
         ShowWarning(CL_CYAN "DropID %u too big\n" CL_RESET, DropID);
@@ -276,6 +280,8 @@ namespace itemutils
     {
         if (LootID < MAX_LOOTID)
         {
+            // False positive: this is LootList_t*, so it's OK
+            // cppcheck-suppress CastIntegerToAddressAtReturn
             return g_pLootList[LootID];
         }
         ShowWarning(CL_CYAN "LootID %u too big\n" CL_RESET, LootID);
