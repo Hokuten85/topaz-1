@@ -801,7 +801,17 @@ AND msl1.spell_id NOT IN (144,149,154,159,164,169);
 INSERT INTO mob_spell_lists
 SELECT 'TRUST_Joachim', 323, sl.spellid , CAST(CONV(SUBSTR(HEX(jobs),19,2),16,10) AS INT), 255
 FROM spell_list sl
-WHERE sl.spellid IN (394, 395, 396, 397, 398);
+WHERE sl.spellid IN (394, 395, 396, 397, 398); -- minuet
+
+INSERT INTO mob_spell_lists
+SELECT 'TRUST_Joachim', 323, sl.spellid , CAST(CONV(SUBSTR(HEX(jobs),19,2),16,10) AS INT), 255
+FROM spell_list sl
+WHERE sl.spellid IN (462); -- magic finale
+
+INSERT INTO mob_spell_lists
+SELECT 'TRUST_Joachim', 323, sl.spellid , CAST(CONV(SUBSTR(HEX(jobs),19,2),16,10) AS INT), 255
+FROM spell_list sl
+WHERE sl.family = 103; -- requiem
 
 -- TRUST mob_skill_lists
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 112);
