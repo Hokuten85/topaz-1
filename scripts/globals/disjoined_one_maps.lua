@@ -833,6 +833,8 @@ function augmentItem(player, npc, gearItem, quantity, augmentIdx, augment, newAu
         baseValue = augments[nextId].BaseValue
     end
     
+    
+    
     local augmentValue = (newAugTier+1) * multiplier - baseValue
     augTable[augmentIdx] = {Id = augmentId, Val = augmentValue}
     
@@ -944,7 +946,7 @@ function checkForMatchingAugId(augmentList, augmentId, skillType)
     local skill = skillMap[skillType]
     
     local tmpAugId = augmentId
-    if (tierIds[augmentId]) then
+    if tierIds[augmentId] then
         tmpAugId = tierIds[augmentId]
     end
     
@@ -952,7 +954,12 @@ function checkForMatchingAugId(augmentList, augmentId, skillType)
         return tonumber(k) and tonumber(v) == tmpAugId
     end
     
-    return loopAugments(augmentList, skill, success)
+    local augment = loopAugments(augmentList, skill, success)
+    if augment ~= nil and tierIds[augmentId] then
+        augment.AugId = augmentId
+    end
+    
+    return augment
 end
 
 function sayAugmentOptions(augmentList, player, npc, skillType)
