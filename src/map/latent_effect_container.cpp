@@ -674,8 +674,18 @@ bool CLatentEffectContainer::ProcessLatentEffect(CLatentEffect& latentEffect)
     // Our default case un-finds our latent prevent us from toggling a latent we don't have programmed
     auto expression  = false;
     auto latentFound = true;
-    auto PLeader     = static_cast<CCharEntity*>(m_POwner->PParty->GetLeader());
-    auto memberCount = m_POwner->PParty->members.size() + (PLeader->PTrusts.size() > 0 ? PLeader->PTrusts.size() : 0);
+    CCharEntity* PLeader;
+    uint8 memberCount = 0;
+    if (m_POwner->PParty != nullptr)
+    {
+        PLeader = static_cast<CCharEntity*>(m_POwner->PParty->GetLeader());
+        memberCount = static_cast<uint8>(m_POwner->PParty->members.size());
+
+        if (PLeader->PTrusts.size() > 0)
+        {
+            memberCount += static_cast<uint8>(PLeader->PTrusts.size());
+        }
+    }
 
     // find the latent type from the enum and find the expression to tests againts
     switch (latentEffect.GetConditionsID())
