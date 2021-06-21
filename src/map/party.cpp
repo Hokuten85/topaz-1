@@ -129,7 +129,9 @@ void CParty::DisbandParty(bool playerInitiated)
 
             PChar->PParty = nullptr;
             PChar->PLatentEffectContainer->CheckLatentsPartyJobs();
-            PChar->PLatentEffectContainer->CheckLatentsPartyMembers(members.size());
+
+            auto memberCount = members.size() + (PChar->PTrusts.size() > 0 ? PChar->PTrusts.size() : 0);
+            PChar->PLatentEffectContainer->CheckLatentsPartyMembers(memberCount);
             PChar->PLatentEffectContainer->CheckLatentsPartyAvatar();
             PChar->pushPacket(new CPartyMemberUpdatePacket(PChar, 0, 0, PChar->getZone()));
 
@@ -303,7 +305,9 @@ void CParty::RemoveMember(CBattleEntity* PEntity)
                             }
                         }
                     }
-                    PChar->PLatentEffectContainer->CheckLatentsPartyMembers(members.size());
+
+                    auto memberCount = members.size() + (static_cast<CCharEntity*>(m_PLeader)->PTrusts.size() > 0 ? static_cast<CCharEntity*>(m_PLeader)->PTrusts.size() : 0);
+                    PChar->PLatentEffectContainer->CheckLatentsPartyMembers(memberCount);
 
                     PChar->pushPacket(new CPartyDefinePacket(nullptr));
                     PChar->pushPacket(new CPartyMemberUpdatePacket(PChar, 0, 0, PChar->getZone()));
@@ -380,7 +384,9 @@ void CParty::DelMember(CBattleEntity* PEntity)
                             }
                         }
                     }
-                    PChar->PLatentEffectContainer->CheckLatentsPartyMembers(members.size());
+
+                    auto memberCount = members.size() + (static_cast<CCharEntity*>(m_PLeader)->PTrusts.size()> 0 ? static_cast<CCharEntity*>(m_PLeader)->PTrusts.size() : 0);
+                    PChar->PLatentEffectContainer->CheckLatentsPartyMembers(memberCount);
 
                     PChar->pushPacket(new CPartyDefinePacket(nullptr));
                     PChar->pushPacket(new CPartyMemberUpdatePacket(PChar, 0, 0, PChar->getZone()));
@@ -774,12 +780,14 @@ void CParty::ReloadParty()
         RefreshFlags(info);
         CBattleEntity* PLeader = GetLeader();
         // regular party
+        auto memberCount = members.size() + (static_cast<CCharEntity*>(PLeader)->PTrusts.size() > 0 ? static_cast<CCharEntity*>(PLeader)->PTrusts.size() : 0);
+
         for (auto& member : members)
         {
             CCharEntity* PChar = (CCharEntity*)member;
 
             PChar->PLatentEffectContainer->CheckLatentsPartyJobs();
-            PChar->PLatentEffectContainer->CheckLatentsPartyMembers(members.size());
+            PChar->PLatentEffectContainer->CheckLatentsPartyMembers(memberCount);
             PChar->PLatentEffectContainer->CheckLatentsPartyAvatar();
             PChar->ReloadPartyDec();
             PChar->pushPacket(new CPartyDefinePacket(this, PLeader && PChar->getZone() == PLeader->getZone()));
