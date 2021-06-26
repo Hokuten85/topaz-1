@@ -578,7 +578,7 @@ void SmallPacket0x015(map_session_data_t* const PSession, CCharEntity* const PCh
             PChar->m_TargID = data.ref<uint16>(0x16);
         }
 
-        if (moved)
+        if (isUpdate)
         {
             PChar->updatemask |= UPDATE_POS;
 

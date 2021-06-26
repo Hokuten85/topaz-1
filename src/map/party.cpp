@@ -780,7 +780,11 @@ void CParty::ReloadParty()
         RefreshFlags(info);
         CBattleEntity* PLeader = GetLeader();
         // regular party
-        auto memberCount = members.size() + (static_cast<CCharEntity*>(PLeader)->PTrusts.size() > 0 ? static_cast<CCharEntity*>(PLeader)->PTrusts.size() : 0);
+        uint8 memberCount = static_cast<uint8>(members.size());
+        if (PLeader != nullptr && static_cast<CCharEntity*>(PLeader)->PTrusts.size() > 0)
+        {
+            memberCount += static_cast<uint8>(static_cast<CCharEntity*>(PLeader)->PTrusts.size());
+        }
 
         for (auto& member : members)
         {

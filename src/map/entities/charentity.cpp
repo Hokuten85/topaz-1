@@ -606,10 +606,10 @@ void CCharEntity::PostTick()
             });
         }
         // Do not send an update packet when only the position has change
-        if (updatemask & UPDATE_POS)
-        {
+        //if (updatemask & UPDATE_POS)
+        //{
             pushPacket(new CCharUpdatePacket(this));
-        }
+        //}
         updatemask = 0;
     }
 }
