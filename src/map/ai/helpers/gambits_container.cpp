@@ -720,6 +720,20 @@ namespace gambits
         return std::nullopt;
     }
 
+    bool CGambitsContainer::EnqueueJA(CBattleEntity* PMember, const uint16 abilityId, const uint16 targid)
+    {
+        auto* controller = static_cast<CTrustController*>(POwner->PAI->GetController());
+        if (static_cast<CMobEntity*>(POwner)->PRecastContainer->HasRecast(RECAST_ABILITY, abilityId, 0) ||
+            POwner->StatusEffectContainer->HasStatusEffect({ EFFECT_AMNESIA, EFFECT_IMPAIRMENT }) ||
+            !trustutils::hasAbility(static_cast<CTrustEntity*>(POwner), abilityId))
+        {
+            return false;
+        }
+
+        controller->actionQueue->emplace(new QueueAction_t{ ACTION_TYPE::JA, targid, abilityId });
+        return true;
+    }
+
     bool CGambitsContainer::EnqueueSong(CBattleEntity* PMember, const std::vector<SpellID>& songList, bool pianissimo)
     {
         auto* controller = static_cast<CTrustController*>(POwner->PAI->GetController());
@@ -739,7 +753,9 @@ namespace gambits
 
     bool CGambitsContainer::BrdSupportMelee()
     {
-        
+        if (EnqueueJA(POwner, ABILITY::ABILITY_NIGHTINGALE, POwner->targid)) { return true; }
+        if (EnqueueJA(POwner, ABILITY::ABILITY_TROUBADOUR, POwner->targid)) { return true; }
+
         auto isValidMember = [&](CBattleEntity* PPartyTarget) -> bool {
             return PPartyTarget->isAlive() && POwner->loc.zone == PPartyTarget->loc.zone && distance(POwner->loc.p, PPartyTarget->loc.p) <= 20.0f;
         };
