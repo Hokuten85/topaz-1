@@ -212,6 +212,11 @@ namespace gambits
                 bool all_predicates_true = true;
                 for (auto& predicate : gambit->predicates)
                 {
+                    if (gambit->extra.notStatusPower > 0)
+                    {
+                        predicate.condition_arg2 = gambit->extra.notStatusPower;
+                    }
+
                     auto predicateResult = RunPredicate(predicate);
                     if (!predicateResult.result)
                     {
@@ -518,6 +523,12 @@ namespace gambits
                         && !static_cast<CMobEntity*>(trigger_target)->PRecastContainer->Has(RECAST_MAGIC, static_cast<uint16>(spellId.value()))
                         && !trigger_target->StatusEffectContainer->HasStatusEffect({ EFFECT_SILENCE, EFFECT_MUTE, EFFECT_OMERTA });
                 }
+                break;
+            }
+            case G_CONDITION::NOT_STATUS_POWER:
+            {
+                auto effect = trigger_target->StatusEffectContainer->GetStatusEffect(static_cast<EFFECT>(predicate.condition_arg));
+                return (effect != nullptr && effect->GetPower() <= predicate.condition_arg2);
                 break;
             }
             default:

@@ -50,7 +50,8 @@ namespace gambits
         RANDOM             = 18,
         CAN_CAST           = 19,
         CAN_CAST_HIGHEST   = 20,
-        NOT_STATUS_COUNT   = 21
+        NOT_STATUS_COUNT   = 21,
+        NOT_STATUS_POWER   = 22,
     };
 
     enum class G_REACTION : uint16
@@ -89,6 +90,7 @@ namespace gambits
         G_TARGET    target;
         G_CONDITION condition;
         uint32      condition_arg = 0;
+        uint32      condition_arg2  = 0;
         bool        isActionTarget = false;
 
         bool parseInput(std::string key, uint32 value)
@@ -104,6 +106,10 @@ namespace gambits
             else if (key.compare("argument") == 0)
             {
                 condition_arg = value;
+            }
+            else if (key.compare("argument2") == 0)
+            {
+                condition_arg2 = value;
             }
             else if (key.compare("actionTarget") == 0)
             {
@@ -151,12 +157,17 @@ namespace gambits
     {
         uint8 maxFails = 0;
         uint8 failCount = 0;
+        uint8 notStatusPower = 0;
 
         bool  parseInput(std::string key, uint32 value)
         {
             if (key.compare("maxFails") == 0)
             {
                 maxFails = static_cast<uint8>(value);
+            }
+            else if (key.compare("notStatusPower") == 0)
+            {
+                notStatusPower = static_cast<uint8>(value);
             }
             else
             {
