@@ -196,6 +196,7 @@ entity.onEventFinish = function(player, csid, option)
         player:setRank(10)
         player:addGil(100000)
         player:messageSpecial(ID.text.GIL_OBTAINED, 100000)
+        addColoredDrop(player)
         player:setTitle(xi.title.SAN_DORIAN_ROYAL_HEIR)
         player:setCharVar("SandoEpilogue", 1)
     elseif (csid == 58) then

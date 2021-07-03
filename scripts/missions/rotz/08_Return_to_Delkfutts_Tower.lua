@@ -112,6 +112,7 @@ mission.sections =
                 [17] = function(player, csid, option, npc)
                     mission:complete(player)
                     player:setMissionStatus(xi.mission.log_id.ZILART, 0)
+                    addColoredDrop(player)
                 end,
 
                 [32001] = function(player, csid, option, npc)

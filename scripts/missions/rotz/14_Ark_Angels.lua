@@ -86,7 +86,7 @@ mission.sections =
                     if keyItemIndex >= 0 and keyItemIndex <= 4 then
                         player:addKeyItem(keyItemOffset[keyItemIndex])
                         player:messageSpecial(ID.text.KEYITEM_OBTAINED, keyItemOffset[keyItemIndex])
-
+                        addColoredDrop(player)
                     -- Divine Might
                     elseif keyItemIndex == 5 then
                         for i = xi.ki.SHARD_OF_APATHY, xi.ki.SHARD_OF_RAGE do
@@ -96,6 +96,7 @@ mission.sections =
 
                         if player:getQuestStatus(xi.quest.log_id.OUTLANDS, xi.quest.id.outlands.DIVINE_MIGHT) == QUEST_ACCEPTED then
                             player:setCharVar("DivineMight", 2)
+                            addColoredDrop(player)
                         end
                     end
 
@@ -108,7 +109,6 @@ mission.sections =
                     then
                         player:setMissionStatus(xi.mission.log_id.ZILART, 0)
                         mission:complete(player)
-                        addColoredDrop(player)
                     end
                 end,
             },
