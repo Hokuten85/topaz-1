@@ -550,15 +550,15 @@ INSERT INTO `traits` VALUES ('150','crit dmg bonus','6','1','1','421','10',null,
 INSERT INTO `traits` VALUES ('150','crit dmg bonus','13','1','1','421','10',null,0);
 
 -- Adjust the enmity cap
-INSERT INTO `traits` VALUES ('151','enmity cap','7','25','1','2000','100',null,0);
-INSERT INTO `traits` VALUES ('151','enmity cap','7','50','2','2000','500',null,0);
-INSERT INTO `traits` VALUES ('151','enmity cap','7','75','3','2000','2000',null,0);
-INSERT INTO `traits` VALUES ('151','enmity cap','7','99','4','2000','3000',null,0);
+INSERT INTO `traits` VALUES ('151','enmity cap','7','25','1','2000','1000',null,0);
+INSERT INTO `traits` VALUES ('151','enmity cap','7','50','2','2000','5000',null,0);
+INSERT INTO `traits` VALUES ('151','enmity cap','7','75','3','2000','10000',null,0);
+INSERT INTO `traits` VALUES ('151','enmity cap','7','99','4','2000','15000',null,0);
 
-INSERT INTO `traits` VALUES ('151','enmity cap','13','25','1','2000','100',null,0);
-INSERT INTO `traits` VALUES ('151','enmity cap','13','50','2','2000','500',null,0);
-INSERT INTO `traits` VALUES ('151','enmity cap','13','75','3','2000','1000',null,0);
-INSERT INTO `traits` VALUES ('151','enmity cap','13','99','4','2000','1500',null,0);
+INSERT INTO `traits` VALUES ('151','enmity cap','13','25','1','2000','1000',null,0);
+INSERT INTO `traits` VALUES ('151','enmity cap','13','50','2','2000','3000',null,0);
+INSERT INTO `traits` VALUES ('151','enmity cap','13','75','3','2000','5000',null,0);
+INSERT INTO `traits` VALUES ('151','enmity cap','13','99','4','2000','5000',null,0);
 
 -- -DT% II
 INSERT INTO `traits` VALUES ('153','damage taken II','7','10','1','2001','2',null,0);
