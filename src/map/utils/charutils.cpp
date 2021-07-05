@@ -3737,7 +3737,7 @@ namespace charutils
                                     exp *= 1.5f;
                                     break;
                                 default:
-                                    exp *= PMember->expChain.chainNumber * 0.005f;
+                                    exp *= 1.5f + PMember->expChain.chainNumber * 0.005f;
                                     break;
                             }
                         }
