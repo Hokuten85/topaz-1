@@ -528,7 +528,10 @@ namespace gambits
             case G_CONDITION::NOT_STATUS_POWER:
             {
                 auto effect = trigger_target->StatusEffectContainer->GetStatusEffect(static_cast<EFFECT>(predicate.condition_arg));
-                return (effect != nullptr && effect->GetPower() <= predicate.condition_arg2);
+                if (effect != nullptr && effect->GetPower() < predicate.condition_arg2)
+                {
+                    return true;
+                }
                 break;
             }
             default:

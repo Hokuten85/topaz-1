@@ -90,8 +90,8 @@ namespace gambits
         G_TARGET    target;
         G_CONDITION condition;
         uint32      condition_arg = 0;
-        uint32      condition_arg2  = 0;
         bool        isActionTarget = false;
+        uint32      condition_arg2 = 0;
 
         bool parseInput(std::string key, uint32 value)
         {

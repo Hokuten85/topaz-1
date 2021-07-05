@@ -389,6 +389,7 @@ where dropType = 0 and itemrate < 50;
 
 -- SPELL LIST
 UPDATE spell_list SET mpCost = 20, castTime = 2000, recastTime = 10000 WHERE spellid = 57; -- haste
+UPDATE spell_list SET jobs = 0x000000004B0000000000000000000000000000000000 WHERE spellid = 511; -- haste ii
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 100; -- enfire
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 101; -- enblizzard
 UPDATE spell_list SET validTargets = 3, spell_range = 204 WHERE spellid = 102; -- enaero
@@ -768,6 +769,9 @@ INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 276, 75, 255); -- BL
 INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 230, 10, 255); -- BIO 
 INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 231, 36, 255); -- BIO 2
 INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 232, 75, 255); -- BIO 3
+
+UPDATE mob_spell_lists SET min_level = 75 WHERE spell_list_id = 364 AND spell_id = 511; -- Haste II
+
 -- RDM Nukes
 INSERT INTO mob_spell_lists
 SELECT 'TRUST_Koru-Moru', 364, sl.spellid, CAST(CONV(SUBSTR(HEX(jobs),9,2),16,10) AS INT), 255
