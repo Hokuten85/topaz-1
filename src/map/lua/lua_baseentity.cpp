@@ -3647,6 +3647,35 @@ bool CLuaBaseEntity::addLinkpearl(std::string const& lsname, bool equip)
     return false;
 }
 
+auto CLuaBaseEntity::addSoulPlate(std::string const& name, uint16 mobFamily, uint8 zeni, uint16 skillIndex, uint8 fp) -> std::optional<CLuaItem>
+{
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
+
+    if (auto* PChar = dynamic_cast<CCharEntity*>(m_PBaseEntity))
+    {
+        // Deduct Blank Plate
+        if (charutils::UpdateItem(PChar, PChar->equipLoc[SLOT_AMMO], PChar->equip[SLOT_AMMO], -1) == 0)
+        {
+            // Couldn't remove a blank plate
+            return std::nullopt;
+        }
+        PChar->pushPacket(new CInventoryFinishPacket());
+
+        // Used Soul Plate
+        CItem* PItem = itemutils::GetItem(2477); 
+        PItem->setQuantity(1);
+        PItem->setSoulPlateData(name, mobFamily, zeni, skillIndex, fp);
+        auto SlotID = charutils::AddItem(PChar, LOC_INVENTORY, PItem, true);
+        if (SlotID == ERROR_SLOTID)
+        {
+            return std::nullopt;
+        }
+
+        return std::optional<CLuaItem>(PItem);
+    }
+    return std::nullopt;
+}
+
 /************************************************************************
  *  Function: getContainerSize()
  *  Purpose : Returns the size of an item container
@@ -5800,7 +5829,7 @@ void CLuaBaseEntity::addMission(uint8 missionLogID, uint16 missionID)
 
         if (PChar->m_missionLog[missionLogID].current != (missionLogID > 2 ? 0 : std::numeric_limits<uint16>::max()))
         {
-            ShowWarning(CL_YELLOW "Lua::addMission: player has a current mission\n" CL_RESET, missionLogID);
+            ShowWarning(CL_YELLOW "Lua::addMission: player has a current mission (%d)\n" CL_RESET, missionLogID);
         }
 
         PChar->m_missionLog[missionLogID].current = missionID;
@@ -5810,7 +5839,7 @@ void CLuaBaseEntity::addMission(uint8 missionLogID, uint16 missionID)
     }
     else
     {
-        ShowError(CL_RED "Lua::delMission: missionLogID %i or Mission %i is invalid\n" CL_RESET, missionLogID, missionID);
+        ShowError(CL_RED "Lua::addMission: missionLogID %i or Mission %i is invalid\n" CL_RESET, missionLogID, missionID);
     }
 }
 
@@ -5940,7 +5969,7 @@ void CLuaBaseEntity::completeMission(uint8 missionLogID, uint16 missionID)
         }
         else
         {
-            PChar->m_missionLog[missionLogID].current = missionLogID > 2 ? 0 : -1;
+            PChar->m_missionLog[missionLogID].current = missionLogID > 2 ? 0 : std::numeric_limits<uint16>::max();
             if ((missionLogID != MISSION_COP) && (missionID < 64))
             {
                 PChar->m_missionLog[missionLogID].complete[missionID] = true;
@@ -12658,7 +12687,7 @@ void CLuaBaseEntity::stun(uint32 milliseconds)
 
 uint32 CLuaBaseEntity::getPool()
 {
-    if (m_PBaseEntity->objtype == TYPE_MOB)
+    if (m_PBaseEntity->objtype == TYPE_MOB || m_PBaseEntity->objtype == TYPE_TRUST)
     {
         CMobEntity* PMob = static_cast<CMobEntity*>(m_PBaseEntity);
         return PMob->m_Pool;
@@ -13082,6 +13111,8 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("getCurrentGPItem", CLuaBaseEntity::getCurrentGPItem);
     SOL_REGISTER("breakLinkshell", CLuaBaseEntity::breakLinkshell);
     SOL_REGISTER("addLinkpearl", CLuaBaseEntity::addLinkpearl);
+
+    SOL_REGISTER("addSoulPlate", CLuaBaseEntity::addSoulPlate);
 
     // Trading
     SOL_REGISTER("getContainerSize", CLuaBaseEntity::getContainerSize);
@@ -13632,6 +13663,69 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("updateToEntireZone", CLuaBaseEntity::updateToEntireZone);
 
     SOL_REGISTER("getHistory", CLuaBaseEntity::getHistory);
+}
+
+
+std::ostream& operator<<(std::ostream& os, const CLuaBaseEntity& entity)
+{
+    if (entity.m_PBaseEntity != nullptr)
+    {
+        std::string id   = std::to_string(entity.m_PBaseEntity->id);
+        std::string name = entity.m_PBaseEntity->name;
+        std::string type = "";
+        switch (entity.m_PBaseEntity->objtype)
+        {
+            case TYPE_NONE:
+            {
+                type = "TYPE_NONE";
+                break;
+            }
+            case TYPE_PC:
+            {
+                type = "TYPE_PC";
+                break;
+            }
+            case TYPE_NPC:
+            {
+                type = "TYPE_NPC";
+                break;
+            }
+            case TYPE_MOB:
+            {
+                type = "TYPE_MOB";
+                break;
+            }
+            case TYPE_PET:
+            {
+                type = "TYPE_PET";
+                break;
+            }
+            case TYPE_SHIP:
+            {
+                type = "TYPE_SHIP";
+                break;
+            }
+            case TYPE_TRUST:
+            {
+                type = "TYPE_TRUST";
+                break;
+            }
+            case TYPE_FELLOW:
+            {
+                type = "TYPE_FELLOW";
+                break;
+            }
+            default:
+            {
+                type = "UNKNOWN";
+                break;
+            }
+        }
+
+        return os << "CLuaBaseEntity(" << type << " | " << id << " | " << name << ")";
+    }
+
+    return os << "CLuaBaseEntity(nullptr)";
 }
 
 //==========================================================//

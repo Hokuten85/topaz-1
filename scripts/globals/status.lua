@@ -929,14 +929,14 @@ xi.mod =
     INT                             = 12,
     MND                             = 13,
     CHR                             = 14,
-    FIREDEF                         = 15,
-    ICEDEF                          = 16,
-    WINDDEF                         = 17,
-    EARTHDEF                        = 18,
-    THUNDERDEF                      = 19,
-    WATERDEF                        = 20,
-    LIGHTDEF                        = 21,
-    DARKDEF                         = 22,
+    FIRE_RES                        = 15,
+    ICE_RES                         = 16,
+    WIND_RES                        = 17,
+    EARTH_RES                       = 18,
+    THUNDER_RES                     = 19,
+    WATER_RES                       = 20,
+    LIGHT_RES                       = 21,
+    DARK_RES                        = 22,
     ATT                             = 23,
     RATT                            = 24,
     ACC                             = 25,
@@ -964,18 +964,18 @@ xi.mod =
     LIGHTACC                        = 46,
     DARKACC                         = 47,
     WSACC                           = 48,
-    SLASHRES                        = 49,
-    PIERCERES                       = 50,
-    IMPACTRES                       = 51,
-    HTHRES                          = 52,
-    FIRERES                         = 54,
-    ICERES                          = 55,
-    WINDRES                         = 56,
-    EARTHRES                        = 57,
-    THUNDERRES                      = 58,
-    WATERRES                        = 59,
-    LIGHTRES                        = 60,
-    DARKRES                         = 61,
+    SLASH_SDT                       = 49,
+    PIERCE_SDT                      = 50,
+    IMPACT_SDT                      = 51,
+    HTH_SDT                         = 52,
+    FIRE_SDT                        = 54,
+    ICE_SDT                         = 55,
+    WIND_SDT                        = 56,
+    EARTH_SDT                       = 57,
+    THUNDER_SDT                     = 58,
+    WATER_SDT                       = 59,
+    LIGHT_SDT                       = 60,
+    DARK_SDT                        = 61,
     ATTP                            = 62,
     DEFP                            = 63,
     COMBAT_SKILLUP_RATE             = 64, -- % increase in skillup combat rate
@@ -2721,7 +2721,8 @@ xi.animation =
     DEATH                   = 3,
     CHOCOBO                 = 5,
     FISHING                 = 6,
-    HEALING                 = 7,
+    -- NOTE: Commented out in core
+    -- HEALING                 = 7,
     OPEN_DOOR               = 8,
     CLOSE_DOOR              = 9,
     ELEVATOR_UP             = 10,
@@ -2791,6 +2792,9 @@ xi.mount =
     GOLDEN_BOMB    = 28,
     BUFFALO        = 29,
     WIVRE          = 30,
+    RED_RAPTOR     = 31,
+    --
+    MOUNT_MAX      = 32,
 }
 
 -----------------------------------
@@ -2896,3 +2900,13 @@ xi.history =
     GM_CALLS           = 12,
     DISTANCE_TRAVELLED = 13,
 }
+
+xi.pathflag =
+{
+    NONE     = 0x00,
+    RUN      = 0x01, -- run twice the speed
+    WALLHACK = 0x02, -- run through walls if path is too long
+    REVERSE  = 0x04, -- reverse the path
+    SCRIPT   = 0x08, -- don't overwrite this path before completion (except via another script)
+    SLIDE    = 0x10,  -- Slide to end point if close enough (so no over shoot)
+};

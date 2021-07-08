@@ -25,6 +25,7 @@
 
 #include <array>
 #include <filesystem>
+#include <numeric>
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -129,9 +130,10 @@ namespace luautils
         // Globally require bit library
         lua.do_string("if not bit then bit = require('bit') end");
 
-        // Bind print() and math.random() globally
-        lua["print"] = sol::overload(&luautils::print<double>, &luautils::print<std::string>, &luautils::print<bool>);
+        // Bind print(...) globally
+        lua.set_function("print", &luautils::print);
 
+        // Bind math.randon(...) globally
         // clang-format off
         lua["math"]["random"] =
             sol::overload([]() { return xirand::GetRandomNumber(1.0f); },
@@ -400,12 +402,88 @@ namespace luautils
      * Overriding the official lua print function                            *
      *                                                                       *
      ************************************************************************/
+    std::string luaToString(sol::object const& obj, std::size_t depth = 0)
+    {
+        switch (obj.get_type())
+        {
+            case sol::type::none:
+                [[fallthrough]];
+            case sol::type::nil:
+            {
+                return "nil";
+            }
+            case sol::type::string:
+            {
+                if (depth > 0)
+                {
+                    return "\"" + obj.as<std::string>() + "\"";
+                }
+                else
+                {
+                    return obj.as<std::string>();
+                }
+            }
+            case sol::type::number:
+            {
+                return fmt::format("{0:g}", obj.as<double>());
+            }
+            case sol::type::thread:
+            {
+                return "thread";
+            }
+            case sol::type::boolean:
+            {
+                return obj.as<bool>() ? "true" : "false";
+            }
+            case sol::type::function:
+            {
+                return "function";
+            }
+            case sol::type::userdata:
+            {
+                return lua["tostring"](obj);
+            }
+            case sol::type::lightuserdata:
+            {
+                return "lightuserdata";
+            }
+            case sol::type::table:
+            {
+                auto table  = obj.as<sol::table>();
 
-    template <typename T>
-    void print(T const& item)
+                // Stringify everything first
+                std::vector<std::string> stringVec;
+                for (auto& pair : table)
+                {
+                    stringVec.emplace_back(luaToString(pair.second, depth + 1));
+                }
+
+                // Accumulate into a pretty string
+                std::string outStr = "table{ ";
+                outStr += std::accumulate(std::begin(stringVec), std::end(stringVec), std::string(),
+                [](std::string& ss, std::string& s)
+                {
+                    return ss.empty() ? s : ss + ", " + s;
+                });
+                return outStr + " }";
+            }
+        }
+        return "UNKNOWN";
+    }
+
+    void print(sol::variadic_args va)
     {
         TracyZoneScoped;
-        ShowScript(fmt::format("{}\n", item));
+
+        std::string outString;
+        for (int i = 0; i < va.size(); ++i)
+        {
+            auto entry = luaToString(va[i]);
+            // TODO: Use fmt::join if we ever update fmt
+            outString += fmt::format("{} ", entry);
+        }
+
+        ShowScript(fmt::format("{}\n", outString));
     }
 
     sol::function getEntityCachedFunction(CBaseEntity* PEntity, std::string funcName)
@@ -1917,7 +1995,7 @@ namespace luautils
         PChar->m_event.Script = filename;
 
         auto onTradeFramework = lua["xi"]["globals"]["interaction"]["interaction_global"]["onTrade"];
-        auto onTrade = lua["xi"]["zones"][zone]["npcs"][name]["onTrade"];
+        auto onTrade          = GetCacheEntryFromFilename(filename)["onTrade"];
 
         auto result = onTradeFramework(CLuaBaseEntity(PChar), CLuaBaseEntity(PNpc), CLuaTradeContainer(PChar->TradeContainer), onTrade);
         if (!result.valid())
@@ -2226,7 +2304,7 @@ namespace luautils
             caster = CLuaBaseEntity(PCaster);
         }
 
-        auto result = onItemCheck(CLuaBaseEntity(PTarget), static_cast<uint32>(param), caster);
+        auto result = onItemCheck(CLuaBaseEntity(PTarget), caster, static_cast<uint32>(param));
         if (!result.valid())
         {
             sol::error err = result;
@@ -2244,7 +2322,7 @@ namespace luautils
     // We use the subject. The return value is the message number or 0.
     // It is also necessary to somehow pass the message parameter (for example,
     // number of recovered MP)
-    int32 OnItemUse(CBaseEntity* PTarget, CItem* PItem)
+    int32 OnItemUse(CBaseEntity* PUser, CBaseEntity* PTarget, CItem* PItem)
     {
         TracyZoneScoped;
 
@@ -2256,7 +2334,7 @@ namespace luautils
             return -1;
         }
 
-        auto result = onItemUse(CLuaBaseEntity(PTarget));
+        auto result = onItemUse(CLuaBaseEntity(PTarget), CLuaBaseEntity(PUser), CLuaItem(PItem));
         if (!result.valid())
         {
             sol::error err = result;

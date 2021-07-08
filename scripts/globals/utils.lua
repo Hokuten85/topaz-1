@@ -391,6 +391,9 @@ function utils.prequire(...)
     end
 end
 
+-- Checks to see if a specific value is contained in a table.  This is often
+-- used for tables that do not define specific indices.
+-- See: Sigil NPCs
 function utils.contains(value, collection)
     for _, v in collection do
         if value == v then
@@ -399,6 +402,32 @@ function utils.contains(value, collection)
     end
 
     return false
+end
+
+-- Checks to see if a specific key is contained in the table.  This is used by
+-- tables that contain specific indices that may be non-sequential.
+-- See: xi.teleport.escape
+function utils.hasKey(keyVal, collection)
+    for k, _ in pairs(collection) do
+        if k == keyVal then
+            return true
+        end
+    end
+
+    return false
+end
+
+-- Selects a random entry from a table, returns the index and the entry
+-- https://gist.github.com/jdev6/1e7ff30671edf88d03d4
+function utils.randomEntry(t)
+    local keys = {}
+    local values = {}
+    for key, value in pairs(t) do
+        keys[#keys+1] = key
+        values[#values+1] = value
+    end
+    local index = keys[math.random(1, #keys)]
+    return index, t[index]
 end
 
 -- Helper functions for Interaction Framework Quests
