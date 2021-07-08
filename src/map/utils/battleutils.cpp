@@ -510,7 +510,7 @@ namespace battleutils
                                          WEATHER_SAND_STORM, WEATHER_THUNDERSTORMS, WEATHER_DARKNESS, WEATHER_STELLAR_GLARE };
         uint32  obi[8]                 = { 15435, 15436, 15437, 15438, 15439, 15440, 15441, 15442 };
         Mod     resistarray[8]         = { Mod::FIRE_RES, Mod::ICE_RES, Mod::WIND_RES, Mod::EARTH_RES, Mod::THUNDER_RES, Mod::WATER_RES, Mod::LIGHT_RES, Mod::DARK_RES };
-        Mod     mdefarray[8]           = { Mod::FIRE_DEF, Mod::EARTH_DEF, Mod::WATER_DEF, Mod::WIND_DEF, Mod::ICE_DEF, Mod::THUNDER_DEF, Mod::LIGHT_DEF, Mod::DARK_DEF };
+        Mod     mdefarray[8]           = { Mod::FIRE_SDT, Mod::EARTH_SDT, Mod::WATER_SDT, Mod::WIND_SDT, Mod::ICE_SDT, Mod::THUNDER_SDT, Mod::LIGHT_SDT, Mod::DARK_SDT };
         bool    obiBonus               = false;
 
         double half      = (double)(PDefender->getMod(resistarray[element - 1])) / 100;

@@ -75,7 +75,6 @@ ai.select =
     MB_ELEMENT          = 4,
     SPECIAL_AYAME       = 5,
     BEST_AGAINST_TARGET = 6,
-    WEAKNESS            = 7,
 }
 ai.s = ai.select
 

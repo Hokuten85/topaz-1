@@ -37,7 +37,7 @@ spell_object.onMobSpawn = function(mob)
         ['actions'] =
         {
             {
-                ['reaction'] = ai.r.MA, ['select'] = ai.s.WEAKNESS, ['argument'] = xi.magic.spellFamily.NONE,
+                ['reaction'] = ai.r.MA, ['select'] = ai.s.BEST_AGAINST_TARGET, ['argument'] = xi.magic.spellFamily.NONE,
             },
         },
         ['retry_delay'] = 5

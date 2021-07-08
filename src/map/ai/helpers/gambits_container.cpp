@@ -73,11 +73,6 @@ namespace gambits
         }
     }
 
-    inline bool resistanceComparator(const Weakness_t& firstElem, const Weakness_t& secondElem)
-    {
-        return firstElem.resistance < secondElem.resistance;
-    }
-
     PredicateResult_t CGambitsContainer::RunPredicate(Predicate_t& predicate)
     {
         auto isValidMember = [&](CBattleEntity* PPartyTarget) -> bool {
@@ -315,36 +310,6 @@ namespace gambits
                                             spell_id = spell;
                                             break;
                                         }
-                                    }
-                                }
-                            }
-
-                            if (spell_id.has_value())
-                            {
-                                actionStarted = controller->Cast(target->targid, static_cast<SpellID>(spell_id.value()));
-                            }
-                        }
-                        else if (action.select == G_SELECT::WEAKNESS)
-                        {
-                            for (auto& weakness : weaknessVector)
-                            {
-                                weakness.resistance = target->getMod(weakness.mod);
-                            }
-
-                            std::stable_sort(weaknessVector.begin(), weaknessVector.end(), resistanceComparator);
-
-                            std::optional<SpellID> spell_id;
-                            CSpell*                PSpell;
-                            for (auto& weakness : weaknessVector) // access by reference to avoid copying
-                            {
-                                auto temp_id = POwner->SpellContainer->GetBestAvailable(static_cast<SPELLFAMILY>(weakness.family));
-                                if (temp_id.has_value())
-                                {
-                                    auto* tempPSpell = spell::GetSpell(static_cast<SpellID>(temp_id.value()));
-                                    if (!spell_id.has_value() || tempPSpell->getBase() > PSpell->getBase())
-                                    {
-                                        spell_id = temp_id;
-                                        PSpell   = tempPSpell;
                                     }
                                 }
                             }

@@ -943,13 +943,13 @@ void CTrustEntity::OnItemFinish(CItemState& state, action_t& action)
         static_cast<CCharEntity*>(PTarget->PMaster)->ForPartyWithTrusts([&](CBattleEntity* PMember) {
             if (!PMember->isDead() && distance(PTarget->loc.p, PMember->loc.p) <= 10)
             {
-                luautils::OnItemUse(PMember, PItem);
+                luautils::OnItemUse(PTarget, PMember, PItem);
             }
         });
     }
     else
     {
-        luautils::OnItemUse(PTarget, PItem);
+        luautils::OnItemUse(PTarget, PTarget, PItem);
     }
 
     action.id         = this->id;

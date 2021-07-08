@@ -472,15 +472,6 @@ namespace zoneutils
                     PMob->setModifier(Mod::LIGHT_RES, (int16)(Sql_GetIntData(SqlHandle, 56)));
                     PMob->setModifier(Mod::DARK_RES, (int16)(Sql_GetIntData(SqlHandle, 57)));
 
-				    PMob->setModifier(Mod::FIRE_DEF, (int16)((Sql_GetFloatData(SqlHandle, 50) - 1) * -256)); // These are stored as floating percentages -- elemental def uses base 256
-				    PMob->setModifier(Mod::ICE_DEF, (int16)((Sql_GetFloatData(SqlHandle, 51) - 1) * -256)); // and need to be adjusted into modifier units.
-				    PMob->setModifier(Mod::WIND_DEF, (int16)((Sql_GetFloatData(SqlHandle, 52) - 1) * -256)); // Higher RES = lower damage.
-				    PMob->setModifier(Mod::EARTH_DEF, (int16)((Sql_GetFloatData(SqlHandle, 53) - 1) * -256)); // Negatives signify increase in damage.
-				    PMob->setModifier(Mod::THUNDER_DEF, (int16)((Sql_GetFloatData(SqlHandle, 54) - 1) * -256)); // Positives signify decrease in damage.
-				    PMob->setModifier(Mod::WATER_DEF, (int16)((Sql_GetFloatData(SqlHandle, 55) - 1) * -256));
-				    PMob->setModifier(Mod::LIGHT_DEF, (int16)((Sql_GetFloatData(SqlHandle, 56) - 1) * -256));
-				    PMob->setModifier(Mod::DARK_DEF, (int16)((Sql_GetFloatData(SqlHandle, 57) - 1) * -256));
-
                     PMob->m_Element     = (uint8)Sql_GetIntData(SqlHandle, 58);
                     PMob->m_Family      = (uint16)Sql_GetIntData(SqlHandle, 59);
                     PMob->m_name_prefix = (uint8)Sql_GetIntData(SqlHandle, 60);

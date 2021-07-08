@@ -34,6 +34,7 @@ enum class ModSetting : uint8
 struct Trust_t
 {
     uint32    trustID;
+    uint32    pool;
     look_t    look;        // appearance data
     string_t  name;        // script name string
     string_t  packet_name; // packet name string
@@ -74,28 +75,28 @@ struct Trust_t
     uint16 spellList;
 
     // resists
-    int16 slashres;
-    int16 pierceres;
-    int16 hthres;
-    int16 impactres;
+    int16 slash_sdt;
+    int16 pierce_sdt;
+    int16 hth_sdt;
+    int16 impact_sdt;
 
-    int16 firedef;
-    int16 icedef;
-    int16 winddef;
-    int16 earthdef;
-    int16 thunderdef;
-    int16 waterdef;
-    int16 lightdef;
-    int16 darkdef;
+    int16 fire_sdt;
+    int16 ice_sdt;
+    int16 wind_sdt;
+    int16 earth_sdt;
+    int16 thunder_sdt;
+    int16 water_sdt;
+    int16 light_sdt;
+    int16 dark_sdt;
 
-    int16 fireres;
-    int16 iceres;
-    int16 windres;
-    int16 earthres;
-    int16 thunderres;
-    int16 waterres;
-    int16 lightres;
-    int16 darkres;
+    int16 fire_res;
+    int16 ice_res;
+    int16 wind_res;
+    int16 earth_res;
+    int16 thunder_res;
+    int16 water_res;
+    int16 light_res;
+    int16 dark_res;
 };
 
 namespace trustutils
