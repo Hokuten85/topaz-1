@@ -85,8 +85,8 @@ CItemState::CItemState(CBattleEntity* PEntity, uint16 targid, uint8 loc, uint8 s
         throw CStateInitException(std::make_unique<CMessageBasicPacket>(m_PEntity, m_PEntity, 0, 0, 56));
     }
 
-    auto* PTarget = m_PEntity->objtype == TYPE_TRUST ? m_PEntity->IsValidTarget(targid, m_PItem->getValidTarget(), m_errorMsg)
-                                                        : ((CCharEntity*)m_PEntity)->IsValidTarget(targid, m_PItem->getValidTarget(), m_errorMsg);
+    UpdateTarget(PEntity->IsValidTarget(targid, m_PItem->getValidTarget(), m_errorMsg));
+    auto* PTarget = GetTarget();
 
     if (!PTarget || m_errorMsg)
     {
@@ -121,8 +121,6 @@ CItemState::CItemState(CBattleEntity* PEntity, uint16 targid, uint8 loc, uint8 s
         ((CCharEntity*)m_PEntity)->UContainer->SetItem(0, m_PItem);
     }
 
-    CState::UpdateTarget(m_targid);
-
     m_startPos      = m_PEntity->loc.p;
     m_castTime      = std::chrono::milliseconds(m_PItem->getActivationTime());
     m_animationTime = std::chrono::milliseconds(m_PItem->getAnimationTime());
@@ -152,6 +150,31 @@ CItemState::CItemState(CBattleEntity* PEntity, uint16 targid, uint8 loc, uint8 s
     {
         ((CCharEntity*)m_PEntity)->pushPacket(new CInventoryAssignPacket(m_PItem, INV_NOSELECT));
         ((CCharEntity*)m_PEntity)->pushPacket(new CInventoryFinishPacket());
+    }
+}
+
+void CItemState::UpdateTarget(CBaseEntity* target)
+{
+    if (target != nullptr)
+    {
+        CState::UpdateTarget(target);
+        CState::SetTarget(target->targid);
+    }
+
+    // Special case for Soultrapper usage:
+    // Valid to use on mobs that are:
+    //     - unclaimed
+    //     - claimed by you
+    //     - claimed by someone else
+    // This is handled this way to avoid bringing in a new very specialized targetting flag
+    // just for soultrapping.
+    if (m_PItem->isSoultrapper())
+    {
+        // Reset possible "already claimed" error from previous lookup
+        m_errorMsg.reset();
+
+        // Call CBattleEntity's simpler IsValidTarget()
+        CState::UpdateTarget(m_PEntity->CBattleEntity::IsValidTarget(m_targid, m_PItem->getValidTarget(), m_errorMsg));
     }
 }
 
@@ -235,11 +258,11 @@ void CItemState::TryInterrupt(CBattleEntity* PTarget)
 
     if (PTarget)
     {
-        PTarget = m_PEntity->IsValidTarget(PTarget->targid, m_PItem->getValidTarget(), m_errorMsg);
+        UpdateTarget(m_PEntity->IsValidTarget(PTarget->targid, m_PItem->getValidTarget(), m_errorMsg));
     }
     else
     {
-        PTarget = m_PEntity->IsValidTarget(m_targid, m_PItem->getValidTarget(), m_errorMsg);
+        UpdateTarget(m_PEntity->IsValidTarget(m_targid, m_PItem->getValidTarget(), m_errorMsg));
     }
 
     uint16 msg = 445; // you cannot use items at this time
@@ -253,11 +276,11 @@ void CItemState::TryInterrupt(CBattleEntity* PTarget)
         msg           = MSGBASIC_IS_PARALYZED;
         m_interrupted = true;
     }
-    else if (!PTarget)
+    else if (!GetTarget())
     {
         m_interrupted = true;
     }
-    else if (battleutils::IsIntimidated(m_PEntity, static_cast<CBattleEntity*>(PTarget)))
+    else if (battleutils::IsIntimidated(m_PEntity, static_cast<CBattleEntity*>(GetTarget())))
     {
         msg           = MSGBASIC_IS_INTIMIDATED;
         m_interrupted = true;

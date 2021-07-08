@@ -14,6 +14,8 @@ spell_object.onSpellCast = function(caster, target, spell)
 end
 
 spell_object.onMobSpawn = function(mob)
+    xi.trust.message(mob, xi.trust.message_offset.SPAWN)
+
     mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.FOOD, ai.r.ITEM, 0, 0)
     
     mob:addSimpleGambit(ai.t.SELF, ai.c.ALWAYS, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.ANCIENT_CIRCLE)
@@ -28,6 +30,14 @@ spell_object.onMobSpawn = function(mob)
     mob:addSimpleGambit(ai.t.SELF, ai.c.HAS_TOP_ENMITY, 0, ai.r.JA, ai.s.SPECIFIC, xi.ja.SUPER_JUMP)
 
     mob:setTrustTPSkillSettings(ai.tp.OPENER, ai.s.SPECIAL_AYAME)
+end
+
+spell_object.onMobDespawn = function(mob)
+    xi.trust.message(mob, xi.trust.message_offset.DESPAWN)
+end
+
+spell_object.onMobDeath = function(mob)
+    xi.trust.message(mob, xi.trust.message_offset.DEATH)
 end
 
 return spell_object

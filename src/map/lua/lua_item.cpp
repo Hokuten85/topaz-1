@@ -297,6 +297,25 @@ bool CLuaItem::isInstalled()
     return PFurnishing->isInstalled();
 }
 
+void CLuaItem::setSoulPlateData(std::string name, uint16 mobFamily, uint8 zeni, uint16 skillIndex, uint8 fp)
+{
+    m_PLuaItem->setSoulPlateData(name, mobFamily, zeni, skillIndex, fp);
+}
+
+auto CLuaItem::getSoulPlateData() -> sol::table
+{
+    auto data        = m_PLuaItem->getSoulPlateData();
+    sol::table table = luautils::lua.create_table();
+
+    table["name"]       = std::get<0>(data);
+    table["mobFamily"]  = std::get<1>(data);
+    table["zeni"]       = std::get<2>(data);
+    table["skillIndex"] = std::get<3>(data);
+    table["fp"]         = std::get<4>(data);
+
+    return table;
+}
+
 int32 CLuaItem::getSlotType()
 {
     if (CItemEquipment* PEquip = dynamic_cast<CItemEquipment*>(m_PLuaItem))
@@ -338,6 +357,14 @@ void CLuaItem::Register()
     SOL_REGISTER("getSignature", CLuaItem::getSignature);
     SOL_REGISTER("isInstalled", CLuaItem::isInstalled);
     SOL_REGISTER("getSlotType", CLuaItem::getSlotType);
+    SOL_REGISTER("setSoulPlateData", CLuaItem::setSoulPlateData);
+    SOL_REGISTER("getSoulPlateData", CLuaItem::getSoulPlateData);
+}
+
+std::ostream& operator<<(std::ostream& os, const CLuaItem& item)
+{
+    std::string id = item.m_PLuaItem ? std::to_string(item.m_PLuaItem->getID()) : "nullptr";
+    return os << "CLuaItem(" << id << ")";
 }
 
 //======================================================//

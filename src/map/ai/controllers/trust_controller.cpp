@@ -45,6 +45,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 CTrustController::CTrustController(CCharEntity* PChar, CTrustEntity* PTrust)
 : CMobController(PTrust)
 , m_GambitsContainer(std::make_unique<gambits::CGambitsContainer>(PTrust))
+, m_InTransit(false)
 {
 
 }
@@ -126,6 +127,12 @@ void CTrustController::DoCombatTick(time_point tick)
                 gambit->extra.failCount = 0;
             }
         }
+    }
+
+    // If busy, don't run around!
+    if (POwner->PAI->IsCurrentState<CMagicState>() || POwner->PAI->IsCurrentState<CRangeState>())
+    {
+        return;
     }
 
     CTrustEntity* PTrust  = static_cast<CTrustEntity*>(POwner);

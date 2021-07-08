@@ -10,8 +10,6 @@ require("scripts/globals/weaponskillids")
 -----------------------------------
 local spell_object = {}
 
-local message_page_offset = 86
-
 spell_object.onMagicCastingCheck = function(caster, target, spell)
     return xi.trust.canCast(caster, spell, 906)
 end
@@ -21,7 +19,7 @@ spell_object.onSpellCast = function(caster, target, spell)
 end
 
 spell_object.onMobSpawn = function(mob)
-    xi.trust.message(mob, message_page_offset, xi.trust.message_offset.SPAWN)
+    xi.trust.message(mob, xi.trust.message_offset.SPAWN)
     
     mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.FOOD, ai.r.ITEM, 0, 0)
 
@@ -52,11 +50,11 @@ spell_object.onMobSpawn = function(mob)
 end
 
 spell_object.onMobDespawn = function(mob)
-    xi.trust.message(mob, message_page_offset, xi.trust.message_offset.DESPAWN)
+    xi.trust.message(mob, xi.trust.message_offset.DESPAWN)
 end
 
 spell_object.onMobDeath = function(mob)
-    xi.trust.message(mob, message_page_offset, xi.trust.message_offset.DEATH)
+    xi.trust.message(mob, xi.trust.message_offset.DEATH)
 end
 
 return spell_object

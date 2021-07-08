@@ -46,6 +46,8 @@ public:
         return m_PBaseEntity;
     }
 
+    friend std::ostream& operator<<(std::ostream& out, const CLuaBaseEntity& entity);
+
     // Messaging System
     void showText(CLuaBaseEntity* mob, uint16 messageID, sol::object const& p0, sol::object const& p1, sol::object const& p2, sol::object const& p3); // Displays Dialog for npc
     void messageText(CLuaBaseEntity* PLuaBaseEntity, uint16 messageID, sol::object const& arg2, sol::object const& arg3);
@@ -210,6 +212,8 @@ public:
     auto getCurrentGPItem(uint8 guildID) -> std::tuple<uint16, uint16>;                                 // Gets current GP item id and max points
     bool breakLinkshell(std::string const& lsname);                                                     // Breaks all pearls/sacks
     bool addLinkpearl(std::string const& lsname, bool equip);                                           // Creates a linkpearl (pearlsack for GMs)
+
+    auto addSoulPlate(std::string const& name, uint16 mobFamily, uint8 zeni, uint16 skillIndex, uint8 fp) -> std::optional<CLuaItem>;
 
     // Trading
     uint8 getContainerSize(uint8 locationID);                  // Gets the current capacity of a container
