@@ -5771,22 +5771,13 @@ namespace charutils
 
         const char* fmtQuery = "SELECT value FROM char_vars WHERE charid = %u AND varname = '%s' LIMIT 1;";
 
-            int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id, var);
+        int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id, var);
 
-            if (ret != SQL_ERROR && Sql_NumRows(SqlHandle) != 0 && Sql_NextRow(SqlHandle) == SQL_SUCCESS)
-            {
-                auto value = Sql_GetIntData(SqlHandle, 0);
-                PChar->charVars[var] = value;
-                return value;
-            }
-
-            PChar->charVars[var] = 0;
-            return 0;
-        }
-        else
+        if (ret != SQL_ERROR && Sql_NumRows(SqlHandle) != 0 && Sql_NextRow(SqlHandle) == SQL_SUCCESS)
         {
-            return it->second;
+            return Sql_GetIntData(SqlHandle, 0);
         }
+        return 0;
     }
 
     void SetCharVar(CCharEntity* PChar, const char* var, int32 value)
