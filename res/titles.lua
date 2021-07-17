@@ -1033,6 +1033,7 @@ return {
     [1037] = {id=1037,en="Alexander Annihilator",ja="アレキサンダー　アナイアレーター"},
     [1038] = {id=1038,en="Lilith Liquidator",ja="リリス　リクィデーター"},
     [1039] = {id=1039,en="Mireu Mincer",ja="ミレウミンサー"},
+    [1040] = {id=1040,en="Draconic Interloper",ja="ドラコニック　インターローパー"},
     [1044] = {id=1044,en="Vegetable Hero",ja="カリカリ救世主"},
     [1045] = {id=1045,en="Contributer from the Shadows",ja="陰の貢献者なのん"},
     [1046] = {id=1046,en="The Decider",ja="裁定者"},
@@ -1077,6 +1078,7 @@ return {
     [1132] = {id=1132,en="Love is Alive",ja="ラブ・ア・ライブ"},
     [1133] = {id=1133,en="The Awakener",ja="目覚めを見届けし者"},
     [1134] = {id=1134,en="Get Over Here!",ja="ロマンシング サ・ソリさん"},
+    [1135] = {id=1135,en="Bond Renewer",ja="再生を見届けし者"},
 }, {"id", "en", "ja"}
 
 --[[

@@ -3101,6 +3101,9 @@ return {
     [3256] = {id=3256,en="solidago flower",ja="キンノキリンソウ",category="Temporary Key Items"},
     [3257] = {id=3257,en="missive to Altennia",ja="アルテニアへの手紙",category="Temporary Key Items"},
     [3258] = {id=3258,en="Carmine Swallows' map",ja="紅燕騎士隊が記した地図",category="Temporary Key Items"},
+    [3259] = {id=3259,en="lock of golden hair",ja="金色の髪の毛",category="Temporary Key Items"},
+    [3260] = {id=3260,en="Mnejing's receiver",ja="メネジンレシーバー",category="Permanent Key Items"},
+    [3261] = {id=3261,en="Wyrm God phantom gem",ja="ファントムクォーツ【神竜】",category="Temporary Key Items"},
 }, {"id", "en", "ja", "category"}
 
 --[[

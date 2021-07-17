@@ -151,3 +151,7 @@ UPDATE synth_recipes SET cloth = 25 WHERE ID = 13013
 
 SELECT * FROM item_basic WHERE itemid IN (662,816,829,850)
 SELECT * FROM item_basic WHERE itemid = 4099
+
+SELECT * FROM mob_family_system WHERE systemid = 19
+SELECT * FROM mob_family_system WHERE ecosystemID = 19
+SELECT * FROM mob_family_system WHERE superfamilyid = 19

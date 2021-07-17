@@ -34,3 +34,5 @@
 "C:\Program Files\MariaDB 10.5\bin\mysql" --user=root --password=Hokuten1 xidb < npc_list.sql
 
 "C:\Program Files\MariaDB 10.5\bin\mysql" --user=root --password=Hokuten1 xidb < spell_list.sql
+
+"C:\Program Files\MariaDB 10.5\bin\mysql" --user=root --password=Hokuten1 xidb < mob_droplist.sql
