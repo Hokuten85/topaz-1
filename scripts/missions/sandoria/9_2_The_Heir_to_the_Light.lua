@@ -212,6 +212,7 @@ mission.sections =
                 -- into Southern San d'Oria.
                 [9] = function(player, csid, option, npc)
                     mission:complete(player)
+                    addColoredDrop(player)
                     mission:setVar(player, 'Option', 1)
 
                     if not npcUtil.giveItem(player, xi.items.SAN_DORIAN_FLAG) then
