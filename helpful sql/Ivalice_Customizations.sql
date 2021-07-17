@@ -222,7 +222,7 @@ INNER JOIN mob_family_system mfs
 SET respawntime = 180
 WHERE mp.mobType = 0x00
 AND mg.respawntime > 1
-AND mfs.systemid NOT IN (19)
+AND mfs.ecosystemID NOT IN (19)
 AND mg.groupid = mg.groupid;
 
 -- NMs respawn timer to 900 seconds
