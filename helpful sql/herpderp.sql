@@ -134,3 +134,20 @@ FROM item_equipment
 WHERE itemid = 14807
 
 jobs | 64 WHERE itemid = 13418
+
+
+SELECT * FROM mob_spawn_points WHERE mobname = 'Seiryu'
+
+SELECT * FROM item_basic ib WHERE ib.name = 'Cursed_Schaller'
+
+SELECT * FROM synth_recipes sr
+INNER JOIN item_basic ib
+	ON sr.result = ib.itemid
+WHERE ib.name = 'Cursed_Schaller'
+
+SELECT * FROM synth_recipes WHERE result = 1374 OR ResultHQ1 = 1374 OR ResultHQ2 = 1374 OR ResultHQ3 = 1374
+
+UPDATE synth_recipes SET cloth = 25 WHERE ID = 13013
+
+SELECT * FROM item_basic WHERE itemid IN (662,816,829,850)
+SELECT * FROM item_basic WHERE itemid = 4099
