@@ -29,8 +29,9 @@ weaponskill_object.onUseWeaponSkill = function(player, target, wsID, tp, primary
     params.acc100 = 0.0 params.acc200 = 0.0 params.acc300 = 0.0
     params.atk100 = 0.8125 params.atk200 = 0.8125 params.atk300 = 0.8125
 	params.multiHitfTP = true;
+
     if USE_ADOULIN_WEAPON_SKILL_CHANGES then
-        params.crit100 = 0.2 params.crit200 = 0.3 params.crit300 = 0.5
+        params.crit100 = 0.1 params.crit200 = 0.25 params.crit300 = 0.4
     end
 
     -- Apply Aftermath

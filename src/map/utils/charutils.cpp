@@ -5763,10 +5763,13 @@ namespace charutils
 
     int32 GetCharVar(CCharEntity* PChar, const char* var)
     {
-        auto it = PChar->charVars.find(var);
-        if (it == PChar->charVars.end())
+        if (PChar == nullptr)
         {
-            const char* fmtQuery = "SELECT value FROM char_vars WHERE charid = %u AND varname = '%s' LIMIT 1;";
+            ShowError("GetCharVar was requested for a nullptr PChar\n");
+            return 0;
+        }
+
+        const char* fmtQuery = "SELECT value FROM char_vars WHERE charid = %u AND varname = '%s' LIMIT 1;";
 
             int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id, var);
 
@@ -5788,6 +5791,12 @@ namespace charutils
 
     void SetCharVar(CCharEntity* PChar, const char* var, int32 value)
     {
+        if (PChar == nullptr)
+        {
+            ShowError("SetCharVar was requested for a nullptr PChar\n");
+            return;
+        }
+
         if (value == 0)
         {
             Sql_Query(SqlHandle, "DELETE FROM char_vars WHERE charid = %u AND varname = '%s' LIMIT 1;", PChar->id, var);

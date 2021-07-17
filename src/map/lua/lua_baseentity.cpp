@@ -5262,7 +5262,7 @@ void CLuaBaseEntity::addJobTraits(uint8 jobID, uint8 level)
 /************************************************************************
  *  Function: getTitle()
  *  Purpose : Returns the integer value of the player's current title
- *  Example : if player:getTitle()) == xi.title.FAKEMOUSTACHED_INVESTIGATOR then
+ *  Example : if player:getTitle()) == xi.title.FAKE_MOUSTACHED_INVESTIGATOR then
  ************************************************************************/
 
 uint16 CLuaBaseEntity::getTitle()
@@ -8587,15 +8587,21 @@ void CLuaBaseEntity::setInstance(CLuaInstance* PLuaInstance)
 /************************************************************************
  *  Function: createInstance()
  *  Purpose : Creates a new instance for a PC
- *  Example : player:createInstance(player:getCurrentAssault(), 63)
+ *  Example : player:createInstance(player:getCurrentAssault())
  *  Notes   :
  ************************************************************************/
 
-void CLuaBaseEntity::createInstance(uint8 instanceID, uint16 zoneID)
+void CLuaBaseEntity::createInstance(uint16 instanceID)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
-    instanceutils::LoadInstance(instanceID, zoneID, static_cast<CCharEntity*>(m_PBaseEntity));
+    if (!instanceutils::IsValidInstanceID(instanceID))
+    {
+        ShowError("CLuaBaseEntity::createInstance: Invalid instanceID: %d\n", instanceID);
+        return;
+    }
+
+    instanceutils::LoadInstance(instanceID, static_cast<CCharEntity*>(m_PBaseEntity));
 }
 
 /************************************************************************
@@ -10860,7 +10866,7 @@ void CLuaBaseEntity::removeAmmo()
  *  Notes   : Mainly used to determine String/Wind level, but can be used for others
  ************************************************************************/
 
-uint8 CLuaBaseEntity::getWeaponSkillLevel(uint8 slotID)
+uint16 CLuaBaseEntity::getWeaponSkillLevel(uint8 slotID)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
 

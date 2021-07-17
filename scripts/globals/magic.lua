@@ -743,13 +743,13 @@ end
 
     local skill = spell:getSkillType()
     if skill == xi.skill.ELEMENTAL_MAGIC then
-        dmg = dmg * ELEMENTAL_POWER
+        dmg = dmg * xi.settings.ELEMENTAL_POWER
     elseif skill == xi.skill.DARK_MAGIC then
-        dmg = dmg * DARK_POWER
+        dmg = dmg * xi.settings.DARK_POWER
     elseif skill == xi.skill.NINJUTSU then
-        dmg = dmg * NINJUTSU_POWER
+        dmg = dmg * xi.settings.NINJUTSU_POWER
     elseif skill == xi.skill.DIVINE_MAGIC then
-        dmg = dmg * DIVINE_POWER
+        dmg = dmg * xi.settings.DIVINE_POWER
     end
 
     dmg = target:magicDmgTaken(dmg)

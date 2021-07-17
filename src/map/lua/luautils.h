@@ -259,19 +259,22 @@ namespace luautils
 
     int32 OnMobWeaponSkill(CBaseEntity* PChar, CBaseEntity* PMob, CMobSkill* PMobSkill, action_t* action); // triggers when mob weapon skill is used
     int32 OnMobSkillCheck(CBaseEntity* PChar, CBaseEntity* PMob, CMobSkill* PMobSkill);                    // triggers before mob weapon skill is used, returns 0 if the move is valid
-    int32 OnMobAutomatonSkillCheck(CBaseEntity* PChar, CAutomatonEntity* PAutomaton, CMobSkill* PMobSkill);
+    int32 OnAutomatonAbilityCheck(CBaseEntity* PChar, CAutomatonEntity* PAutomaton, CMobSkill* PMobSkill);
+    int32 OnAutomatonAbility(CBaseEntity* PTarget, CBaseEntity* PMob, CMobSkill* PMobSkill, CBaseEntity* PMobMaster, action_t* action);
 
     int32 OnAbilityCheck(CBaseEntity* PChar, CBaseEntity* PTarget, CAbility* PAbility, CBaseEntity** PMsgTarget);                                                                               // triggers when a player attempts to use a job ability or roll
     int32 OnPetAbility(CBaseEntity* PPet, CBaseEntity* PMob, CMobSkill* PMobSkill, CBaseEntity* PPetMaster, action_t* action);                                                                  // triggers when pet uses an ability
     auto  OnUseWeaponSkill(CBattleEntity* PUser, CBaseEntity* PMob, CWeaponSkill* wskill, uint16 tp, bool primary, action_t& action, CBattleEntity* taChar) -> std::tuple<int32, uint8, uint8>; // returns: damage, tphits landed, extra hits landed
     int32 OnUseAbility(CBattleEntity* PUser, CBattleEntity* PTarget, CAbility* PAbility, action_t* action);                                                                                     // triggers when job ability is used
 
+    auto GetCachedInstanceScript(uint16 instanceId) -> sol::table;
+    
     int32 OnInstanceZoneIn(CCharEntity* PChar, CInstance* PInstance);            // triggered on zone in to instance
     void  AfterInstanceRegister(CBaseEntity* PChar);                             // triggers after a character is registered and zoned into an instance (the first time)
     int32 OnInstanceLoadFailed(CZone* PZone);                                    // triggers when an instance load is failed (ie. instance no longer exists)
     int32 OnInstanceTimeUpdate(CZone* PZone, CInstance* PInstance, uint32 time); // triggers every second for an instance
     int32 OnInstanceFailure(CInstance* PInstance);                               // triggers when an instance is failed
-    int32 OnInstanceCreated(CCharEntity* PChar, CInstance* PInstance);           // triggers when an instance is created (per character - waiting outside for entry)
+    int32 OnInstanceCreatedCallback(CCharEntity* PChar, CInstance* PInstance);   // triggers when an instance is created (per character - waiting outside for entry)
     int32 OnInstanceCreated(CInstance* PInstance);                               // triggers when an instance is created (instance setup)
     int32 OnInstanceProgressUpdate(CInstance* PInstance);                        // triggers when progress is updated in an instance
     int32 OnInstanceStageChange(CInstance* PInstance);                           // triggers when stage is changed in an instance
