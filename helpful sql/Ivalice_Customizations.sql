@@ -228,6 +228,16 @@ AND mfs.ecosystemID NOT IN (19)
 AND mg.groupid = mg.groupid
 AND zs.zonetype != 5;
 
+UPDATE mob_groups mg
+INNER JOIN mob_pools mp
+	ON mg.poolid = mp.poolid
+INNER JOIN zone_settings zs
+	ON mg.zoneid = zs.zoneid
+SET mg.minLevel = mg.minLevel - 15, mg.maxLevel = mg.maxLevel - 15
+WHERE zs.zonetype = 5
+AND NOT (mp.mobType & 0x02)
+AND mg.minLevel > 80;
+
 -- NMs respawn timer to 900 seconds
 UPDATE mob_spawn_points msp
 INNER JOIN mob_groups mg
