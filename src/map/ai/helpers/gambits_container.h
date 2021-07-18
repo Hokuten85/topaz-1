@@ -25,6 +25,7 @@ namespace gambits
         RANGED     = 6,
         CASTER     = 7,
         TOP_ENMITY = 8,
+        ADDS       = 9,
     };
 
     enum class G_CONDITION : uint16

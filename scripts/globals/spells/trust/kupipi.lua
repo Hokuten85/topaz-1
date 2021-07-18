@@ -33,7 +33,7 @@ spell_object.onMobSpawn = function(mob)
     })
     
     --mob:addSimpleGambit(ai.t.SELF, ai.c.MPP_LT, 5, ai.r.ITEM, 0, 0)
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.REFRESH, ai.r.ITEM, 0, 0)
+    --mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.REFRESH, ai.r.ITEM, 0, 0)
 
     mob:addSimpleGambit(ai.t.PARTY, ai.c.HPP_LT, 25, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.CURE)
 

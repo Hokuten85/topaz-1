@@ -112,6 +112,8 @@ INNER JOIN  spell_list sl
 	ON mp.poolid = sl.spellid+5000
 WHERE sl.spellid >= 896;
 
+
+
 SELECT *
 FROM trust_equipment te
 INNER JOIN item_basic ib

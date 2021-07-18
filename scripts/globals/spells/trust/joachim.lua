@@ -29,7 +29,7 @@ spell_object.onMobSpawn = function(mob)
     xi.trust.message(mob, xi.trust.message_offset.SPAWN)
     
     --mob:addSimpleGambit(ai.t.SELF, ai.c.MPP_LT, 5, ai.r.ITEM, 0, 0)
-    mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.REFRESH, ai.r.ITEM, 0, 0)
+    --mob:addSimpleGambit(ai.t.SELF, ai.c.NOT_STATUS, xi.effect.REFRESH, ai.r.ITEM, 0, 0)
 
     mob:addSimpleGambit(ai.t.PARTY, ai.c.STATUS, xi.effect.POISON, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.POISONA)
     mob:addSimpleGambit(ai.t.PARTY, ai.c.STATUS, xi.effect.PARALYSIS, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.PARALYNA)
@@ -40,6 +40,8 @@ spell_object.onMobSpawn = function(mob)
     mob:addSimpleGambit(ai.t.PARTY, ai.c.STATUS, xi.effect.CURSE_I, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.CURSNA)
     
     local extra = {["extra"] = {["maxFails"] = 2}}
+    mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.LULLABY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.HORDE_LULLABY, 0, extra)
+    mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.LULLABY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.FOE_LULLABY, 0, extra)
     mob:addSimpleGambit(ai.t.TARGET, ai.c.STATUS_FLAG, xi.effectFlag.DISPELABLE, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.MAGIC_FINALE, 0, extra)
     mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.ELEGY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.ELEGY, 0, extra)
     mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.REQUIEM, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.FOE_REQUIEM, 0, extra)

@@ -136,10 +136,10 @@ xi.settings =
     NM_LOTTERY_COOLDOWN = 1.0,
 
     -- DYNAMIS SETTINGS
-    BETWEEN_2DYNA_WAIT_TIME     = 24,       -- Hours before player can re-enter Dynamis. Default is 1 Earthday (24 hours).
+    BETWEEN_2DYNA_WAIT_TIME     = 1,       -- Hours before player can re-enter Dynamis. Default is 1 Earthday (24 hours).
     DYNA_MIDNIGHT_RESET         = true,     -- If true, makes the wait time count by number of server midnights instead of full 24 hour intervals
     DYNA_LEVEL_MIN              = 65,       -- Level min for entering in Dynamis
-    TIMELESS_HOURGLASS_COST     = 500000,   -- Refund for the timeless hourglass for Dynamis.
+    TIMELESS_HOURGLASS_COST     = 50000,   -- Refund for the timeless hourglass for Dynamis.
     PRISMATIC_HOURGLASS_COST    = 50000,    -- Cost of the prismatic hourglass for Dynamis.
     CURRENCY_EXCHANGE_RATE      = 100,      -- X Tier 1 ancient currency -> 1 Tier 2, and so on. Certain values may conflict with shop items. Not designed to exceed 198.
     RELIC_2ND_UPGRADE_WAIT_TIME = 7200,     -- Wait time for 2nd relic upgrade (stage 2 -> stage 3) in seconds. 7200s = 2 hours.

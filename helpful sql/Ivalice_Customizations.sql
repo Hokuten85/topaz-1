@@ -219,11 +219,14 @@ INNER JOIN mob_pools mp
 	ON mg.poolid = mp.poolid
 INNER JOIN mob_family_system mfs
 	ON mp.familyid = mfs.familyid
+INNER JOIN zone_settings zs
+	ON mg.zoneid = zs.zoneid
 SET respawntime = 180
 WHERE mp.mobType = 0x00
 AND mg.respawntime > 1
 AND mfs.ecosystemID NOT IN (19)
-AND mg.groupid = mg.groupid;
+AND mg.groupid = mg.groupid
+AND zs.zonetype != 5;
 
 -- NMs respawn timer to 900 seconds
 UPDATE mob_spawn_points msp
@@ -789,6 +792,14 @@ from spell_list sl
 where SUBSTR(HEX(sl.jobs),9,2) <> '00'
 AND sl.family IN (21,22,23,24,25,26, 28, 69); -- enspells, regen, spikes
 
+INSERT INTO mob_spell_lists
+SELECT 'TRUST_Koru-Moru', 364, sl.spellid, CAST(CONV(SUBSTR(HEX(jobs),9,2),16,10) AS INT), 255
+from spell_list sl
+where SUBSTR(HEX(sl.jobs),9,2) <> '00'
+AND sl.family IN (71); -- sleep
+
+INSERT INTO mob_spell_lists VALUES ('TRUST_Koru-Moru', 364, 273, 62, 255); -- sleepga
+
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 266, 43, 255); -- absorb-str
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 267, 41, 255); -- absorb-dex
 INSERT INTO mob_spell_lists VALUES ('TRUST_Zeid_II', 419, 242, 61, 255); -- absorb-acc
@@ -820,6 +831,11 @@ INSERT INTO mob_spell_lists
 SELECT 'TRUST_Joachim', 323, sl.spellid , CAST(CONV(SUBSTR(HEX(jobs),19,2),16,10) AS INT), 255
 FROM spell_list sl
 WHERE sl.family = 103; -- requiem
+
+INSERT INTO mob_spell_lists
+SELECT 'TRUST_Joachim', 323, sl.spellid , CAST(CONV(SUBSTR(HEX(jobs),19,2),16,10) AS INT), 255
+FROM spell_list sl
+WHERE sl.family IN (104,138); -- lullaby
 
 -- TRUST mob_skill_lists
 INSERT INTO mob_skill_lists VALUES ('TRUST_Shikaree_Z', 1030, 112);
@@ -873,6 +889,10 @@ WHERE poolid IN (5900,5908,6010); -- Ayame, Tenzen pool
 UPDATE mob_pools
 SET cmbDmgMult = 100, sJob = 12, cmbSkill = 8
 WHERE poolid IN (5915); -- Shikaree_Z pool
+
+UPDATE mob_pools
+SET sJob = 4
+WHERE poolid = 5952; -- Koru-Moru
 
 -- TRUST Mod Settings -- 1 - negative, 2 - ignore, 3 - positive -- Job 0 is default -- Provide specific job settings if necessary
 INSERT INTO trust_mod_settings VALUES (6, 27, 2);

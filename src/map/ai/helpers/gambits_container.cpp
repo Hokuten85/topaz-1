@@ -7,6 +7,7 @@
 #include "../../ai/states/range_state.h"
 #include "../../ai/states/weaponskill_state.h"
 #include "../../enmity_container.h"
+#include "../../notoriety_container.h"
 #include "../../mobskill.h"
 #include "../../spell.h"
 #include "../../utils/battleutils.h"
@@ -80,7 +81,7 @@ namespace gambits
         };
 
         bool result = false;
-        CBattleEntity* target;
+        CBattleEntity* target = nullptr;
         if (predicate.target == G_TARGET::SELF)
         {
             result = CheckTrigger(POwner, predicate);
@@ -146,6 +147,21 @@ namespace gambits
                     target = result && predicate.isActionTarget ? PMember : nullptr;
                     return result;
                 });
+            }
+        }
+        else if (predicate.target == G_TARGET::ADDS)
+        {
+            for (auto addMob : *POwner->PMaster->PNotorietyContainer)
+            {
+                if (POwner->GetBattleTarget()->id != addMob->id)
+                {
+                    result = CheckTrigger(addMob, predicate);
+                    target = result && predicate.isActionTarget ? addMob : nullptr;
+                    if (target != nullptr)
+                    {
+                        break;
+                    }
+                }
             }
         }
 
