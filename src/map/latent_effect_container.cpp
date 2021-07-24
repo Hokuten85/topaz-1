@@ -1144,7 +1144,7 @@ bool CLatentEffectContainer::ProcessLatentEffect(CLatentEffect& latentEffect)
             break;
         default:
             latentFound = false;
-            ShowWarning("Latent ID %d unhandled in ProcessLatentEffect\n", static_cast<uint16>(latentEffect.GetConditionsID()));
+            ShowWarning("Latent ID %d unhandled in ProcessLatentEffect", static_cast<uint16>(latentEffect.GetConditionsID()));
             break;
     }
 

@@ -443,9 +443,6 @@ public:
 
     int8 getShieldSize();
 
-    bool getWeaponSkillKill() const;
-    void setWeaponSkillKill(bool isWeaponSkillKill);
-
     bool getStyleLocked() const;
     void setStyleLocked(bool isStyleLocked);
     bool getBlockingAid() const;
@@ -551,7 +548,6 @@ private:
     std::unique_ptr<CItemContainer> m_Wardrobe3;
     std::unique_ptr<CItemContainer> m_Wardrobe4;
 
-    bool m_isWeaponSkillKill;
     bool m_isStyleLocked;
     bool m_isBlockingAid;
     bool m_reloadParty;
