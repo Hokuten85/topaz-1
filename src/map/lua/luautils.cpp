@@ -90,7 +90,7 @@
 // TODO: Implement FileWatch backend for OSX
 #ifndef __APPLE__
 // TODO: Fix path
-#include "../../ext/filewatch/filewatch/FileWatch.hpp"
+#include "../../../ext/filewatch/filewatch/FileWatch.hpp"
 std::unique_ptr<filewatch::FileWatch<std::string>> watch = nullptr;
 #endif // __APPLE__
 

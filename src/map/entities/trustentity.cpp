@@ -19,7 +19,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 ===========================================================================
 */
 
-#include "fmt/printf.h"
 #include "trustentity.h"
 #include "../ai/ai_container.h"
 #include "../ai/controllers/trust_controller.h"
@@ -901,7 +900,7 @@ void CTrustEntity::HandleTrade(CCharEntity* PChar)
 
                 if (Sql_Query(SqlHandle, Query, PChar->id, this->m_TrustID, slotId, newPItem->getID(), newPItem->getQuantity(), extra) == SQL_ERROR)
                 {
-                    ShowError(CL_RED "trustentity::HandleTrade: Cannot insert item to database\n" CL_RESET);
+                    ShowError("trustentity::HandleTrade: Cannot insert item to database");
                     return;
                 }
 
