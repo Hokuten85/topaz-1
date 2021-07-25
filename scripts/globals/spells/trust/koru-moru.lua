@@ -43,12 +43,14 @@ spell_object.onMobSpawn = function(mob)
     mob:addSimpleGambit(ai.t.TOP_ENMITY, ai.c.NOT_STATUS, xi.effect.PHALANX, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.PHALANX_II)
 
     local extra = {["extra"] = {["maxFails"] = 2}}
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.SILENCE, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SILENCE, 0, extra)
-    mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.SLEEP_I, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEP, 0, extra)
-    --mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.SLEEP, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEPGA, 0, extra)
-    --mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.SLEEP, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEP, 0, extra)
-    mob:addSimpleGambit(ai.t.TARGET, ai.c.STATUS_FLAG, xi.effectFlag.DISPELABLE, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.DISPEL, 0, extra)
+    
+    if mob:getCurrentRegion() == xi.region.DYNAMIS then
+        mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.SILENCE, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SILENCE, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.SLEEP_I, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEPGA, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.SLEEP_I, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEP, 0, extra)
+    end
 
+    mob:addSimpleGambit(ai.t.TARGET, ai.c.STATUS_FLAG, xi.effectFlag.DISPELABLE, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.DISPEL, 0, extra)
     mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.DIA, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.DIA, 0, extra)
     mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.BIO, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.BIO, 0, extra)
     mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.SLOW, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.SLOW, 0, extra)

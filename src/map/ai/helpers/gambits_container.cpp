@@ -200,14 +200,6 @@ namespace gambits
             return;
         }
 
-        if (POwner->GetMJob() == JOB_BRD)
-        {
-            if (BrdSupportMelee())
-            {
-                return;
-            }
-        }
-
         // Didn't WS/MS, go for other Gambits
         for (const auto* container : all_gambits)
         {
@@ -216,6 +208,11 @@ namespace gambits
                 if (tick < gambit->last_used + std::chrono::seconds(gambit->retry_delay))
                 {
                     continue;
+                }
+
+                if (POwner->GetMJob() == JOB_BRD && gambit->actions.front().reaction == G_REACTION::BRD_SUPPORT && BrdSupportMelee())
+                {
+                    return;
                 }
 
                 CBattleEntity* target = nullptr;

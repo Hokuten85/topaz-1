@@ -40,8 +40,14 @@ spell_object.onMobSpawn = function(mob)
     mob:addSimpleGambit(ai.t.PARTY, ai.c.STATUS, xi.effect.CURSE_I, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.CURSNA)
     
     local extra = {["extra"] = {["maxFails"] = 2}}
-    mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.LULLABY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.HORDE_LULLABY, 0, extra)
-    mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.LULLABY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.FOE_LULLABY, 0, extra)
+    
+    if mob:getCurrentRegion() == xi.region.DYNAMIS then
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.LULLABY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.HORDE_LULLABY, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.LULLABY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.FOE_LULLABY, 0, extra)
+    end
+    
+    mob:addSimpleGambit(0,0,0,ai.r.BRD_SUPPORT,0,0)
+    
     mob:addSimpleGambit(ai.t.TARGET, ai.c.STATUS_FLAG, xi.effectFlag.DISPELABLE, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.MAGIC_FINALE, 0, extra)
     mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.ELEGY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.ELEGY, 0, extra)
     mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.REQUIEM, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.FOE_REQUIEM, 0, extra)

@@ -57,14 +57,15 @@ namespace gambits
 
     enum class G_REACTION : uint16
     {
-        ATTACK  = 0,
-        RATTACK = 1,
-        MA      = 2,
-        JA      = 3,
-        WS      = 4,
-        MS      = 5,
-        MSG     = 6,
-        ITEM    = 7,
+        ATTACK      = 0,
+        RATTACK     = 1,
+        MA          = 2,
+        JA          = 3,
+        WS          = 4,
+        MS          = 5,
+        MSG         = 6,
+        ITEM        = 7,
+        BRD_SUPPORT = 8,
     };
 
     enum class G_SELECT : uint16
