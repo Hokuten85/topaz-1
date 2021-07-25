@@ -43,11 +43,34 @@ spell_object.onMobSpawn = function(mob)
     mob:addSimpleGambit(ai.t.TOP_ENMITY, ai.c.NOT_STATUS, xi.effect.PHALANX, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.PHALANX_II)
 
     local extra = {["extra"] = {["maxFails"] = 2}}
+
+    --mob:addSimpleGambit(ai.t.TARGET, ai.c.JOB_TYPE, ai.t.CASTER, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SILENCE, 0, extra)
     
+    mob:addFullGambit({
+        ['predicates'] =
+        {
+            {
+                ['target'] = ai.t.TARGET, ['condition'] = ai.c.JOB_TYPE, ['argument'] = ai.t.CASTER, ['actionTarget'] = 1
+            },
+            {
+                ['target'] = ai.t.TARGET, ['condition'] = ai.c.NOT_STATUS, ['argument'] = xi.effect.SILENCE,
+            },
+        },
+        ['actions'] =
+        {
+            {
+                ['reaction'] = ai.r.MA, ['select'] = ai.s.SPECIFIC, ['argument'] = xi.magic.spell.SILENCE,
+            },
+        },
+        ["extra"] = {["maxFails"] = 2}
+    })
+    
+  
     if mob:getCurrentRegion() == xi.region.DYNAMIS then
-        mob:addSimpleGambit(ai.t.TARGET, ai.c.NOT_STATUS, xi.effect.SILENCE, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SILENCE, 0, extra)
-        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.SLEEP_I, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEPGA, 0, extra)
-        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.SLEEP_I, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEP, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, ai.effect.IS_ASLEEP, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEPGA, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, ai.effect.IS_ASLEEP, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEPGA_II, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, ai.effect.IS_ASLEEP, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEP, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, ai.effect.IS_ASLEEP, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.SLEEP_II, 0, extra)
     end
 
     mob:addSimpleGambit(ai.t.TARGET, ai.c.STATUS_FLAG, xi.effectFlag.DISPELABLE, ai.r.MA, ai.s.SPECIFIC, xi.magic.spell.DISPEL, 0, extra)

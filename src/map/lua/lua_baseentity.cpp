@@ -1,4 +1,4 @@
-/*
+﻿/*
 ===========================================================================
 
   Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -11317,16 +11317,12 @@ inline int32 CLuaBaseEntity::addFullGambit(sol::table fullGambit)
     {
         for (const auto& kvp : extra.value())
         {
-            sol::table subTable = (sol::table)kvp.second;
-            for (const auto& keyValuePair : subTable)
-            {
-                auto key   = keyValuePair.first.as<std::string>();
-                auto value = keyValuePair.second.as<uint32>();
+            auto key   = kvp.first.as<std::string>();
+            auto value = kvp.second.as<uint32>();
 
-                if (!g->extra.parseInput(key, value))
-                {
-                    ShowWarning("Invalid Gambit: Bad Extra input");
-                }
+            if (!g->extra.parseInput(key, value))
+            {
+                ShowWarning("Invalid Gambit: Bad Extra input");
             }
         }
     }

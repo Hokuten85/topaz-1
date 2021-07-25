@@ -421,12 +421,28 @@ namespace gambits
             }
             case G_CONDITION::STATUS:
             {
-                return trigger_target->StatusEffectContainer->HasStatusEffect(static_cast<EFFECT>(predicate.condition_arg));
+                if (predicate.condition_arg == (int16)G_EFFECT::IS_ASLEEP)
+                {
+                    return trigger_target->isAsleep();
+                }
+                else
+                {
+                    return trigger_target->StatusEffectContainer->HasStatusEffect(static_cast<EFFECT>(predicate.condition_arg));
+                }
+                
                 break;
             }
             case G_CONDITION::NOT_STATUS:
             {
-                return !trigger_target->StatusEffectContainer->HasStatusEffect(static_cast<EFFECT>(predicate.condition_arg));
+                if (predicate.condition_arg == (int16)G_EFFECT::IS_ASLEEP)
+                {
+                    return !trigger_target->isAsleep();
+                }
+                else
+                {
+                    return !trigger_target->StatusEffectContainer->HasStatusEffect(static_cast<EFFECT>(predicate.condition_arg));
+                }
+                
                 break;
             }
             case G_CONDITION::STATUS_FLAG:
@@ -514,6 +530,26 @@ namespace gambits
             {
                 auto effect = trigger_target->StatusEffectContainer->GetStatusEffect(static_cast<EFFECT>(predicate.condition_arg));
                 if (effect != nullptr && effect->GetPower() < predicate.condition_arg2)
+                {
+                    return true;
+                }
+                break;
+            }
+            case G_CONDITION::JOB_TYPE:
+            {
+                if (predicate.condition_arg == (int16)G_TARGET::MELEE && melee_jobs.find(trigger_target->GetMJob()) != melee_jobs.end())
+                {
+                    return true;
+                }
+                else if (predicate.condition_arg == (int16)G_TARGET::CASTER && caster_jobs.find(trigger_target->GetMJob()) != caster_jobs.end())
+                {
+                    return true;
+                }
+                else if (predicate.condition_arg == (int16)G_TARGET::RANGED && (trigger_target->GetMJob() == JOB_RNG || trigger_target->GetMJob() == JOB_COR))
+                {
+                    return true;
+                }
+                else if (predicate.condition_arg == (int16)G_TARGET::TANK && (trigger_target->GetMJob() == JOB_PLD || trigger_target->GetMJob() == JOB_RUN))
                 {
                     return true;
                 }

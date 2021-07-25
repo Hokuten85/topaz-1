@@ -42,8 +42,8 @@ spell_object.onMobSpawn = function(mob)
     local extra = {["extra"] = {["maxFails"] = 2}}
     
     if mob:getCurrentRegion() == xi.region.DYNAMIS then
-        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.LULLABY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.HORDE_LULLABY, 0, extra)
-        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, xi.effect.LULLABY, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.FOE_LULLABY, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, ai.effect.IS_ASLEEP, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.HORDE_LULLABY, 0, extra)
+        mob:addSimpleGambit(ai.t.ADDS, ai.c.NOT_STATUS, ai.effect.IS_ASLEEP, ai.r.MA, ai.s.HIGHEST, xi.magic.spellFamily.FOE_LULLABY, 0, extra)
     end
     
     mob:addSimpleGambit(0,0,0,ai.r.BRD_SUPPORT,0,0)

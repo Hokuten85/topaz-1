@@ -53,6 +53,12 @@ namespace gambits
         CAN_CAST_HIGHEST   = 20,
         NOT_STATUS_COUNT   = 21,
         NOT_STATUS_POWER   = 22,
+        JOB_TYPE           = 23,
+    };
+
+    enum class G_EFFECT : uint16
+    {
+        IS_ASLEEP = 10000,
     };
 
     enum class G_REACTION : uint16

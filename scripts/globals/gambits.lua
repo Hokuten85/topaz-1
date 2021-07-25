@@ -48,9 +48,17 @@ ai.condition =
     RANDOM             = 18,
     CAN_CAST           = 19,
     CAN_CAST_HIGHEST   = 20,
-    NOT_STATUS_POWER   = 22
+    NOT_STATUS_POWER   = 22,
+    JOB_TYPE           = 23,
 }
 ai.c = ai.condition
+
+-- special effects
+ai.effect =
+{
+    IS_ASLEEP = 10000,
+}
+ai.e = ai.effect
 
 -- Reaction
 ai.reaction =
