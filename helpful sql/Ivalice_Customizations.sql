@@ -775,6 +775,8 @@ CALL myproc();
 DROP PROCEDURE myProc;
 
 -- MOB_SPELL_LISTS
+DELETE FROM mob_spell_lists WHERE spell_id = 367; -- Remove Death
+
 INSERT INTO mob_spell_lists VALUES ('TRUST_Kupipi', 310, 96, 55, 255); -- AUSPICE
 INSERT INTO mob_spell_lists VALUES ('TRUST_Kupipi', 310, 108, 21, 255); -- REGEN 1
 INSERT INTO mob_spell_lists VALUES ('TRUST_Kupipi', 310, 110, 44, 255); -- REGEN 2

@@ -6592,8 +6592,10 @@ int32 CLuaBaseEntity::getMerit(uint16 merit)
         if (PTrust != nullptr)
         {
             auto* PChar = static_cast<CCharEntity*>(PTrust->PMaster);
-
-            return PChar->PMeritPoints->GetMeritValue(static_cast<MERIT_TYPE>(merit), PChar);
+            if (PTrust->PMaster != nullptr)
+            {
+                return PChar->PMeritPoints->GetMeritValue(static_cast<MERIT_TYPE>(merit), PChar);
+            }
         }
     }
 

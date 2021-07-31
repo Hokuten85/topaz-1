@@ -6413,7 +6413,11 @@ namespace battleutils
         else if (PEntity->objtype == TYPE_TRUST)
         {
             auto* PTrust = static_cast<CTrustEntity*>(PEntity);
-            return static_cast<CCharEntity*>(PTrust->PMaster)->PMeritPoints->GetMeritValue(merit, static_cast<CCharEntity*>(PTrust->PMaster));
+            if (PTrust->PMaster != nullptr)
+            {
+                return static_cast<CCharEntity*>(PTrust->PMaster)->PMeritPoints->GetMeritValue(merit, static_cast<CCharEntity*>(PTrust->PMaster));
+            }
+            
         }
         return 0;
     }

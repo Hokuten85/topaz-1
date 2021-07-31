@@ -487,7 +487,7 @@ int32 CMeritPoints::GetMeritValue(MERIT_TYPE merit, CCharEntity* PChar)
             meritValue = std::min(PMerit->count, cap[PChar->GetMLevel()]);
         }
 
-        if (PMerit->catid == 25 && PChar->GetMLevel() < 96)
+        if (PMerit->catid == 25 && PChar->GetMLevel() < 75)
         { // categoryID 25 is for merit weaponskills, which only apply if the player is lv 96+
             meritValue = 0;
         }
