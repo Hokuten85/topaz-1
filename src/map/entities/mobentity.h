@@ -257,6 +257,12 @@ public:
     static constexpr float sound_range{ 8.f };
     static constexpr float sight_range{ 15.f };
 
+    uint16 m_SoundRange;
+    uint16 m_SightRange;
+    uint16 m_SuperLink;
+    uint16 m_LinkRadius;
+    uint16 m_NoLink;
+
 protected:
     void DistributeRewards();
     void DropItems(CCharEntity* PChar);

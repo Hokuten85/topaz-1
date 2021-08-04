@@ -1,4 +1,4 @@
--- update zone_settings set zoneip = '97.119.224.179';
+update zone_settings set zoneip = '97.119.241.102';
 
 -- Augments
 UPDATE augments SET multiplier = 100, value = 1 WHERE augmentId = 49;
@@ -208,6 +208,7 @@ AND NOT EXISTS (SELECT 1 FROM synth_recipes WHERE Result = 9037);
 INSERT INTO `synth_recipes` VALUES (13013,0,0,0,62,0,25,0,0,0,0,4099,4241,662,662,816,829,850,0,0,0,12843,14236,14236,14236,1,1,1,1,'Haidate');
 INSERT INTO `synth_recipes` VALUES (24554,0,0,0,51,97,0,0,0,48,0,4096,4238,648,664,745,754,762,850,931,0,1374,1375,1375,1375,1,1,1,1,'Cursed Schaller');
 INSERT INTO `synth_recipes` VALUES (24550,0,0,0,0,96,0,0,0,44,0,4096,4238,746,746,931,12675,0,0,0,0,1378,1379,1379,1379,1,1,1,1,'Cursed Handschuhs');
+INSERT INTO `synth_recipes` VALUES (13020,0,0,0,64,0,32,0,0,0,0,4096,4238,662,662,816,829,850,0,0,0,12974,14112,14112,14112,1,1,1,1,'Sune-Ate');
 
 UPDATE mob_spawn_points SET pos_x = 1 WHERE mobid = 17580341; -- make aroma fly spawnable
 

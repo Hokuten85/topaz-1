@@ -151,11 +151,12 @@ void CMobController::TryLink()
     // Handle monster linking if they are close enough
     if (PMob->PParty != nullptr)
     {
+        auto superLink = PMob->getMobMod(MOBMOD_SUPERLINK);
         for (auto& member : PMob->PParty->members)
         {
             CMobEntity* PPartyMember = (CMobEntity*)member;
 
-            if (PPartyMember->PAI->IsRoaming() && PPartyMember->CanLink(&PMob->loc.p, PMob->getMobMod(MOBMOD_SUPERLINK)))
+            if (PPartyMember->PAI->IsRoaming() && PPartyMember->CanLink(&PMob->loc.p, superLink))
             {
                 PPartyMember->PEnmityContainer->AddBaseEnmity(PTarget);
 
@@ -213,7 +214,7 @@ bool CMobController::CanDetectTarget(CBattleEntity* PTarget, bool forceSight)
         hasSneak     = PTarget->StatusEffectContainer->HasStatusEffect(EFFECT_SNEAK);
     }
 
-    if (detectSight && !hasInvisible && currentDistance < PMob->getMobMod(MOBMOD_SIGHT_RANGE) && facing(PMob->loc.p, PTarget->loc.p, 64))
+    if (detectSight && !hasInvisible && currentDistance < PMob->m_SightRange && facing(PMob->loc.p, PTarget->loc.p, 64))
     {
         return CanSeePoint(PTarget->loc.p);
     }
@@ -223,7 +224,7 @@ bool CMobController::CanDetectTarget(CBattleEntity* PTarget, bool forceSight)
         return true;
     }
 
-    if ((detects & DETECT_HEARING) && currentDistance < PMob->getMobMod(MOBMOD_SOUND_RANGE) && !hasSneak)
+    if ((detects & DETECT_HEARING) && currentDistance < PMob->m_SoundRange && !hasSneak)
     {
         return CanSeePoint(PTarget->loc.p);
     }
