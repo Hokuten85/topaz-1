@@ -214,7 +214,7 @@ bool CMobController::CanDetectTarget(CBattleEntity* PTarget, bool forceSight)
         hasSneak     = PTarget->StatusEffectContainer->HasStatusEffect(EFFECT_SNEAK);
     }
 
-    if (detectSight && !hasInvisible && currentDistance < PMob->m_SightRange && facing(PMob->loc.p, PTarget->loc.p, 64))
+    if (detectSight && !hasInvisible && currentDistance < PMob->getMobMod(MOBMOD_SIGHT_RANGE) && facing(PMob->loc.p, PTarget->loc.p, 64))
     {
         return CanSeePoint(PTarget->loc.p);
     }
@@ -224,7 +224,7 @@ bool CMobController::CanDetectTarget(CBattleEntity* PTarget, bool forceSight)
         return true;
     }
 
-    if ((detects & DETECT_HEARING) && currentDistance < PMob->m_SoundRange && !hasSneak)
+    if ((detects & DETECT_HEARING) && currentDistance < PMob->getMobMod(MOBMOD_SOUND_RANGE) && !hasSneak)
     {
         return CanSeePoint(PTarget->loc.p);
     }

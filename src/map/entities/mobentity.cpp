@@ -281,7 +281,7 @@ bool CMobEntity::CanRoam()
 bool CMobEntity::CanLink(position_t* pos, int16 superLink)
 {
     // handle super linking
-    if (superLink && m_SuperLink == superLink)
+    if (superLink && getMobMod(MOBMOD_SUPERLINK) == superLink)
     {
         return true;
     }
@@ -313,12 +313,12 @@ bool CMobEntity::CanLink(position_t* pos, int16 superLink)
         }
     }
 
-    if (distance(loc.p, *pos) > m_LinkRadius)
+    if (distance(loc.p, *pos) > getMobMod(MOBMOD_LINK_RADIUS))
     {
         return false;
     }
 
-    if (m_NoLink > 0)
+    if (getMobMod(MOBMOD_NO_LINK) > 0)
     {
         return false;
     }
@@ -370,27 +370,6 @@ uint16 CMobEntity::TPUseChance()
 
 void CMobEntity::setMobMod(uint16 type, int16 value)
 {
-    if (type == MOBMOD_SIGHT_RANGE)
-    {
-        m_SightRange = value;
-    }
-    else if (type == MOBMOD_SOUND_RANGE)
-    {
-        m_SoundRange = value;
-    }
-    else if (type == MOBMOD_SUPERLINK)
-    {
-        m_SuperLink = value;
-    }
-    else if (type == MOBMOD_LINK_RADIUS)
-    {
-        m_LinkRadius = value;
-    }
-    else if (type == MOBMOD_NO_LINK)
-    {
-        m_NoLink = value;
-    }
-
     m_mobModStat[type] = value;
 }
 
@@ -401,53 +380,11 @@ int16 CMobEntity::getMobMod(uint16 type)
 
 void CMobEntity::addMobMod(uint16 type, int16 value)
 {
-    if (type == MOBMOD_SIGHT_RANGE)
-    {
-        m_SightRange += value;
-    }
-    else if (type == MOBMOD_SOUND_RANGE)
-    {
-        m_SoundRange += value;
-    }
-    else if (type == MOBMOD_SUPERLINK)
-    {
-        m_SuperLink += value;
-    }
-    else if (type == MOBMOD_LINK_RADIUS)
-    {
-        m_LinkRadius = value;
-    }
-    else if (type == MOBMOD_NO_LINK)
-    {
-        m_NoLink = value;
-    }
-
     m_mobModStat[type] += value;
 }
 
 void CMobEntity::defaultMobMod(uint16 type, int16 value)
 {
-    if (type == MOBMOD_SIGHT_RANGE)
-    {
-        m_SightRange = value;
-    }
-    else if (type == MOBMOD_SOUND_RANGE)
-    {
-        m_SoundRange = value;
-    }
-    else if (type == MOBMOD_SUPERLINK)
-    {
-        m_SuperLink = value;
-    }
-    else if (type == MOBMOD_LINK_RADIUS)
-    {
-        m_LinkRadius = value;
-    }
-    else if (type == MOBMOD_NO_LINK)
-    {
-        m_NoLink = value;
-    }
-
     if (m_mobModStat[type] == 0)
     {
         m_mobModStat[type] = value;

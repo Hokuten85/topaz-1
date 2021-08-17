@@ -6265,9 +6265,8 @@ void CLuaBaseEntity::triggerRoeEvent(uint8 eventNum, sol::object const& reqTable
         }
     }
 
-        auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
-        roeutils::event(eventID, PChar, roeEventData);
-    }
+    auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
+    roeutils::event(eventID, PChar, roeEventData);
 }
 
 /************************************************************************
@@ -12359,7 +12358,7 @@ void CLuaBaseEntity::untargetable(bool untargetable)
     }
     else if (m_PBaseEntity->objtype == TYPE_NPC)
     {
-        static_cast<CMobEntity*>(m_PBaseEntity)->Untargetable(untargetable);
+        static_cast<CNpcEntity*>(m_PBaseEntity)->Untargetable(untargetable);
     }
 
     m_PBaseEntity->updatemask |= UPDATE_HP;

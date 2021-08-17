@@ -982,9 +982,8 @@ void CZoneEntities::PushPacket(CBaseEntity* PEntity, GLOBAL_MESSAGE_TYPE message
                                     // so we're just going to skip this packet
                                     break;
                                 }
-                                SpawnIDList_t::iterator iter = spawnlist.lower_bound(id);
-
-                                if (!(iter == spawnlist.end() || spawnlist.key_comp()(id, iter->first)))
+                                auto iter = spawnlist.find(id);
+                                if (iter != spawnlist.end())
                                 {
                                     PCurrentChar->pushPacket(new CBasicPacket(*packet));
                                 }

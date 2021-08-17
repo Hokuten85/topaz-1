@@ -52,7 +52,7 @@ enum class STATUS_TYPE : uint8
     SHUTDOWN      = 20,
 };
 
-enum ANIMATIONTYPE
+enum ANIMATIONTYPE : uint8
 {
     ANIMATION_NONE    = 0,
     ANIMATION_ATTACK  = 1,

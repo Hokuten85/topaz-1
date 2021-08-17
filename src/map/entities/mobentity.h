@@ -24,6 +24,7 @@
 
 #include "battleentity.h"
 #include <unordered_map>
+#include <array>
 
 // forward declaration
 class CMobSpellContainer;
@@ -257,12 +258,6 @@ public:
     static constexpr float sound_range{ 8.f };
     static constexpr float sight_range{ 15.f };
 
-    uint16 m_SoundRange;
-    uint16 m_SightRange;
-    uint16 m_SuperLink;
-    uint16 m_LinkRadius;
-    uint16 m_NoLink;
-
 protected:
     void DistributeRewards();
     void DropItems(CCharEntity* PChar);
@@ -270,8 +265,8 @@ protected:
 private:
 
     time_point    m_DespawnTimer {time_point::min()};  // Despawn Timer to despawn mob after set duration
-    std::unordered_map<int, int16>     m_mobModStat;
-    std::unordered_map<int, int16>     m_mobModStatSave;
+    std::array<int16, 80>  m_mobModStat{};
+    std::array<int16, 80>  m_mobModStatSave{};
     static constexpr float roam_home_distance {60.f};
 
     std::array<uint16, 7> coloredDrops = { 4258,4259,4260,4261,4262,4263,4264 };
